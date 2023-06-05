@@ -1,0 +1,130 @@
+
+*{
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  transition-duration: 200ms;
+  font-family: 'Poppins', sans-serif;
+
+}
+:root{
+  --primary-color:#6495ed;
+  --bg-color:white;
+  --color: #333;
+}
+
+[data-theme="dark"] {
+  --primary-color: #2d3f63;
+  --bg-color: #000;
+  --color: #ddd;
+}
+
+body{
+  background-color: var(--bg-color);
+  color: var(--color);
+}
+.container{
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  /* background: red; */
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+h1.title {
+  font-size: 2.5em;
+  font-weight: 350;
+}
+
+h2.title {
+  font-size: 2em;
+  font-weight: 250;
+  margin: 0 auto;
+}
+
+h3.title {
+  font-size: 1.5em;
+  font-weight: 200;
+}
+h4.title {
+  font-size: 1.3em;
+  font-weight: 200;
+}
+h1.name {
+  font-size: 2.2em;
+  font-weight: 300;
+}
+
+.btn__submit {
+  width: 180px;
+  background: blue;
+  color: whitesmoke;
+  font-weight: 800;
+  padding: 8px;
+  margin: 8px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+  
+.above, .center {
+  position: absolute;
+  transform: translateY(-50%);
+  min-width: 150px;
+  pointer-events: none;
+  border-radius: 4px;
+  padding: 0 6px;
+  font-size: .8em;
+}
+
+.izq {
+  transform: translatex(-50%);
+
+}
+
+.above {
+  top: 0;
+  left: 24px;
+  color: whitesmoke;
+  background: navy;
+  border: 1px solid blue;
+  font-size: .7em;
+}
+
+.center {
+  top: 50%;
+  left: 6px;
+  /* border: 1px solid transparent; */
+  opacity: 0;
+}
+
+/* iconos */
+
+.fa-pen-to-square {
+  font-size: 1em;
+  color: blue;
+  opacity: 40%;
+  cursor: pointer;
+}
+
+.fa-trash-can {
+  font-size:1em;
+  color: red;
+  opacity: 40%;
+  cursor: pointer;
+}
+
+.fa-square-check {
+  font-size: 1em;
+  color: darkgreen;
+  opacity: 40%;
+  cursor: pointer;
+}
+
+i:hover {
+  color: yellow;
+  opacity: 100%;
+}
