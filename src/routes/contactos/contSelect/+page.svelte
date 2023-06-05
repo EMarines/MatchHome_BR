@@ -307,17 +307,17 @@
                     {/if}
               
           <!-- Botonies enviar WA o guardar nota para bitácora -->
-              <div class>
-                  <div class="textAreaCont">
-                      <textarea on:change={textAreaComm} class="texArea" bind:value = {commInpuyBinnacle} placeholder ="Ingresa un comentario"/> 
-                      <div class="waSave">
-                        {#if !!commInpuyBinnacle || contCheck.length >= 1 || $systStatus === "addContact" || $systStatus === "msgGratitude" }
-                          <button  class="btn__common" on:click={selMsgWA}><i class="fa-brands fa-square-whatsapp"></i>WhatsApp</button>
-                          <button class="btn__common" on:click={saveNote($systStatus, commInpuyBinnacle)}><i class="fa-solid fa-floppy-disk"></i>Guardar Info</button>
-                        {/if}
-                    </div>
+              
+                <div class="textAreaCont">
+                    <textarea on:change={textAreaComm} class="texArea" bind:value = {commInpuyBinnacle} placeholder ="Ingresa un comentario"/> 
+                    <div class="waSave">
+                      {#if !!commInpuyBinnacle || contCheck.length >= 1 || $systStatus === "addContact" || $systStatus === "msgGratitude" }
+                        <button  class="btn__common" on:click={selMsgWA}><i class="fa-brands fa-square-whatsapp"></i>WhatsApp</button>
+                        <button class="btn__common" on:click={saveNote($systStatus, commInpuyBinnacle)}><i class="fa-solid fa-floppy-disk"></i>Guardar Info</button>
+                      {/if}
                   </div>
-                </div>  
+                </div>
+                
         </div>
 
       </div>
@@ -381,13 +381,14 @@
       display: flex;
       flex-direction: column;
       width: 60%;
-      max-height: 550px;
+      /* height: auto; */
+      /* max-height: 550px; */
       margin-top: 10px;
       border: 1px solid rgb(56, 56, 56);
       border-radius: 8px;
       box-shadow: 1px 2px rgba(255,255,255, 0.5);
       background: rgb(56, 56, 56);
-      padding: 15px;
+      padding: 0 15px 0 15px;
       
     }
     
@@ -559,6 +560,12 @@
       justify-content: space-evenly;
     }
 
+    .card__prop {
+      width: 320px;
+      /* justify-content: center; */
+    }
+
+ 
   /* Cad Properties */
     /* .bookshelf {
         display: inline-block;
@@ -645,9 +652,11 @@
       }
       .rigthContainer{
         width: 100%;
+        height: auto;
       }
       .leftContainer {
           width: 100%;
+          /* height: auto; */
         }
       .date, .titleIcons {
         position: static;
@@ -666,10 +675,21 @@
       .waSave{
         flex-direction: column;
         width: 100%;
+        align-items: center;
+        gap: 5px;
       }
       .btn__common{
         width: 90%;
       }
+   
+      .cont__contact{
+        flex-direction: column;
+      }
+      /* .rigthContainer {
+        width: auto;
+      } */
+
+      
     }
 
   

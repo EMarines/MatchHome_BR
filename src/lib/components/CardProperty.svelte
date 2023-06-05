@@ -71,4 +71,22 @@
       width: 100%;
       justify-content: center;
     }
+
+    @media(max-width: 400px){
+      .img__cont{
+        display: flex;
+        justify-content: center;
+        /* width: 100%; */
+        /* height: 80%; */
+    }
+    img{
+      width: 280px;
+      height: 200px;
+    }
+
+    span{
+      color: blue;
+      font-weight: 800;
+    }
+  }
 </style>
