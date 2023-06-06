@@ -12,15 +12,9 @@
      import { sortTodos } from '$lib/functions/sort.js'
      import { goto } from '$app/navigation';
      import { onDestroy } from 'svelte';
+    //  import { toComaSep, toTele } from '$lib/functions/format.js';
+    //  import { fly, fade } from 'svelte/transition';
 
-
-     import { toComaSep, toTele } from '$lib/functions/format.js';
-     import { fly, fade } from 'svelte/transition';
-     //  import { formatDate } from '$lib/functions/dateFunctions'
-      // import { useNavigate } from "svelte-navigator";
-      // import { sortTodos } from '../assets/funcions/sort'
-      // import edit from '../assets/images/edit.svg'
-      // import calendar_check from '../assets/images/calendar_check.svg'
 
   // Declaraciones
       $todo = {};
@@ -111,49 +105,36 @@
 
 <!-- {#if $systStatus === "editing"} -->
           
-<div class="container">  
+<div class="container schedule">  
 
   <div class="mainContainer">
-    <h1>Agenda</h1>
-    <img src={schedule} alt="schedule" class="imgTitle">
-    
-      <div>
-        <input type="text" class="inputTask" cols="56" rows="1"  placeholder = "Agrega una Tarea o Cita" bind:value = {$todo.task} />
-      </div>
+    <div class="header">
+      <img src={schedule} alt="schedule" class="imgTitle">
+      <h1 class="title">Agenda</h1>
+    </div>
 
+    <div class="cont__shcedule">
+
+        <input type="text" class="inputTask" placeholder = "Agrega una Tarea o Cita" bind:value = {$todo.task} />
+      
       <div class="contDate">
-          <input type="time"class="inputDate" bind:value = {$todo.timeTask} />
-          <input type="date" class="inputDate" bind:value = {$todo.endTask} /> 
-      </div>
-
-      <div>
-          <textarea name="notes" id="" cols="56" rows="5" bind:value = {$todo.notes} placeholder ="descripción"></textarea>
+        <input type="time"class="inputDate" bind:value = {$todo.timeTask} />
+        <input type="date" class="inputDate" bind:value = {$todo.endTask} /> 
       </div> 
 
+        <textarea name="notes" id="" bind:value = {$todo.notes} placeholder ="descripción"></textarea>
       <div>
         <!-- <button id="btn-task-save" on:click={handTodos}>Guardar</button> -->
         <button on:click={handTodo($todo)} >{#if $systStatus !== "editing"}Guardar{:else} Editar{/if}</button>
         <button on:click={cancel}>Cancelar</button>
         {#if editStatus}
-          <button on:click={deleteTodo}>Borrar</button>
+        <button on:click={deleteTodo}>Borrar</button>
         {/if}
+      </div>
+
     </div>
 
    
-
-  <!-- Agenda Head -->
-      <!-- {#if $systStatus !== "editing"} -->
-      
-
-            <!-- <div class="head__title">
-              <h1 class="title">Agenda</h1>
-            </div> -->
-            
-            <!-- <div class="agen__head">
-              <img src={schedule} alt="schedule" class="imgTitle">
-              <button on:click={addSchedule}>Agregar</button>
-            </div> -->
-
       <!-- AddToSchedule -->
             {#if inActivated}
               <AddToSchedule {...$todo}  on:closeIt = {close} />
@@ -185,52 +166,117 @@
 
 <style>
 
-.mainContainer {
-  display: flex;
-  flex-direction: column;
-  width: 950px;
-  height: 100vh;
-  /* background: yellowgreen; */
-  align-items: center;
-}
+  .schedule {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+  }
 
-/* .agen__head {
-  display: flex;
-  flex-direction: row;
-  width: 80%;
-  justify-content: space-evenly;
-  align-items: center;
-} */
+  .mainContainer {
+    display: flex;
+    flex-direction: column;
+    width: 950px;
+    height: auto;
+    /* background: yellowgreen; */
+    align-items: center;
+    /* justify-content: center; */
+  }
 
-img {
-  width: 80px;
-  height: auto;
-  padding: 10px;
-}
+  .header {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
 
-button {
-  height: 40px;
-  padding: 0 10px;
-  border-radius: 8px;
-  border-color: transparent;
-}
+  }
 
-td {
-  font-size: .8em;
-  font-weight: 300;
-  color: rgb(137, 136, 136);
-  padding: 8px;
-  border: 1px solid rgb(42, 41, 41, .3);
-}
+  .cont__shcedule {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    padding: 8px;
+    gap: 15px;
+  }
+
+  .contDate {
+    display: flex;
+    width: 60%;
+    justify-content: space-around;
+    
+  }
+
+  .table__todosHoy{
+    padding: 8px;
+  }
+
+  h3{
+    display: flex;
+    justify-content: center;
+  }
+
+  img {
+    width: 80px;
+    height: auto;
+    padding: 10px;
+  }
+
+  .inputTask {
+    width: 50%;
+    
+  }
+
+  input {
+    width: 40%;
+    height: 35px;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  textarea{
+    width: 60%;
+    height: 50px;
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  button {
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 8px;
+    border-color: transparent;
+  }
 
 
-.td__notes {
-  width: 160px;
-}
 
-.td__task {
-  width: 150px;
-}
+  td {
+    font-size: .8rem;
+    font-weight: 300;
+    color: rgb(137, 136, 136);
+    padding: 8px;
+    border: 1px solid rgb(42, 41, 41, .3);
+  }
+
+
+  .td__notes {
+    width: 160px;
+  }
+
+  .td__task {
+    width: 150px;
+  }
+
+  @media(max-width: 400px){
+    td{
+      font-size: .6rem;
+    }
+    .contDate {
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    input {
+      width: 85%;
+    }
+  }
 
 
 
