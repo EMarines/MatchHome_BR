@@ -56,6 +56,7 @@
             } 
           } else {
             try {
+              // Da de alta al contacto con los datos de la propiedad por la que contactó
               let createdAt = Date.now();
               let selecTP = $property.selectTP
               let propCont = $property.nameProperty;
@@ -183,7 +184,7 @@
         <select class="in__sel feat" id="selTP" name="selTP" bind:value={$contact.selecTP}>
           <option disabled selected value="">Tipo de Propiedad</option>
           {#each typeProperties as selecTP}
-          <option value={selecTP}>{selecTP}</option>
+            <option value={selecTP}>{selecTP}</option>
           {/each}
         </select>
       {/if}  

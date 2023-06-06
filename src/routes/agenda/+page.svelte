@@ -280,7 +280,6 @@
 
     .cont__shcedule {
       width: 100%;
-      background: yellow;
     }
     .contDate {
       flex-direction: column;

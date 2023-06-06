@@ -1,12 +1,12 @@
-<script>
+<!-- <script>
    export let data;
    console.log(data)
 </script>
-    <div class="container">
+    <div class="container"> -->
 
   
   <!-- Datos Personales -->
-    <h1 class="sectionTitle">Alta Contactos{data}</h1>
+    <!-- <h1 class="sectionTitle">Alta Contactos{data}</h1> -->
 
   <!-- Muestro o oculta la fecha para mostrar o editar -->
         <!-- <div class=""> -->
@@ -139,4 +139,4 @@
      <!-- <button class="btn__save" on:click={detaAlta}>Alta Detalles</button>
 
     </div> -->
-  </div>
+  <!-- </div> -->

@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
  	import { enhance, applyAction } from '$app/forms';
 	import ContactsTable from '$lib/components/ContactsTable.svelte';
 	import Alert from '../../lib/components/Alert.svelte';
@@ -85,4 +85,4 @@
 	</form>
 
 	<ContactsTable contacts={data?.contacts} />
-</div>
+</div> -->

@@ -17,7 +17,7 @@ export const GET = async() => {
         "id": 3,
         "title": "¿Quieres Invertir en Bienes Raíces?",
         "image": "https://picsum.photos/id/49/800/500",
-        "body": "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut"
+        "body": "Invertir en Bienes Raices es la manera más redituable y segura de hacer crecer tu patrimonio"
       }
     ];
 

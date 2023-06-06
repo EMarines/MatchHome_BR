@@ -45,22 +45,22 @@
 
 // Agendar
   // Cerrar Shedule                       
-      function close(){
-            isActivated = false;
-          };
+    function close(){
+          isActivated = false;
+        };
 
   // Mostrar Schedule
-      function addSchedule(){
-        isActivated = true;
-      };
+    function addSchedule(){
+      isActivated = true;
+    };
 
 // Search and filter
   // Muestra las propiedades que le podrían intesar
-      function fitProp($contact) {
-        propToRender = filtContPropInte($contact)
-        // propToRender = $currPropList
-            showProp = true;
-          };
+    function fitProp($contact) {
+      propToRender = filtContPropInte($contact)
+      // propToRender = $currPropList
+          showProp = true;
+        };
 
   // Search property by name
     function searProp() {
@@ -220,25 +220,20 @@
 
         <div class="leftContainer">
 
-        <div class="data__container">
-
-          <div class="headTitle">
-            <h1 class="name">{$contact.name} {$contact.lastname}</h1>
-
-            <div class="titleRight">
+          <div class="data__container">
+            <div class="headTitle">
               <div class="titleIcons">
-                <i on:click={()=>{editContact($contact.id)}} on:keydown={()=>{}} class="fa-regular fa-pen-to-square" />
-                <i on:click={()=>{deleContact($contact.id)}} on:keydown={()=>{}} class="fa-regular fa-trash-can" />
+                  <i on:click={()=>{editContact($contact.id)}} on:keydown={()=>{}} class="fa-regular fa-pen-to-square" />
+                  <i on:click={()=>{deleContact($contact.id)}} on:keydown={()=>{}} class="fa-regular fa-trash-can" />
+                </div>
+                <div class="titleRight">
+                  <h1 class="name">{$contact.name} {$contact.lastname}</h1>
+                  <span class="date">Fecha Alta: {formatDate($contact.createdAt)}</span>  
               </div>
-              <span class="date">Fecha Alta: {formatDate($contact.createdAt)}</span>  
-            </div>
-
-
             </div>
           </div>
 
         <div>
-  
           <div class="stage">
             <span>{$contact.contactStage}</span>
           </div>
@@ -306,7 +301,7 @@
                       <AddToSchedule {...$contact} on:closeIt = {close} />
                     {/if}
               
-          <!-- Botonies enviar WA o guardar nota para bitácora -->
+  <!-- Botonies enviar WA o guardar nota para bitácora -->
               
                 <div class="textAreaCont">
                     <textarea on:change={textAreaComm} class="texArea" bind:value = {commInpuyBinnacle} placeholder ="Ingresa un comentario"/> 
@@ -374,22 +369,17 @@
       gap: 10px;
       flex: 1;
     }
-    
-
   
     .leftContainer {
       display: flex;
       flex-direction: column;
       width: 60%;
-      /* height: auto; */
-      /* max-height: 550px; */
       margin-top: 10px;
       border: 1px solid rgb(56, 56, 56);
       border-radius: 8px;
       box-shadow: 1px 2px rgba(255,255,255, 0.5);
       background: rgb(56, 56, 56);
       padding: 0 15px 0 15px;
-      
     }
     
     .rigthContainer {
@@ -400,7 +390,6 @@
       line-height: 2rem;
       max-height: 550px;
       width: 40%;
-      /* align-items: left; */
       margin-top: 10px;
       border: 1px solid rgb(56, 56, 56);
       border-radius: 8px;
@@ -423,22 +412,8 @@
       justify-content: center;
       align-items: center;
       width: 100%;
-      /* background: yellowgreen; */
     }
 
-    /* .prop__container {
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-      max-width: 1200px;
-      align-items: center;
-      flex-wrap: wrap;
-      border: 1px solid rgb(56, 56, 56);
-      border-radius: 8px;
-      box-shadow: 1px 2px rgba(255,255,255, 0.5);
-      background: rgb(56, 56, 56);
-      padding: 5px;
-    } */
     .card__container {
       display: flex;
       flex-direction: row;
@@ -514,10 +489,10 @@
     
     .headTitle {
       display: flex;
+      flex-direction: column;
       width: 100%;
       padding: 20px 0 10px 0;
       justify-content: space-around;
-      /* align-items: center; */
     }
     
     .stage {
@@ -565,40 +540,6 @@
       /* justify-content: center; */
     }
 
- 
-  /* Cad Properties */
-    /* .bookshelf {
-        display: inline-block;
-        position: relative;
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: flex-start;
-        justify-content: center; 
-        gap: 15px;
-    } */
-    /* .property {
-      display: flex;
-      width: 220px;
-      gap: 15px;
-      flex-wrap: wrap;
-      border: 1px solid;
-      }
-
-      .bkcont {
-        width: 100%;
-        padding: 3px;
-        object-fit: cover;
-      }
-
-      img {
-        width: 100%;
-
-        padding: 3px;  
-        border-radius: 5px;    
-      } */
-
       .schedule{
         display: flex;
         align-items: left;
@@ -624,13 +565,30 @@
       }
 
       .titleIcons{
+        display: flex;
+        width: 100%;
+        height: 10px;
         position: relative;
-        top: -30px; left: 180px;
+        top: -15px;
+        justify-content: right;
+        gap: 50px;
+      }
+
+      .titleRight {
+        display: flex;
+        justify-content: space-between;
       }
 
       .date {
         position: relative;
-        top: -30px;
+        top: 20px;
+      }
+
+      .fa-pen-to-square, .fa-trash-can {
+        display: flex;
+        align-items:baseline;
+        font-size: 1.2rem;
+
       }
 
       .btn__common {
@@ -656,7 +614,6 @@
       }
       .leftContainer {
           width: 100%;
-          /* height: auto; */
         }
       .date, .titleIcons {
         position: static;
@@ -685,11 +642,12 @@
       .cont__contact{
         flex-direction: column;
       }
-      /* .rigthContainer {
-        width: auto;
-      } */
 
-      
+      .date {
+        position: relative;
+        top: 30px;
+      }
+         
     }
 
   

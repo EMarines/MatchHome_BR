@@ -5,16 +5,6 @@
     "Renta",
     "Renta Temporal"
   ]
- 
-  export const propTypes = [
-  "Casa",
-  "Departamento",
-  "Terreno",
-  "Casa Campo",
-  "Bodega",
-  "Local Comercial",
-  ""
-]
   
   export const ubications = [
     "Norte",

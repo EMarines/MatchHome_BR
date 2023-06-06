@@ -1,18 +1,24 @@
 // @ts-ignore
 import { mosRange } from '$lib/functions/rangValue.js'
 import { dbProperties } from '../../firebase';
+import { contact } from '$lib/stores/store.js'
 
 let proInt = dbProperties
 // console.log(proInt);
 
-    // @ts-ignore
+  
+    /**
+ * @param {{ selecTP: any; numBeds: number; numBaths: number; numParks: number; budget: number; rangeProp: string; }} $contact
+ */
     export function filtContPropInte($contact){
         // @ts-ignore
-        proInt = proInt.filter((item) => 
-
-          $contact.selecTP === item.selectTP);
+        proInt = proInt.filter((item) => {
+          console.log($contact);
+          console.log("jsjsjsj", item.selectTP, $contact.selecTP);
+        item.selectTP === $contact.selecTP
+    });
           
-        // console.log("filtraste por tipo de propiedad", proInt )
+        console.log("filtraste por tipo de propiedad", proInt )
        
        if ($contact.numBeds > 0) {
          proInt = proInt.filter((item) => item.beds >= $contact.numBeds);
@@ -39,7 +45,7 @@ let proInt = dbProperties
             // console.log(prop.price)
             )         
           } else {         
-            // console.log("filtraste por rango", $contact.rangeProp)
+            console.log("filtraste por rango", $contact.rangeProp)
   
             proInt = proInt.filter((prop) => mosRange(Number(prop.price)) === $contact.rangeProp);
             // console.log(prop.price)

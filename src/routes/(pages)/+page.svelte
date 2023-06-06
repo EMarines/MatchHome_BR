@@ -15,7 +15,7 @@
             <div>
                 <h2>{title}</h2>
                 <img src = {image} alt={title} />
-                <p>{body.substring(0, 80)}</p>
+                <p>{body.substring(0, 100)}</p>
             </div>
             {/each}
         </div>
@@ -35,6 +35,7 @@
             width: 100%;
             object-fit: cover;
             object-position: center;
+            border-radius: 8px;
         }
 
         @media(max-width: 800px){

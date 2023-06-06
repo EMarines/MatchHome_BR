@@ -4,7 +4,7 @@
     import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc} from 'firebase/firestore';
     import { db } from '../../../firebase'
     import{ goto } from '$app/navigation'
-    import { operTypes, propTypes, ubications, oneToFour, oneToFive } from '$lib/parameters';
+    import { operTypes, typeProperties, ubications, oneToFour, oneToFive } from '$lib/parameters';
     import Tags from '$lib/components/Tags.svelte'
 
   // HandeleSubmit
@@ -61,8 +61,8 @@
       <p class={$property.selectTP ? ' above' : ' center'}>Tipo de Propiedad</p>
       <select class="in__sel" name="selectTP" bind:value={$property.selectTP}>
         <option value="" disabled selected>* Tipo de Propiedad</option>
-        {#each propTypes as propType}
-          <option value={propType.toLocaleLowerCase()} >{propType}</option>
+        {#each typeProperties as propType}
+          <option value={propType} >{propType}</option>
         {/each}
       </select>
     </label>
