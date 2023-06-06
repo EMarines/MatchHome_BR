@@ -1,9 +1,18 @@
 <script>
     import { page } from '$app/stores'
 
-    export let title;
-    export let description;
-    export let type;
+    /**
+	 * @type {any}
+	 */
+     export let title;
+    /**
+	 * @type {any}
+	 */
+     export let description;
+    /**
+	 * @type {any}
+	 */
+     export let type;
 
     $: url = $page.url.href;
 </script>

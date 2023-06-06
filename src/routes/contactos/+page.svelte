@@ -109,7 +109,7 @@
     .headContainer {
       display: flex;
       flex-direction: row;
-      width: 100%;
+      /* width: 100%; */
       align-items: center;
       justify-content: space-around;
       /* background: yellow; */
@@ -198,5 +198,13 @@
       display: flex;
       width: 100%;
       justify-content: center;
+    }
+
+    @media (max-width:400px){
+      .headContainer {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
     }
     </style>

@@ -40,6 +40,7 @@
         font-weight: 500;
         border-bottom: 1px solid #ddd;
     }
+    
    </style>
 
     <Seo title="Services | Business Frontpage" description="Services" type="WebPage"/>

@@ -7,17 +7,16 @@
   ]
  
   export const propTypes = [
-  "",
   "Casa",
   "Departamento",
   "Terreno",
   "Casa Campo",
   "Bodega",
-  "Local Comercial"
+  "Local Comercial",
+  ""
 ]
   
   export const ubications = [
-    "",
     "Norte",
     "Norte_Oeste",
     "Norte_Este",
@@ -26,25 +25,26 @@
     "Este",
     "Centro_Sur",
     "Sur_Oeste",
-    "Sur_Este"
+    "Sur_Este",
+    ""
   ]
   
   export const typeContacts = [
-    "",
     "Comprador",
     "Vendedor",
     "Arrendador",
     "Arrendatario",
     "Inmobiliario",
     "Inmobiliario Asociado",
-    "Inversionista"
+    "Inversionista",
+    ""
   ]
 
   export const oneToThree = [
-    "",
     1,
     2,
-    3
+    3,
+    ""
   ]
 
   export const oneToFour = ["",
@@ -55,16 +55,15 @@
   ]
   
   export const oneToFive = [
-    "",
     1,
     2,
     3,
     4,
-    5
+    5,
+    ""
   ]
   
   export const modeContact = [ 
-    "",
     "Lona en Propiedad",
     "Propiedades.com",
     "NocNok",
@@ -74,10 +73,10 @@
     "Inmuebles24",
     "Referido",
     "Otro",
+    ""
   ]
 
   export const typeProperties = [
-    "",
     "Casa",
     "Terreno",
     "Departamento",
@@ -85,19 +84,20 @@
     "Local Comercial",
     "Edificio",
     "Bodega",
-    "Casa de Campo"
+    "Casa de Campo",
+    "",
   ];
 
   export const modePays = [
-    "",
     "Contado",
     "Credito Hipotecario",
     "INFONAVIT",
     "COFINAVIT",
     "FOVISSSTE",
     "ALIADOS",
-    "Conyugal"
-      ];
+    "Conyugal",
+    "",    
+  ];
 
   export const tags = [
     "Fracc. Privado",
@@ -110,10 +110,10 @@
   ]
 
   export const contactStage = [
-    "",
     "Etapa1",
     "Etapa2",
     "Etapa3",
     "Etapa4",
-    "Etapa5"
+    "Etapa5",
+    "",
   ]

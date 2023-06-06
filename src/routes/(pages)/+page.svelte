@@ -37,4 +37,24 @@
             object-position: center;
         }
 
+        @media(max-width: 800px){
+            .grid {
+                display: flex;
+                flex-direction: column;
+                max-width: 500px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+        }
+
+        @media(max-width: 400px){
+            .grid {
+                display: flex;
+                flex-direction: column;
+                max-width: 350px;
+                margin: 0 auto;
+                padding: 10px;
+            }
+        }
+
     </style>

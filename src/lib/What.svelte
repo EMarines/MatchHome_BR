@@ -1,10 +1,9 @@
 <script>
     import Button from '../lib/button.svelte';
     import Contact from '$lib/Contact.svelte';
-    import schedule from '$lib/images/schedule.png';
-    // import house_sale from '$lib/images/house-sale.jpg'
     import { currContList, currPropList } from './stores/store';
     import { dbProperties } from '../firebase'
+    // import schedule from '$lib/images/schedule.png';
 
     $: totProp = $currPropList.length;
     $: totCont = $currContList.length;
@@ -46,4 +45,11 @@
         border-bottom: 1px solid #ddd;
     }
 
+    @media(max-width: 800px) {
+        .grid {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+    }
 </style>

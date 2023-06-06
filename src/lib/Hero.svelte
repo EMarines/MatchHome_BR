@@ -5,13 +5,14 @@
 <div class="hero">
     <div class="container">
         <div class="header cabezal">
+            <div class="logo">
+                <img src={logo} alt="Match Home">
+            </div>
             <div>
                 <h2>Match Home</h2>
                 <h5>Tu Patrimonio En Buenas Manos</h5>
             </div>
-            <div class="logo">
-                <img src={logo} alt="Match Home">
-            </div>
+
         </div>
     </div>
 </div>
@@ -40,6 +41,7 @@
 
     .header {
         display: flex;
+        padding: 10px;
     }
 
     .logo {
@@ -50,5 +52,20 @@
 
     .cabezal {
         justify-content: space-between;
+    }
+
+    @media (max-width: 800px){
+        .header {
+            display: felx;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        h2 {
+            font-size: 2.5rem;
+        }
+        h5 {
+            font-size: 1.2rem;
+        }
     }
 </style>
