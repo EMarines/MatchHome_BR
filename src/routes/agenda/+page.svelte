@@ -123,14 +123,16 @@
       </div> 
 
         <textarea name="notes" id="" bind:value = {$todo.notes} placeholder ="descripción"></textarea>
-      <div>
-        <!-- <button id="btn-task-save" on:click={handTodos}>Guardar</button> -->
-        <button on:click={handTodo($todo)} >{#if $systStatus !== "editing"}Guardar{:else} Editar{/if}</button>
-        <button on:click={cancel}>Cancelar</button>
-        {#if editStatus}
-        <button on:click={deleteTodo}>Borrar</button>
-        {/if}
-      </div>
+      <!-- <div> -->
+        <div class="buttons">
+          <button on:click={handTodo($todo)} >{#if $systStatus !== "editing"}Guardar{:else} Editar{/if}</button>
+          <button on:click={cancel}>Cancelar</button>
+        </div>
+
+        <!-- {#if editStatus}
+          <button on:click={deleteTodo}>Borrar</button>
+        {/if} -->
+      <!-- </div> -->
 
     </div>
 
@@ -175,7 +177,8 @@
   .mainContainer {
     display: flex;
     flex-direction: column;
-    width: 950px;
+    width: 100%;
+    max-width: 1200px;
     height: auto;
     /* background: yellowgreen; */
     align-items: center;
@@ -245,6 +248,12 @@
     border-color: transparent;
   }
 
+  .buttons {
+    display: flex;
+    width: 40%;
+    justify-content: space-around;
+  }
+
 
 
   td {
@@ -266,15 +275,31 @@
 
   @media(max-width: 400px){
     td{
-      font-size: .6rem;
+      font-size: .8rem;
+    }
+
+    .cont__shcedule {
+      width: 100%;
+      background: yellow;
     }
     .contDate {
       flex-direction: column;
       align-items: center;
+      width: 100%;
       gap: 8px;
     }
     input {
-      width: 85%;
+      width: 100%;
+    }
+    textarea {
+      width: 100%;
+    }
+    .inputTask{
+      width: 100%;
+    }
+    .buttons {
+      width: 100%;
+      /* gap: 50px; */
     }
   }
 
