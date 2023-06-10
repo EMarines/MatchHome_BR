@@ -54,6 +54,7 @@ import { getAuth } from 'firebase/auth';
   export const auth = getAuth(app)
 
 
+  
   const bitacora = collection(db, "binnacles");
    const contactos = collection(db, "contacts");
    const propiedades = collection(db, "properties");

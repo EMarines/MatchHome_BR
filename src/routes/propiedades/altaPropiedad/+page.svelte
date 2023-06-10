@@ -7,6 +7,8 @@
     import { operTypes, typeProperties, ubications, oneToFour, oneToFive } from '$lib/parameters';
     import Tags from '$lib/components/Tags.svelte'
 
+    
+
   // HandeleSubmit
       async function handleSubmit() { 
          if($systStatus === "editing"){      
@@ -157,7 +159,7 @@
       </select>
     </label>
 
-    <Tags />
+    <Tags bind:tags = {$property.tagsProperty}/>
 
   </div>
   

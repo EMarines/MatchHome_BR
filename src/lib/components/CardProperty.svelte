@@ -19,7 +19,7 @@
         <span>Recámaras {Number(prop.beds)}</span>
         <span>Baños {Number(prop.bathroom)}</span> 
       {:else if prop.selectTP === "terreno"}  
-        <span>{prop.areaTotal} m²</span>
+        <span>{toComaSep(Number(prop.areaTotal))} m²</span>
       {/if}
     </div>
     <div class="prop__clave">
@@ -38,8 +38,12 @@
     }
 
     .img__cont{
+      display: flex;
       width: 100%;
       height: 58%;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
     }
 
     .info__cont{

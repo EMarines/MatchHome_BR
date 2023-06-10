@@ -3,6 +3,7 @@
    * @type {any}
    */
 	 export let ubication = [];
+
 </script>
 
 <div class="mainContainer">
@@ -15,47 +16,47 @@
 	</div>
 
 	<div class="filterLocationOne">
-		<label for="northwest">/Noroeste
-			<input value="Noroeste" id="northwest" type="checkbox" bind:group={ubication} />
+		<label for="Norte_Oeste">/Noroeste
+			<input value="Norte_Oeste" id="Norte_Oeste" type="checkbox" bind:group={ubication} />
 		</label>
 
-		<label for="northeast">
-			<input value="Noreste" id="northeast" type="checkbox" bind:group={ubication} />NorEste\
+		<label for="Norte_Este">
+			<input value="Norte_Este" id="Norte_Este" type="checkbox" bind:group={ubication} />NorEste\
 		</label>
 	</div>  
 
 	<div class="filterLocationOne">
-		<label for="west">/Oeste
-			<input value="Oeste" id="west" type="checkbox" bind:group={ubication} />
+		<label for="Oeste">/Oeste
+			<input value="Oeste" id="Oeste" type="checkbox" bind:group={ubication} />
 		</label>
 
-		<label for="townNorth"
+		<label for="Centro_Norte"
 					 >Centro Norte
-			<input value="Centronorte" id="townNorth" type="checkbox" bind:group={ubication} />
+			<input value="Centro_Norte" id="Centro_Norte" type="checkbox" bind:group={ubication} />
 		</label>
 
-		<label for="east">
+		<label for="Este">
 					 
-			<input value="Este" id="east" type="checkbox" bind:group={ubication} />Este\
+			<input value="Este" id="Este" type="checkbox" bind:group={ubication} />Este\
 		</label>
 	</div>
 
 	<div class="filterLocationOne"> 
-		<label for="townsouth"
+		<label for="Centro_Sur"
 					 >Centro Sur
-			<input value="CentroSur" id="townsouth" type="checkbox" bind:group={ubication} />
+			<input value="Centro_Sur" id="Centro_Sur" type="checkbox" bind:group={ubication} />
 		</label>
 	</div>
 
 	<div class="filterLocationOne">
-		<label for="southwest"
+		<label for="Sur_Oeste"
 					 >/SurOeste
-			<input value="SurOeste" id="southwest" type="checkbox" bind:group={ubication} />
+			<input value="Sur_Oeste" id="Sur_Oeste" type="checkbox" bind:group={ubication} />
 		</label>
 
-		<label for="southeast"
+		<label for="Sur_Este"
 					 >
-			<input value="SurEste" id="southeast" type="checkbox" bind:group={ubication} />SurEste\
+			<input value="Sur_Este" id="Sur_Este" type="checkbox" bind:group={ubication} />SurEste\
 		</label>
 	</div>
 </div>

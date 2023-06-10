@@ -146,10 +146,8 @@
       color: grey;
       border: 1px solid grey;
       border-radius: 5px;
-      /* justify-content: center; */
-      /* align-items: center; */
       padding: 8px;
-      /* background: rgb(255, 145, 105); */
+      cursor: pointer;
     }
 
     .card__info {

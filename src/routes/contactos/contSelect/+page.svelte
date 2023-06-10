@@ -9,13 +9,14 @@
   import { db, dbBinnacle } from '../../../firebase'
   import Search from '$lib/components/Search.svelte';
   import AddToSchedule from '$lib/components/AddToSchedule.svelte'
-  import { filtContPropInte } from '../../../lib/functions/filProperties';
+  import { filtContPropInte } from '$lib/functions/filProperties';
   import { goto } from '$app/navigation';
   import { deleteDoc, doc, collection, onSnapshot, updateDoc } from '@firebase/firestore';
   import { onDestroy } from 'svelte';
   import CardProperty from '$lib/components/CardProperty.svelte';
   import CardBinnacle from '$lib/components/CardBinnacle.svelte';
   import { sortBinnacle } from '$lib/functions/sort.js'
+  // import { proInt } from '$lib/functions/filPropety.js'
   // import { scale } from 'svelte/transition';
   // import { expoInOut } from 'svelte/easing';
   // import Binnacle from '$lib/components/Binnacle.svelte';
@@ -30,6 +31,8 @@
   let propToRender = []; 
   let sortedBinn = [];
   let toRenBinn = [];
+  let contacto = {};
+  // let proInt = [];
   // let proInterest = {};
   // $toRenBinn = dbBinnacle;
   // let msgWA = ""; 
@@ -56,9 +59,13 @@
 
 // Search and filter
   // Muestra las propiedades que le podrían intesar
-    function fitProp($contact) {
-      propToRender = filtContPropInte($contact)
-      // propToRender = $currPropList
+    function fitProp() {
+      contacto = $contact
+      console.log(filtContPropInte(contacto));
+      propToRender = filtContPropInte(contacto) 
+      console.log(propToRender);
+      // propToRender = proIntc
+      // console.log(proInt);
           showProp = true;
         };
 
@@ -434,15 +441,17 @@
     .card__prop { 
         display: flex; 
         flex-direction: column;   
-        width: 200px;
-        height: 250px;     
-        font-family: cursive;
+        /* width: 150px; */
+        /* height: 250px;      */
+        /* font-family: cursive; */
         color: grey;
         border: 1px solid grey;
         border-radius: 5px;
+        align-items: center;
         justify-content: center;
         padding: 8px;
         gap: 4px;
+        /* background: yellow; */
     }
 
     .btn__actions {
@@ -536,7 +545,7 @@
     }
 
     .card__prop {
-      width: 320px;
+      width: 200px;
       /* justify-content: center; */
     }
 
@@ -646,6 +655,14 @@
       .date {
         position: relative;
         top: 30px;
+      }
+
+      .card__prop {
+        width: auto;
+      }
+      .title__props {
+        font-size: .6rem;
+        padding: 20px;
       }
          
     }

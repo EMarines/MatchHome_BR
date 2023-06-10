@@ -1,11 +1,8 @@
 <script>
-   import Tags from './Tags.svelte';
-   import { tags } from '$lib/parameters.js'
-  // let etapa;
    /**
    * @type {any}
    */
-    let tag = [];
+    export  let tags = [];
   
 </script>
 
@@ -13,34 +10,34 @@
 
 		<div class="rowContainer">
 			<label>Fracc. Privado
-				<input type="checkbox"  value="Fracc. Privado" bind:group={tag}/>
+				<input type="checkbox"  value="Fracc._Privado" bind:group={tags}/>
 	   	</label>
       <label>Frente a Parque
-         <input type="checkbox" value="Frente a Parque"  bind:group={tag}  />
+         <input type="checkbox" value="Frente_a_Parque"  bind:group={tags}  />
       </label>	
 		</div>
 
 		<div class="rowContainer">
       <label>Una Planta
-         <input type="checkbox" value="Una Planta"  bind:group={tag} />
+         <input type="checkbox" value="Una_Planta"  bind:group={tags} />
       </label>
 			<label>Recamara en P.B.
-				<input type="checkbox" value="Recamara en PB" bind:group={tag} />
+				<input type="checkbox" value="Recamara_ en_PB" bind:group={tags} />
 			</label>	
 		</div>
 			
 		<div class="rowContainer">
 			<label>Patio Amplio
-				<input type="checkbox" value="Patio Amplio" bind:group={tag} />
+				<input type="checkbox" value="Patio_Amplio" bind:group={tags} />
 			</label>			
 			<label>Lista para Habitarse
-				<input type="checkbox" value="Lista Habitarse" bind:group={tag} />
+				<input type="checkbox" value="Lista_Habitarse" bind:group={tags} />
 			</label>
 		</div>
 			
 		<div class="rowContainer">
 			<label>Nueva
-				<input type="checkbox" value="Nueva" bind:group={tag} />
+				<input type="checkbox" value="Nueva" bind:group={tags} />
 			</label>
 		</div>
 

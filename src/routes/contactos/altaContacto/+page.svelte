@@ -9,15 +9,15 @@
     import Ubication from '$lib/components/Ubication.svelte'
     import { mosRange } from '../../../lib/functions/rangValue'
     import { infoToBinnacle } from '$lib/functions/binnSaver'
-    import { scale } from 'svelte/transition';
-    import { expoInOut } from 'svelte/easing';
-    import { toComaSep } from '$lib/functions/format.js' 
-    // import { searProp } from '$lib/functions/searchProperty.js'
     import { typeContacts, modeContact, typeProperties, modePays, oneToFive, oneToFour, oneToThree, contactStage } from '$lib/parameters.js';
-    import { formatDate } from '$lib/functions/dateFunctions.js';
     import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc} from 'firebase/firestore';
     import { goto } from '$app/navigation';
     import CardProperty from '$lib/components/CardProperty.svelte';
+    import { formatDate } from '$lib/functions/dateFunctions.js';
+    import { toComaSep } from '$lib/functions/format.js' 
+    import { scale } from 'svelte/transition';
+    import { expoInOut } from 'svelte/easing';
+    // import { searProp } from '$lib/functions/searchProperty.js'
 
   // Declaraciones
       let searchTerm = "";
@@ -26,7 +26,7 @@
       let propChecked = "";
       let prop;
       let ubication = "";
-      let tag = [];
+      let tags = "";
       
       /**
        * @type {never[]}
@@ -45,7 +45,7 @@
 
   // Handle Submit
       async function handleSubmit() { 
-        console.log($systStatus);
+        console.log(tags);
           if($systStatus === "editing"){ 
             try {
               await updateDoc(doc(db, "contacts", $contact.id), $contact);
@@ -160,33 +160,41 @@
     </div>
 
   <!-- Tipo de contacto -->
-    <div class="featContact">
+      <div class="featContact">
 
-      <select class="in__sel feat" bind:value={$contact.typeContact}>
-        <option class={$contact.typeContact ? ' above' : ' center'} value="">Tipo de Contacto</option>
-        <!-- <p class={$contact.typeContact ? ' above' : ' center'}>Tipo de Contacto</p> -->
-
-        {#each typeContacts as typeContac}
-          <option  value={typeContac}>{typeContac}</option>
-        {/each}
-      </select>       
+        <label class="label__title">
+          <p class={$contact.typeContact ? ' above' : ' center'}>Tipo de Contacto</p>
+          <select class="in__sel feat" bind:value={$contact.typeContact}>
+            <option class={$contact.typeContact ? ' above' : ' center'} value="">Tipo de Contacto</option>
+            {#each typeContacts as typeContac}
+              <option  value={typeContac}>{typeContac}</option>
+            {/each}
+          </select>   
+        </label>    
       
     <!-- Fuente del Contacto -->
-      <select class="in__sel feat" bind:value={$contact.selecMC}>
-        <option disabled selected value="">Modo de Contacto</option>
-        {#each modeContact as selecMC}
-        <option  value={selecMC}>{selecMC}</option>
-        {/each}
-      </select>
+
+        <label class="label__title">
+          <p class={$contact.selecMC ? ' above' : ' center'}>Modo de Contacto</p>
+          <select class="in__sel feat" bind:value={$contact.selecMC}>
+            <option disabled selected value="">Modo de Contacto</option>
+            {#each modeContact as selecMC}
+            <option  value={selecMC}>{selecMC}</option>
+            {/each}
+          </select>
+        </label>
       
     <!-- Tipo de propiedad buscada -->
       {#if detaAdd}
-        <select class="in__sel feat" id="selTP" name="selTP" bind:value={$contact.selecTP}>
-          <option disabled selected value="">Tipo de Propiedad</option>
-          {#each typeProperties as selecTP}
-            <option value={selecTP}>{selecTP}</option>
-          {/each}
-        </select>
+        <label class="label__title">      
+          <p class={$contact.selecTP ? ' above' : ' center'}>Tipo de Propiedad</p>
+            <select class="in__sel feat" id="selTP" name="selTP" bind:value={$contact.selecTP}>
+              <option disabled selected value="">Tipo de Propiedad</option>
+              {#each typeProperties as selecTP}
+                <option value={selecTP}>{selecTP}</option>
+              {/each}
+            </select>
+          </label>
       {/if}  
     </div>
 
@@ -210,41 +218,57 @@
       </div>
 
   <!-- Metodo de Pago -->
-       <select class="in__sel" bind:value={$contact.modePay}>
-          <option disabled selected value="">Modo de Pago</option>
-          {#each modePays as modeP}
-            <option  value={modeP}>{modeP}</option>
-          {/each}
-       </select>
-
+        <label class="label__title">
+          <p class={$contact.modePay ? ' above' : ' center'}>Modo de Pago</p>
+            <select class="in__sel" bind:value={$contact.modePay}>
+                <option disabled selected value="">Modo de Pago</option>
+                {#each modePays as modeP}
+                  <option  value={modeP}>{modeP}</option>
+                {/each}
+            </select>
+        </label>
   <!-- Características buscadas -->
-       <select class="in__sel" bind:value={$contact.numBeds}>
-          <option disabled selected value="" ># Recámaras</option>
-          {#each oneToFive as beds}
-            <option value={beds} >{beds} Recámaras</option>
-          {/each}
-       </select>
+            
+        <label class="label__title">
+          <p class={$contact.numBeds ? ' above' : ' center'}>Recámaras</p>
+            <select class="in__sel" bind:value={$contact.numBeds}>
+                <option disabled selected value="" ># Recámaras</option>
+                {#each oneToFive as beds}
+                  <option value={beds} >{beds} Recámaras</option>
+                {/each}
+            </select>
+        </label>
 
-       <select class="in__sel" bind:value={$contact.numBaths}>
-          <option disabled selected value=""># Baños</option>
-          {#each oneToFour as bathroom}
-            <option value={bathroom}>{bathroom} baños</option>
-          {/each}
-       </select>
+       <label class="label__title">
+        <p class={$contact.numBaths ? ' above' : ' center'}>Baños</p>
+          <select class="in__sel" bind:value={$contact.numBaths}>
+              <option disabled selected value=""># Baños</option>
+              {#each oneToFour as bathroom}
+                <option value={bathroom}>{bathroom} baños</option>
+              {/each}
+          </select>
+       </label> 
 
-       <select class="in__sel" bind:value={$contact.halfBathroom}>
-          <option disabled selected value=""># Medios Baños</option>
-          {#each oneToFour as numberHalfBath}
-          <option value={numberHalfBath}>{numberHalfBath} Medios baños</option>
-          {/each}
-       </select>
+       
+       <label class="label__title">
+        <p class={$contact.halfBathroom ? ' above' : ' center'}>Medios Baños</p>
+          <select class="in__sel" bind:value={$contact.halfBathroom}>
+              <option disabled selected value=""></option>
+              {#each oneToFour as numberHalfBath}
+              <option value={numberHalfBath}>{numberHalfBath}</option>
+              {/each}
+          </select>
+        </label>
 
-       <select  class="in__sel"bind:value={$contact.numParks}>
-          <option disabled selected value=""># Estacionamientos</option>
-          {#each oneToFour as park}
-          <option value={park}>{park} Estacionamientos</option>
-          {/each}
-       </select>
+       <label class="label__title">
+        <p class={$contact.numParks ? ' above' : ' center'}>Estacionamientos</p>
+        <select  class="in__sel"bind:value={$contact.numParks}>
+            <option disabled selected value="">Estacionamientos</option>
+            {#each oneToFour as park}
+            <option value={park}>{park} Estacionamientos</option>
+            {/each}
+        </select>
+       </label>
 
   <!-- Stages -->
         <label class="label__title">
@@ -260,7 +284,7 @@
   <!-- Ubicacion y etiquetas -->
        <div class="ubi__Tags">
           <Ubication bind:ubication = {$contact.locaProperty} />
-          <Tags bind:tag = {$contact.tagsProperty} />
+          <Tags bind:tags = {$contact.tagsProperty} />
        </div>
     {/if}
 
@@ -317,9 +341,9 @@
     width: 250px;
     border-radius: 8px;
     border-color: 2px solid blue;
-    font-family: cursive;
+    /* font-family: cursive; */
     font-size: .8em;
-    font-weight: 550;
+    font-weight: 600;
     color: darkblue;  
   }
 
