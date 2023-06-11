@@ -1,12 +1,16 @@
-// @ts-nocheck
-// @ts-ignore
+
 import { mosRange } from '$lib/functions/rangValue.js'
 import { dbProperties } from '../../firebase';
-// @ts-ignore
-// import { contact } from '$lib/stores/store.js'
 
+
+      /**
+ * @type {any[]}
+ */
       let proInt = [];
 
+      /**
+ * @param {{ selecTP?: any; numBeds?: any; numBaths?: any; numParks?: any; budget?: any; rangeProp?: any; locaProperty?: any; tagsProperty?: any; }} contact
+ */
       export function filtContPropInte(contact){
         proInt = dbProperties
 
@@ -14,6 +18,11 @@ import { dbProperties } from '../../firebase';
           proInt = proInt.filter((item) =>
             contact.selecTP === item.selectTP
           );
+
+      // // Filtra por tipo de operacion 
+      //       proInt = proInt.filter((item) =>
+      //       contact.typeContact === item.typeOperation
+      //     );
             
         if (contact.numBeds > 0) {
           proInt = proInt.filter((item) => item.beds >= contact.numBeds);
@@ -41,34 +50,35 @@ import { dbProperties } from '../../firebase';
   // Filtra por Ubicación  
       if(contact.locaProperty){
           proInt = proInt.filter(prop => 
-          (contact.locaProperty).some(c => (prop.locaProperty).includes(c))
+          (contact.locaProperty).some((/** @type {any} */ c) => (prop.locaProperty).includes(c))
       )};
         
 
             // console.log(contact.tagsProperty);
 
-    // // Filtra por Etiquetas
-    //     if(contact.tagsProperty)
-    //       console.log("estas dentro de tags", contact.tagsProperty, proInt)
-    //       //   proInt= proInt.filter(e => contact.tagsProperty.every(c => e.tagsProperty.includes(c)));
-    //       // ;
-    //       console.log(contact.tagsProperty.length) 
-    //       try {
-    //         proInt = proInt.filter(prop => {
-    //           // console.log(prop.tagsProperty[0]);
-    //           if(prop.tagsProperty.length > 0){
-    //             console.log("Estas en if", prop.tagsProperty.length);
-    //             proInt= proInt.filter(e => contact.tagsProperty.some(c => e.tagsProperty.includes(c)));
-    //             console.log(proInt);
-    //             // return proInt
-    //           } else {
-    //             // conIntR = conInt.filter((prop) => cont.tagsProperty.length === 0)
-    //             console.log(proInt);
-    //           }
-    //         });            
-    //       } catch (error) {
-    //         console.log(error)
-    //       };
+    // Filtra por Etiquetas
+        if(contact.tagsProperty)
+          console.log("estas dentro de tags", contact.tagsProperty, proInt)
+          //   proInt= proInt.filter(e => contact.tagsProperty.every(c => e.tagsProperty.includes(c)));
+          // ;
+          console.log(contact.tagsProperty.length) 
+          try {
+            proInt = proInt.filter(prop => {
+              // console.log(prop.tagsProperty[0]);
+              if(prop.tagsProperty.length > 0){
+                console.log("Estas en if", prop.tagsProperty.length);
+                return proInt= proInt.filter(elem => contact.tagsProperty.every((/** @type {any} */ tags) => elem.tagsProperty.includes(tags)));
+                console.log(proInt);
+                // return proInt
+              } 
+              //     else {
+              //   // conIntR = conInt.filter((prop) => cont.tagsProperty.length === 0)
+              //   console.log(proInt);
+              // }
+            });            
+          } catch (error) {
+            console.log(error)
+          };
             
         return proInt;
 

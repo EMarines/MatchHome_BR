@@ -61,7 +61,7 @@
   // Muestra las propiedades que le podrían intesar
     function fitProp() {
       contacto = $contact
-      console.log(filtContPropInte(contacto));
+      // console.log(filtContPropInte(contacto));
       propToRender = filtContPropInte(contacto) 
       console.log(propToRender);
       // propToRender = proIntc
@@ -294,7 +294,7 @@
           <!-- Iconos edit, delete -->
                   <div class="icon__actions">
                       <button class="btn__common" on:click = {addSchedule($contact)} ><i class="fa-solid fa-calendar-days"></i>Agendar</button>
-                      <button class="btn__common" on:click = { () => fitProp($contact)}> <i class="fa-solid fa-house-laptop"></i>Propiedades</button>
+                      <button class="btn__common" on:click = { fitProp($contact)}> <i class="fa-solid fa-house-laptop"></i>Propiedades</button>
                       <button class="btn__common" on:click = {mostSearch}> <i class="fa-solid fa-house-user"></i>Propiedad</button>
                       <button class="btn__common" on:click={onCancel}><i class="fa-solid fa-rotate-left"></i>Regresar</button>
                       
