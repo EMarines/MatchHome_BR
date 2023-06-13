@@ -46,11 +46,12 @@
   </script>
     
   <!-- Renderización -->
-    <div class="container">
-    
-      <h1 class="title">Propiedades</h1>
-    
-      <button class="btn__submit" on:click={addProperty}>Alta de Propiedad</button>
+    <div class="mainContainer">
+      <div class="title__head">
+        <h1 class="title">Propiedades</h1>
+      
+        <button class="btn__submit" on:click={addProperty}>Alta de Propiedad</button>
+      </div>
     
       <div class="card__container">
 
@@ -67,28 +68,53 @@
   
 <style>
 
+  .mainContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .title__head{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: auto;
+  }
+
+  .card__container {
+      display: flex;
+      flex-direction: row;
+      margin: 0 auto;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+  }
+
   .card__prop { 
       display: flex; 
       flex-direction: column;   
       width: 200px;
       height: 250px;     
-      font-family: cursive;
       color: grey;
       border: 1px solid grey;
       border-radius: 5px;
       justify-content: center;
       padding: 8px;
       gap: 4px;
-  }
+    }
 
-  .card__container {
-    width: 90%;
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-  }
+    @media(max-width: 400px) {
+      .card__prop {
+      border: none;
+      padding: 5px;
+      }
+      .title__head {
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+    }
+    
+
 
 </style>

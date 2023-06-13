@@ -43,7 +43,7 @@
       height: 58%;
       align-items: center;
       justify-content: center;
-      margin: 0 auto;
+      /* margin: 0 auto; */
     }
 
     .info__cont{
@@ -86,11 +86,16 @@
     img{
       width: 280px;
       height: 200px;
+      
+      border: 1px solid grey;
+      padding: 5px;
     }
 
     span{
       color: blue;
       font-weight: 800;
+      position: relative;
+      top: -30px;
     }
   }
 </style>

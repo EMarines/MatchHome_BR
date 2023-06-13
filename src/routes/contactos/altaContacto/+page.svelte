@@ -9,7 +9,7 @@
     import Ubication from '$lib/components/Ubication.svelte'
     import { mosRange } from '../../../lib/functions/rangValue'
     import { infoToBinnacle } from '$lib/functions/binnSaver'
-    import { typeContacts, modeContact, typeProperties, modePays, oneToFive, oneToFour, oneToThree, contactStage } from '$lib/parameters.js';
+    import { typeContacts, modeContact, typeProperties, modePays, oneToFive, oneToFour, oneToThree, contactStage, range } from '$lib/parameters.js';
     import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc} from 'firebase/firestore';
     import { goto } from '$app/navigation';
     import CardProperty from '$lib/components/CardProperty.svelte';
@@ -253,9 +253,9 @@
        <label class="label__title">
         <p class={$contact.halfBathroom ? ' above' : ' center'}>Medios Baños</p>
           <select class="in__sel" bind:value={$contact.halfBathroom}>
-              <option disabled selected value=""></option>
+              <option disabled selected value=""># Medios Baños</option>
               {#each oneToFour as numberHalfBath}
-              <option value={numberHalfBath}>{numberHalfBath}</option>
+              <option value={numberHalfBath}>{numberHalfBath}Medios Baños</option>
               {/each}
           </select>
         </label>
@@ -263,9 +263,19 @@
        <label class="label__title">
         <p class={$contact.numParks ? ' above' : ' center'}>Estacionamientos</p>
         <select  class="in__sel"bind:value={$contact.numParks}>
-            <option disabled selected value="">Estacionamientos</option>
+            <option disabled selected value=""># Estacionamientos</option>
             {#each oneToFour as park}
-            <option value={park}>{park} Estacionamientos</option>
+            <option value={park}>{park}Estacionamientos</option>
+            {/each}
+        </select>
+       </label>
+
+       <label class="label__title">
+        <p class={$contact.rangeProp ? ' above' : ' center'}>Rango</p>
+        <select  class="in__sel" bind:value={$contact.rangeProp}>
+            <option disabled selected value="">Rango</option>
+            {#each range as rng}
+            <option value={rng.slice(0,3)}>{rng}</option>
             {/each}
         </select>
        </label>
@@ -418,6 +428,9 @@
     }
     .in__sel {
       width: 100%;
+    }
+    .ubi__Tags {
+      flex-direction: column;
     }
   }
 </style>

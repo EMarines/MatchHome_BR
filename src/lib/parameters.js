@@ -6,16 +6,26 @@
     "Renta Temporal"
   ]
   
+  export const range = [
+    "PRM 0.0 <> 1.0",
+    "SGN 1.0 <> 2.5",
+    "TRC 2.5 <> 5.0",
+    "CRT 5.0 <> 8.0",
+    "QNT 8.0 <> 12",
+    "SXT 12 > X",
+    ""
+  ]
+
   export const ubications = [
     "Norte",
-    "Norte_Oeste",
-    "Norte_Este",
+    "Noroeste",
+    "Noreste",
     "Oeste",
-    "Centro_Norte",
+    "Centronorte",
     "Este",
-    "Centro_Sur",
-    "Sur_Oeste",
-    "Sur_Este",
+    "Centrosur",
+    "Suroeste",
+    "Sureste",
     ""
   ]
   

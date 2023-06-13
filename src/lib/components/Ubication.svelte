@@ -16,12 +16,12 @@
 	</div>
 
 	<div class="filterLocationOne">
-		<label for="Norte_Oeste">/Noroeste
-			<input value="Norte_Oeste" id="Norte_Oeste" type="checkbox" bind:group={ubication} />
+		<label for="Noroeste">/Noroeste
+			<input value="Noroeste" id="Noroeste" type="checkbox" bind:group={ubication} />
 		</label>
 
-		<label for="Norte_Este">
-			<input value="Norte_Este" id="Norte_Este" type="checkbox" bind:group={ubication} />NorEste\
+		<label for="Noreste">
+			<input value="Noreste" id="Noreste" type="checkbox" bind:group={ubication} />NorEste\
 		</label>
 	</div>  
 
@@ -30,9 +30,9 @@
 			<input value="Oeste" id="Oeste" type="checkbox" bind:group={ubication} />
 		</label>
 
-		<label for="Centro_Norte"
+		<label for="Centronorte"
 					 >Centro Norte
-			<input value="Centro_Norte" id="Centro_Norte" type="checkbox" bind:group={ubication} />
+			<input value="Centronorte" id="Centronorte" type="checkbox" bind:group={ubication} />
 		</label>
 
 		<label for="Este">
@@ -42,21 +42,21 @@
 	</div>
 
 	<div class="filterLocationOne"> 
-		<label for="Centro_Sur"
+		<label for="Centrosur"
 					 >Centro Sur
-			<input value="Centro_Sur" id="Centro_Sur" type="checkbox" bind:group={ubication} />
+			<input value="Centrosur" id="Centrosur" type="checkbox" bind:group={ubication} />
 		</label>
 	</div>
 
 	<div class="filterLocationOne">
-		<label for="Sur_Oeste"
+		<label for="Suroeste"
 					 >/SurOeste
-			<input value="Sur_Oeste" id="Sur_Oeste" type="checkbox" bind:group={ubication} />
+			<input value="Suroeste" id="Suroeste" type="checkbox" bind:group={ubication} />
 		</label>
 
-		<label for="Sur_Este"
+		<label for="Sureste"
 					 >
-			<input value="Sur_Este" id="Sur_Este" type="checkbox" bind:group={ubication} />SurEste\
+			<input value="Sureste" id="Sureste" type="checkbox" bind:group={ubication} />SurEste\
 		</label>
 	</div>
 </div>
