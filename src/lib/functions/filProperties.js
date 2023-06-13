@@ -30,7 +30,6 @@ import { dbProperties } from '../../firebase';
           if (contact.numParks > 0) {
             proInt = proInt.filter((item) => item.park >= contact.numParks);
         }
-        console.log(proInt);
 
   // Filtra por Rango
         if(!!contact.budget || (!!contact.rangeProp))

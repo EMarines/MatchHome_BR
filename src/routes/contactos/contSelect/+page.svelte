@@ -61,12 +61,8 @@
   // Muestra las propiedades que le podrían intesar
     function fitProp() {
       contacto = $contact
-      // console.log(filtContPropInte(contacto));
       propToRender = filtContPropInte(contacto) 
-      console.log(propToRender);
-      // propToRender = proIntc
-      // console.log(proInt);
-          showProp = true;
+      showProp = true;
         };
 
   // Search property by name

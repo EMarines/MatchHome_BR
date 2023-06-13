@@ -9,10 +9,15 @@
     import { sortList } from '$lib/functions/sort.js'
     import { goto } from '$app/navigation';
     import CardProperty from '$lib/components/CardProperty.svelte';
+    import Search from '$lib/components/Search.svelte';
+    // import { searProp } from '$lib/functions/searProp.js'
+
+
 
   // Declarations
     $property = {};
     $systStatus = "";
+    let searchTerm = "";
     let prop = {};
 
   // Añadir propiedad
@@ -42,6 +47,14 @@
       $property = prop
       goto("/propiedades/propSelect")
     }
+
+  // Search property by name
+    function searProp() {
+      return propToRender = $currPropList.filter((propety) => {
+        let contInfo = (propety.nameProperty + " " + propety.colonia + " " + propety.claveEB).toLowerCase();
+        return contInfo.includes(searchTerm.toLowerCase());
+      });  
+    };
   
   </script>
     
@@ -49,8 +62,10 @@
     <div class="mainContainer">
       <div class="title__head">
         <h1 class="title">Propiedades</h1>
-      
-        <button class="btn__submit" on:click={addProperty}>Alta de Propiedad</button>
+        <div class="title__inter">
+          <Search bind:searchTerm on:input={searProp} on:keydown={()=>{}}/>
+          <button class="btn__submit" on:click={addProperty}>Alta de Propiedad</button>
+        </div>
       </div>
     
       <div class="card__container">
@@ -76,9 +91,19 @@
   
   .title__head{
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
     height: auto;
+  }
+
+  .title__inter {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    align-items: baseline;
+
   }
 
   .card__container {
@@ -112,6 +137,12 @@
         flex-direction: column;
         align-items: center;
         margin-bottom: 25px;
+      }
+      .title__inter {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        margin: 15px 0;
       }
     }
     
