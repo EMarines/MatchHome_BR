@@ -306,7 +306,7 @@
 
       </div>
       
-      
+    </div>  
       
   <!-- Renderiza las Tarjetas para Propiedad -->
       {#if showProp} 
@@ -315,10 +315,18 @@
       <div class="card__container">
 
         {#each propToRender as prop}
+
           <div class="card__prop">
-            <input type="checkbox" name={prop.claveEB} value={prop} bind:group={propChecked} on:change={propCheck}>
-            <CardProperty {prop} />
+
+            <div class="sel__prop">
+              <input  type="checkbox" name={prop.claveEB} value={prop} bind:group={propChecked} on:change={propCheck}>
+            </div>
+            <div >
+              <CardProperty {prop} />
+            </div>
+
           </div>
+
         {/each}
 
         {#if propToRender.length === 0}
@@ -327,7 +335,7 @@
       </div>
       {/if}
       
-    </div>  
+     
 
 
 
@@ -398,13 +406,13 @@
   }
 
   .card__container {
-    width: 90%;
     display: flex;
     flex-direction: row;
+    width: 100%;
     padding: 10px;
-    flex-wrap: wrap;
     /* align-items: center; */
     justify-content: center;
+    flex-wrap: wrap;
     gap: 10px;
   }
 
@@ -417,12 +425,28 @@
       color: grey;
       border: 1px solid grey;
       border-radius: 5px;
-      justify-content: center;
+      justify-content: baseline;
       padding: 8px;
       gap: 4px;
   }
 
+  .sel__prop {
+    display: block; 
+    padding: 0; 
+    margin: 0;  
+    width: 0%; 
+    border-radius: 0; 
+    line-height: 1;
+    position: relative;
+    top: 30px;
+    left: 5px;
+  }
+
   @media(max-width:400px){
+    .card__container {
+      flex-direction: column;
+    }
+
     .inp__lat{
       flex-direction: column;
     }
@@ -432,6 +456,18 @@
     .ubi__Tags {
       flex-direction: column;
     }
+    .card__prop {
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      border: none;
+    }
+    .sel__prop {
+      position: relative;
+      top: 43px;
+      left: 10px;
+    }
+
   }
 </style>
 

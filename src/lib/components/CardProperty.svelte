@@ -9,11 +9,14 @@
   <div class="img__cont">
     <img src="{prop.urlImage}" alt="casa">
   </div>
+
   <div class="info__cont">
+
     <div class="card__info">
-        <span>{prop.colonia}</span>
-        <span>$ {toComaSep(Number(prop.price))}.</span>
+      <span>{prop.colonia}</span>
+      <span>$ {toComaSep(Number(prop.price))}.</span>
     </div>
+
     <div class="card__features">
       {#if  prop.selectTP === "casa" || prop.selectTP === "departamento"}
         <span>Recámaras {Number(prop.beds)}</span>
@@ -22,45 +25,45 @@
         <span>{toComaSep(Number(prop.areaTotal))} m²</span>
       {/if}
     </div>
-    <div class="prop__clave">
-    </div>
+
   </div>
 
 
 <style>
 
-      .card__info {
-        display: flex;
-        flex-direction: column;
-        font-size: 0.9rem;
-        font-weight: 300;
-        align-items: center;
-    }
-
     .img__cont{
       display: flex;
       width: 100%;
       height: 58%;
-      align-items: center;
+      align-items: baseline;
       justify-content: center;
-      /* margin: 0 auto; */
+      margin-bottom: 20px;
     }
-
+    
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 0 0 20px 0;
+      /* object-position: center; */
+    }
+    
     .info__cont{
       width: 100%;
       height: 38%;
-      align-items: center;
+      /* align-items: baseline;s */
     }
-  
-    img{
-        width: 180px;
-        height: 120px;
-        object-fit: cover;
-        object-position: center;
-        border-radius: 4px;
+    
+    .card__info {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.9rem;
+      font-weight: 300;
+      align-items: center;
+      justify-content: center;
     }
    
-  
     .card__features {
       display: flex;
       flex-direction: row;
@@ -70,32 +73,25 @@
       justify-content: center;
     }
 
-    .prop__clave {
-      display: flex;
-      width: 100%;
-      justify-content: center;
-    }
-
     @media(max-width: 400px){
       .img__cont{
         display: flex;
+        width: 340px;
+        align-items: center;
+        /* height: 300px; */
         justify-content: center;
-        /* width: 100%; */
-        /* height: 80%; */
     }
     img{
-      width: 280px;
-      height: 200px;
-      
-      border: 1px solid grey;
-      padding: 5px;
-    }
+      width: 100%;
+      max-height: 195px;
+      /* padding: 15px 5px 0 5px; */
 
+    }
     span{
       color: blue;
       font-weight: 800;
       position: relative;
-      top: -30px;
+      top: -80px;
     }
   }
 </style>
