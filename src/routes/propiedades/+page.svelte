@@ -3,16 +3,13 @@
   // Importaciones
     import { currPropList, currContList, property } from '$lib/stores/store.js';
     import { onSnapshot, collection } from '@firebase/firestore'
-    import { db } from '../../firebase'
+    import { db, dbBinnacle } from '../../firebase'
     import { systStatus } from '$lib/stores/store.js';
     import { onDestroy } from 'svelte';
     import { sortList } from '$lib/functions/sort.js'
     import { goto } from '$app/navigation';
     import CardProperty from '$lib/components/CardProperty.svelte';
     import Search from '$lib/components/Search.svelte';
-    // import { searProp } from '$lib/functions/searProp.js'
-
-
 
   // Declarations
     $property = {};
@@ -55,19 +52,20 @@
         return contInfo.includes(searchTerm.toLowerCase());
       });  
     };
-  
+
   </script>
     
   <!-- Renderización -->
     <div class="mainContainer">
       <div class="title__head">
-        <h1 class="title">Propiedades</h1>
+        <h1 class="title">Propiedadess</h1>
+
         <div class="title__inter">
           <Search bind:searchTerm on:input={searProp} on:keydown={()=>{}}/>
           <button class="btn__submit" on:click={addProperty}>Alta de Propiedad</button>
         </div>
       </div>
-    
+
       <div class="card__container">
 
         {#each propToRender as prop}
@@ -86,6 +84,7 @@
   .mainContainer {
     display: flex;
     flex-direction: column;
+    width: 100%;
     align-items: center;
   }
   
@@ -129,19 +128,27 @@
     }
 
     @media(max-width: 400px) {
-      .card__prop {
+      .card__container {
+      flex-direction: column;
+      width: 100%;
+      gap: 20px;
+    }
+    .card__prop {
       border: none;
       padding: 5px;
+      width: 100%;
+      height: 200px;
+      align-items: center;
       }
       .title__head {
         flex-direction: column;
         align-items: center;
-        margin-bottom: 25px;
+        margin-bottom: 5px;
       }
       .title__inter {
         flex-direction: column;
         align-items: center;
-        gap: 20px;
+        gap: 10px;
         margin: 15px 0;
       }
     }

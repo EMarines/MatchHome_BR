@@ -2,61 +2,121 @@
 <script>
 	// @ts-nocheck
 	// Importaciones
-	import { db } from '../../../firebase';
-	import { property, contact, systStatus } from '$lib/stores/store';
-	import { toComaSep } from '$lib/functions/format.js';
-	import { diaTarde } from '$lib/functions/dateFunctions';
-	import BtnWA from '$lib/components/BtnWA.svelte';
-	import BtnFollLink from '$lib/components/BtnFollink.svelte';
-	import BtnFind from '$lib/components/BtnFind.svelte';
-	import BtnCancel from '$lib/components/BtnCancel.svelte';
-	// import CardProperty from '$lib/components/CardProperty.svelte'
-	import { goto } from '$app/navigation';
-	import { deleteDoc, doc, collection, updateDoc } from '@firebase/firestore';
+		import { db, dbBinnacle, dbContacts } from '../../../firebase';
+		import { property, contact, systStatus, currPropList, currContList } from '$lib/stores/store';
+		import { toComaSep } from '$lib/functions/format.js';
+		import { diaTarde } from '$lib/functions/dateFunctions';
+		import BtnWA from '$lib/components/BtnWA.svelte';
+		import BtnFollLink from '$lib/components/BtnFollink.svelte';
+		import BtnFind from '$lib/components/BtnFind.svelte';
+		import BtnCancel from '$lib/components/BtnCancel.svelte';
+		import { filtPropContInte } from '$lib/functions/filContacts.js'
+		import { goto } from '$app/navigation';
+		import { deleteDoc, doc, collection, updateDoc } from '@firebase/firestore';
+		import CardContact from '$lib/components/CardContact.svelte'
 
 	// declaraciones
-	let saludoHora = '';
-	let modeAction = '';
+		let saludoHora = '';
+		let modeAction = '';
+		let poroShowTo =["Posobles_Interesados", "Por_Enviar", "Ya_Se_Envió" ];
+    let contInterested = "";
+		let contInterest = [];
+		let contToRender = [];
+		let cont = {};
 
-	// funciones
+    let sent =[];
+    let toSend = [];
+    let tosend =[];
+    let res = [];
+    let msg = "Contactos les puede interesar esta propiedad";
+    let seeCont = true;
+    let bitacora = dbBinnacle;
+		let show__contacts = false;
+		// $: contInterest = filtPropContInte($property, $currContList)
+
+			// console.log($currContList);
+		// console.log(contInterest);
+
 	// Edty Property
-	function editProp() {
-		$systStatus = 'editing';
-		goto('/propiedades/altaPropiedad');
-	}
+		function editProp() {
+			$systStatus = 'editing';
+			goto('/propiedades/altaPropiedad');
+		}
 
 	//  Delete Property
-	async function deleProperty() {
-		if (confirm('Deseas eleiminar definitivamente la propiedad?')) {
-			// $systStatus = "propDeleting"
-			await deleteDoc(doc(db, 'properties', $property.id));
-			$property = [];
-		} else {
-			return;
+		async function deleProperty() {
+			if (confirm('Deseas eleiminar definitivamente la propiedad?')) {
+				// $systStatus = "propDeleting"
+				await deleteDoc(doc(db, 'properties', $property.id));
+				$property = [];
+			} else {
+				return;
+			}
+			goto('/propiedades');
 		}
-		goto('/propiedades');
-	}
-
-	// Find Contacts
-	function findCustomers() {}
-
-	//  Send WhatshApp with Message and Property
-	function sendWA() {
-		// $contact = contChecked[0]
-		saludoHora = diaTarde();
-		let msg = `${$contact.name}. ${saludoHora}  Te envío esta casa que creo te va a interesar. ¡Saludos!`;
-		let link = `https://api.whatsapp.com/send?phone=52${$contact.telephon}&text=${$property.urlProp}         🏠 ${msg} 👍 `;
-		window.open(link, 'ventana1', 'width=350,height=350,scrollbars=NO');
-		modeAction = 'sendProperties';
-		let claveProp = $property.claveEB;
-		// sendProperty($contact)
-	}
 
 	// Cancel
-	function actCancel() {
-		$property = [];
-		goto('/propiedades');
-	}
+		function actCancel() {
+			$property = [];
+			goto('/propiedades');
+		}
+
+	// Separar contactos agrupados
+	 	function listToRender(){ 
+			console.log($property, " y ", $currContList);
+			contInterest = filtPropContInte($property, $currContList)
+			console.log(contInterest);
+			console.log("entraste de nuevo en la funcion listToRender", bitacora.length);
+			if(contInterested === "Posobles_Interesados"){
+					msg = "Contactos Les Puede Interesar Esta Propiedad"
+					return contToRender = contInterest
+			} else if(contInterested === "Por_Enviar"){
+					toSend=[];
+					msg = "No Se Les Ha Enviado Esta Propieadad"
+					res =  bitacora.filter(item =>
+					item.comment === $property.nameProperty)
+					const contsT = res.map(doc => doc.to)
+					toSend = contInterest.filter(doc => !contsT.includes(doc.telephon))               
+					return contToRender = toSend
+			} else if(contInterested === "Ya_Se_Envió"){
+					sent=[];
+					msg = "Ya se les envió esta propiedad"
+					res = dbBinnacle.filter(item =>
+					item.comment === $property.nameProperty)
+					dbContacts.filter((cont) =>{
+						res.forEach(binn => {
+							if(cont.telephon === binn.to){
+								sent.push(cont)
+								}
+							})
+							return contToRender = sent
+					})
+			} 
+		};
+
+	// Muestra listado de contactos interesados
+		function findCustomers() {
+			show__contacts = !show__contacts
+			listToRender($property, $currContList)
+		}
+
+	//  Send WhatshApp with Message and Property
+		function sendWA() {
+			saludoHora = diaTarde();
+			let msg = `${$contact.name}. ${saludoHora}  Te envío esta casa que creo te va a interesar. ¡Saludos!`;
+			let link = `https://api.whatsapp.com/send?phone=52${$contact.telephon}&text=${$property.urlProp}         🏠 ${msg} 👍 `;
+			window.open(link, 'ventana1', 'width=350,height=350,scrollbars=NO');
+			modeAction = 'sendProperties';
+			// let claveProp = $property.claveEB;
+		}
+
+	// Le da el valor del contacto seleccionado para envar prop por WA a $contact
+			function contSelected(cont) {
+				$contact = cont
+				// console.log($contact);
+			}
+
+
 </script>
 
 <!-- Title -->
@@ -88,20 +148,8 @@
 				</div>
 			</div>
 			<div class="actions">
-				<i
-					on:click={() => {
-						editProp($property.id);
-					}}
-					on:keydown={() => {}}
-					class="fa-regular fa-pen-to-square"
-				/>
-				<i
-					on:click={() => {
-						deleProperty($property.id);
-					}}
-					on:keydown={() => {}}
-					class="fa-regular fa-trash-can"
-				/>
+				<i on:click={() => {editProp($property.id)}} on:keydown={() => {}} class="fa-regular fa-pen-to-square" />
+				<i on:click={() => {deleProperty($property.id)}}	on:keydown={() => {}}	class="fa-regular fa-trash-can"	/>
 			</div>
 		</div>
 	</div>
@@ -112,6 +160,33 @@
 		<BtnCancel on:click={actCancel} />
 		<BtnFollLink />
 	</div>
+
+<!-- Muestra opciones para buscar contactos interesados -->
+	{#if show__contacts}
+		<div class="mainContainer">
+			<div class="sect__Title">
+				<h1>A {contInterest.length} {msg}</h1>
+				<div class="opti__cont">
+					{#each poroShowTo as list}
+							<label>
+								<input type=radio bind:group={contInterested} value={list} on:change={listToRender}>
+								{list.replaceAll("_", "  ")}
+							</label>
+					{/each}
+				</div>
+			</div>
+		</div>
+		
+		<div class="cards__container">
+			{#each contToRender as cont}
+			<div class="card__container">
+				<input type="checkbox" on:change={contSelected(cont)}  value={cont}>
+				<CardContact {cont}/>         
+			</div>
+			{/each}        
+		</div>  
+	{/if}
+
 </div>
 
 </div>
@@ -210,6 +285,41 @@
 		justify-content: space-evenly;
 		flex-wrap: wrap;
 	}
+
+	.sect__Title {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.opti__cont{
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 30px;
+	}
+
+	.cards__container {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		flex-wrap: wrap;
+		padding-bottom: 20px;
+		gap: 8px;
+	}
+
+	.card__container { 
+      display: flex; 
+      flex-direction: column; 
+      width: 350px;
+      height: 130px;   
+      justify-content: center;
+      align-items: center;  
+      color: grey;
+      border: 1px solid grey;
+      border-radius: 5px;
+      padding: 8px;
+    }
 
 	@media (max-width: 800px) {
 		.prop__ima__info {

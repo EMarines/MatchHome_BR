@@ -74,11 +74,12 @@
     }
 
     @media(max-width: 400px){
+  
       .img__cont{
         display: flex;
         width: 340px;
         align-items: center;
-        /* height: 300px; */
+        height: auto;
         justify-content: center;
     }
     img{
@@ -93,5 +94,10 @@
       position: relative;
       top: -80px;
     }
+
+    .info__cont {
+      height: 0;
+    }
+    
   }
 </style>

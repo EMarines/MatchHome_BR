@@ -2,7 +2,6 @@
 import { mosRange } from '$lib/functions/rangValue.js'
 import { dbProperties } from '../../firebase';
 
-
       /**
  * @type {any[]}
  */
@@ -32,35 +31,39 @@ import { dbProperties } from '../../firebase';
         }
 
   // Filtra por Rango
-        if(!!contact.budget || (!!contact.rangeProp))
+        if(!!contact.budget || (!!contact.rangeProp)){
+        try {
           if(contact.budget){
             let lowRange=(Number(contact.budget * .7))
             let upRange=(Number(contact.budget * 1.1))
-            return proInt = proInt.filter((prop) => 
+            proInt = proInt.filter((prop) => 
             prop.price >= lowRange && prop.price <= upRange)         
         } else {       
             proInt = proInt.filter((prop) => mosRange(Number(prop.price)) === contact.rangeProp);
-        }
+        }          
+        } catch (error) {
+          console.log(error);
+        }};
         
-  // Filtra por Ubicación  
+  // Filtra por Ubicación 
         if(contact.locaProperty.length > 0){
-            return proInt = proInt.filter(prop => 
-            (contact.locaProperty).some((/** @type {any} */ c) => (prop.locaProperty).includes(c))
-        )};
+        try {
+              proInt = proInt.filter(prop => 
+              (contact.locaProperty).some((/** @type {any} */ c) => (prop.locaProperty).includes(c))
+          );          
+        } catch (error) {
+          console.log(error);
+        }} 
         
     // Filtra por Etiquetas
-        if(contact.tagsProperty.length > 0)
-          try {
-            proInt = proInt.filter(prop => {
-              if(prop.tagsProperty.length > 0){
-                return proInt= proInt.filter(elem => contact.tagsProperty.every((/** @type {any} */ tags) => elem.tagsProperty.includes(tags)));
-              } 
-            });            
+        try {
+          if(contact.tagsProperty.length > 0)
+            proInt= proInt.filter(prop => contact.tagsProperty.every((/** @type {any} */ tags) => prop.tagsProperty.includes(tags)))         
           } catch (error) {
             console.log(error)
           };
-            
-        return proInt;
+
+      return proInt;
 
       }
 

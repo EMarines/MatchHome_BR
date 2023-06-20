@@ -410,7 +410,6 @@
     flex-direction: row;
     width: 100%;
     padding: 10px;
-    /* align-items: center; */
     justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
@@ -445,6 +444,7 @@
   @media(max-width:400px){
     .card__container {
       flex-direction: column;
+      width: 100%;
     }
 
     .inp__lat{
