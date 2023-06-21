@@ -2,6 +2,8 @@
 import { mosRange } from '$lib/functions/rangValue.js'
 import { dbProperties } from '../../firebase';
 
+console.log(dbProperties);
+
       /**
  * @type {any[]}
  */
@@ -11,7 +13,8 @@ import { dbProperties } from '../../firebase';
  * @param {{ selecTP?: any; numBeds?: any; numBaths?: any; numParks?: any; budget?: any; rangeProp?: any; locaProperty?: any; tagsProperty?: any; }} contact
  */
       export function filtContPropInte(contact){
-        proInt = dbProperties
+        // @ts-ignore
+        proInt = dbProperties;
 
         // Filtra por tipo de propiedad y numero de piezas
           proInt = proInt.filter((item) =>
@@ -58,7 +61,7 @@ import { dbProperties } from '../../firebase';
     // Filtra por Etiquetas
         try {
           if(contact.tagsProperty.length > 0)
-            proInt= proInt.filter(prop => contact.tagsProperty.every((/** @type {any} */ tags) => prop.tagsProperty.includes(tags)))         
+            proInt = proInt.filter(prop => contact.tagsProperty.every((/** @type {any} */ tags) => prop.tagsProperty.includes(tags)))         
           } catch (error) {
             console.log(error)
           };

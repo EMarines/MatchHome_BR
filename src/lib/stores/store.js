@@ -2,9 +2,9 @@ import { writable, readable } from 'svelte/store';
 
 export const currPropList = writable([]);
 
-export const dbProperties = writable([]);
-
 export const currContList = writable([]);
+
+export const dbProperties = writable([]);
 
 export const currBinnList = writable([]);
 

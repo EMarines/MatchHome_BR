@@ -1,8 +1,14 @@
     <script>
         import What from '$lib/What.svelte';
-        import Seo from '$lib/Seo.svelte'
+        import Seo from '$lib/Seo.svelte';
+        import { dbContacts } from '../../firebase.js';
+        import { currPropList } from '$lib/stores/store.js';
+
 
         export let data;
+
+        let totProp = $currPropList.length;
+        let totCont = dbContacts.length;
         
         const { posts } = data;
     </script>

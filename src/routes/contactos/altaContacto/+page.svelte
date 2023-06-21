@@ -33,8 +33,10 @@
        */
       let contCheck = [];
       
-      $currPropList = dbProperties
+      // $currPropList = dbProperties
       $: propToRender = $currPropList
+
+      console.log($currPropList);
 
   // // Add Contact
   //     function addContact() {

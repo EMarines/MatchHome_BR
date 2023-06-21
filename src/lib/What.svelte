@@ -1,18 +1,20 @@
 <script>
+// @ts-nocheck
+
     import Button from '../lib/button.svelte';
     import Contact from '$lib/Contact.svelte';
     import { currContList, currPropList } from './stores/store';
     import { dbProperties } from '../firebase'
-    // import schedule from '$lib/images/schedule.png';
 
     $: totProp = $currPropList.length;
     $: totCont = $currContList.length;
+  
 
  </script>
 <div class="container grid">
     <div class="what">
         <h3>Que Hacemos</h3>
-        <p><strong>Actualmente tenemos {dbProperties.length}</strong> propiedades en venta, y {totCont} clientes registrados que están buscando alguna propiedad como la tuya. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione id odio quasi quos, vitae sit dolore, libero magnam eaque inventore quas officia rem. Error qui fugit officia amet laboriosam at eos officiis in optio voluptatum.
+        <p><strong>Actualmente tenemos {totProp} propiedades en venta, y {totCont} clientes registrados que están buscando alguna propiedad como la tuya. </strong> Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione id odio quasi quos, vitae sit dolore, libero magnam eaque inventore quas officia rem. Error qui fugit officia amet laboriosam at eos officiis in optio voluptatum.
         </p>
         <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque ut, eius illo pariatur voluptate nobis nostrum perspiciatis eaque doloribus neque dolorem. Harum, possimus! Laborum, magnam ducimus cumque temporibus at, voluptatem expedita tempora facilis exercitationem odio impedit natus? Tempore, sapiente inventore.

@@ -1,11 +1,16 @@
 <script>
   // importaciones
-    import { property, systStatus } from '$lib/stores/store.js'
-    import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc} from 'firebase/firestore';
+    import { property, systStatus, currPropList } from '$lib/stores/store.js'
+    import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc, onSnapshot} from 'firebase/firestore';
     import { db } from '../../../firebase'
     import{ goto } from '$app/navigation'
     import { operTypes, typeProperties, ubications, oneToFour, oneToFive } from '$lib/parameters';
     import Tags from '$lib/components/Tags.svelte'
+    // import { onSnapshot } from '@firebase/firestore'
+    import { onDestroy } from 'svelte';
+    import { sortList } from '$lib/functions/sort.js'
+
+
 
     
 
@@ -41,6 +46,25 @@
     function onCancel() {
       goto("/propiedades")
     }
+
+  // Renderiza currPropList y lo convierte en propToRender
+    const unsubC = onSnapshot(
+          collection(db, "properties"),
+          (querySnapshot) => {
+              $currPropList = querySnapshot.docs.map(doc => {
+                return{...doc.data(), id: doc.id}
+              })
+              return sortList($currPropList)
+          },
+              (err) =>{
+                console.log(err);
+          }
+        );
+          
+        onDestroy(unsubC)
+      // $: propToRender = $currPropList
+
+
     
 </script>
 
