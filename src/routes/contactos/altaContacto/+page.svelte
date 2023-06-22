@@ -13,10 +13,10 @@
     import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc} from 'firebase/firestore';
     import { goto } from '$app/navigation';
     import CardProperty from '$lib/components/CardProperty.svelte';
-    import { formatDate } from '$lib/functions/dateFunctions.js';
-    import { toComaSep } from '$lib/functions/format.js' 
-    import { scale } from 'svelte/transition';
-    import { expoInOut } from 'svelte/easing';
+    // import { formatDate } from '$lib/functions/dateFunctions.js';
+    // import { toComaSep } from '$lib/functions/format.js' 
+    // import { scale } from 'svelte/transition';
+    // import { expoInOut } from 'svelte/easing';
     // import { searProp } from '$lib/functions/searchProperty.js'
 
   // Declaraciones
@@ -33,21 +33,10 @@
        */
       let contCheck = [];
       
-      // $currPropList = dbProperties
       $: propToRender = $currPropList
-
-      console.log($currPropList);
-
-  // // Add Contact
-  //     function addContact() {
-  //       console.log($systStatus);
-  //       // $systStatus = "addContact"
-  //       handleSubmit($systStatus, $contact)
-  //     }
 
   // Handle Submit
       async function handleSubmit() { 
-        console.log(tags);
           if($systStatus === "editing"){ 
             try {
               await updateDoc(doc(db, "contacts", $contact.id), $contact);
@@ -57,8 +46,8 @@
               console.log(error);
             } 
           } else {
+  // Da de alta al contacto con los datos de la propiedad por la que contactó
             try {
-              // Da de alta al contacto con los datos de la propiedad por la que contactó
               let createdAt = Date.now();
               let selecTP = $property.selectTP
               let propCont = $property.nameProperty;
@@ -69,13 +58,6 @@
                 } 
                 const contToAdd = collection(db, "contacts")
                 await addDoc(contToAdd, $contact);
-                // $systStatus = "binnAdding"
-                // $binnacle = {"date": Date.now(), "to": $contact.telephon, "action": "Se agregó a: ", "comment": (`${$contact.name} ${$contact.lastname}`)}
-                // infoToBinnacle($systStatus, $binnacle)
-                // console.log($binnacle);
-                // $binnacle = {"date": Date.now(), "to": $property.nameProperty, "action": "Propiedad enviada: "}
-                // infoToBinnacle($systStatus, $contact)
-                // console.log($binnacle);
                 $systStatus = "addContact"              
             } catch (error) {
               console.log(error);

@@ -1,9 +1,8 @@
-<!-- propSelect +page -->
 <script>
 	// @ts-nocheck
 	// Importaciones
 		import { db, dbBinnacle, dbContacts } from '../../../firebase';
-		import { property, contact, systStatus, currPropList, currContList } from '$lib/stores/store';
+		import { property, contact, binnacle, systStatus, currPropList, currContList, currBinnList } from '$lib/stores/store';
 		import { toComaSep } from '$lib/functions/format.js';
 		import { diaTarde } from '$lib/functions/dateFunctions';
 		import BtnWA from '$lib/components/BtnWA.svelte';
@@ -12,30 +11,43 @@
 		import BtnCancel from '$lib/components/BtnCancel.svelte';
 		import { filtPropContInte } from '$lib/functions/filContacts.js'
 		import { goto } from '$app/navigation';
-		import { deleteDoc, doc, collection, updateDoc } from '@firebase/firestore';
+		import { deleteDoc, doc, collection, updateDoc, onSnapshot, addDoc } from '@firebase/firestore';
+		import { onDestroy } from 'svelte';
 		import CardContact from '$lib/components/CardContact.svelte'
+		import { sortBinnacle } from '$lib/functions/sort.js'
 
 	// declaraciones
 		let saludoHora = '';
 		let modeAction = '';
-		let poroShowTo =["Posobles_Interesados", "Por_Enviar", "Ya_Se_Envió" ];
+		let poroShowTo =["Por_Enviar", "Ya_Se_Envió", "Posobles_Interesados" ];
     let contInterested = "";
 		let contInterest = [];
 		let contToRender = [];
-		let cont = {};
-
+		let conts = [];
     let sent =[];
     let toSend = [];
     let tosend =[];
     let res = [];
     let msg = "Contactos les puede interesar esta propiedad";
-    let seeCont = true;
-    let bitacora = dbBinnacle;
 		let show__contacts = false;
-		// $: contInterest = filtPropContInte($property, $currContList)
+    // let seeCont = true;
+    // let bitacora = dbBinnacle;
 
-			// console.log($currContList);
-		// console.log(contInterest);
+
+	// Renderiza currBinnList
+			const unsubB = onSnapshot(
+           collection(db, "binnacles"),
+           (querySnapshot) => {
+              $currBinnList = querySnapshot.docs.map(doc => {
+                 return{...doc.data(), id: doc.id}
+              })
+              return sortBinnacle($currBinnList)
+           },
+              (err) =>{
+                 console.log(err);
+           }
+        );           
+        onDestroy(unsubB)
 
 	// Edty Property
 		function editProp() {
@@ -63,133 +75,146 @@
 
 	// Separar contactos agrupados
 	 	function listToRender(){ 
-			console.log($property, " y ", $currContList);
 			contInterest = filtPropContInte($property, $currContList)
-			console.log(contInterest);
-			console.log("entraste de nuevo en la funcion listToRender", bitacora.length);
 			if(contInterested === "Posobles_Interesados"){
 					msg = "Contactos Les Puede Interesar Esta Propiedad"
-					return contToRender = contInterest
+					contToRender = contInterest
 			} else if(contInterested === "Por_Enviar"){
 					toSend=[];
 					msg = "No Se Les Ha Enviado Esta Propieadad"
-					res =  bitacora.filter(item =>
+					res =  $currBinnList.filter(item =>
 					item.comment === $property.nameProperty)
 					const contsT = res.map(doc => doc.to)
 					toSend = contInterest.filter(doc => !contsT.includes(doc.telephon))               
-					return contToRender = toSend
+					contToRender = toSend
 			} else if(contInterested === "Ya_Se_Envió"){
 					sent=[];
 					msg = "Ya se les envió esta propiedad"
-					res = dbBinnacle.filter(item =>
+					res = $currBinnList.filter(item =>
 					item.comment === $property.nameProperty)
-					dbContacts.filter((cont) =>{
+					$currContList.filter((cont) =>{
 						res.forEach(binn => {
 							if(cont.telephon === binn.to){
 								sent.push(cont)
 								}
 							})
-							return contToRender = sent
+							contToRender = sent
 					})
 			} 
 		};
 
 	// Muestra listado de contactos interesados
 		function findCustomers() {
-			show__contacts = !show__contacts
 			listToRender($property, $currContList)
+			show__contacts = !show__contacts
+			$systStatus = "sendPropToContacts"
 		}
 
 	//  Send WhatshApp with Message and Property
-		function sendWA() {
+		async function sendWA() {
 			saludoHora = diaTarde();
 			let msg = `${$contact.name}. ${saludoHora}  Te envío esta casa que creo te va a interesar. ¡Saludos!`;
 			let link = `https://api.whatsapp.com/send?phone=52${$contact.telephon}&text=${$property.urlProp}         🏠 ${msg} 👍 `;
 			window.open(link, 'ventana1', 'width=350,height=350,scrollbars=NO');
-			modeAction = 'sendProperties';
-			// let claveProp = $property.claveEB;
+			 	$binnacle = {"date": Date.now(), "comment": $property.nameProperty, "to": $contact.telephon, "action": "Propiedad enviada: "}
+				try {
+					const binnacleToAdd = collection(db, "binnacles")
+					await addDoc(binnacleToAdd, $binnacle);					
+				} catch (error) {
+				}
+
+				if($systStatus === "sendPropToContacts"){
+					$contact = "";
+					conts = "";
+					// $systStatus = "";
+				
+					listToRender($property, $currContList)
+				}
 		}
 
 	// Le da el valor del contacto seleccionado para envar prop por WA a $contact
 			function contSelected(cont) {
-				$contact = cont
-				// console.log($contact);
+				$contact = conts[0];
+				if(conts.length > 1){
+					alert("no puedesseleccionar más de uno, borra la segunda selección")
+				}
 			}
 
 
 </script>
 
-<!-- Title -->
-<div class="container">
+	<!-- Title -->
+		<div class="container">
 
-<div class="mainContainer">
-	<h2>Propiedad Seleccionada</h2>
-
-	<div class="prop__ima__info">
-		<!-- Image and clave -->
-		<div class="prop__image">
-			<p class="prop__clave">{$property.claveEB}</p>
-			<img src={$property.urlImage} alt={$property.nameProperty} />
-		</div>
-
-		<div class="prop__card">
-			<div class="prop__info">
-				<h1>Colonia {$property.colonia} {$property.selectTP} en {$property.selecTO}</h1>
-				<div class="prop__price">
-					<h2>Precio $ {toComaSep(Number($property.price))}.</h2>
-				</div>
-				<div class="prop__features">
-					{#if $property.selectTP === 'Casa' || $property.selectTP === 'Departamento'}
-						<span>Recámaras {Number($property.beds)}</span>
-						<span>Baños {Number($property.bathroom)}</span>
-					{:else if $property.typeProperty === 'Terreno'}
-						<span>{$property.areaTotal} m²</span>
-					{/if}
-				</div>
-			</div>
-			<div class="actions">
-				<i on:click={() => {editProp($property.id)}} on:keydown={() => {}} class="fa-regular fa-pen-to-square" />
-				<i on:click={() => {deleProperty($property.id)}}	on:keydown={() => {}}	class="fa-regular fa-trash-can"	/>
-			</div>
-		</div>
-	</div>
-
-	<div class="btn__options">
-		<BtnWA on:click={sendWA} />
-		<BtnFind on:click={findCustomers} />
-		<BtnCancel on:click={actCancel} />
-		<BtnFollLink />
-	</div>
-
-<!-- Muestra opciones para buscar contactos interesados -->
-	{#if show__contacts}
 		<div class="mainContainer">
-			<div class="sect__Title">
-				<h1>A {contInterest.length} {msg}</h1>
-				<div class="opti__cont">
-					{#each poroShowTo as list}
-							<label>
-								<input type=radio bind:group={contInterested} value={list} on:change={listToRender}>
-								{list.replaceAll("_", "  ")}
-							</label>
-					{/each}
+			<h2>Propiedad Seleccionada</h2>
+
+	<!-- Muestra la propieda seleccionada -->
+			<div class="prop__ima__info">
+				<div class="prop__image">
+					<p class="prop__clave">{$property.claveEB}</p>
+					<img src={$property.urlImage} alt={$property.nameProperty} />
+				</div>
+
+				<div class="prop__card">
+					<div class="prop__info">
+						<h1>Colonia {$property.colonia} {$property.selectTP} en {$property.selecTO}</h1>
+						<div class="prop__price">
+							<h2>Precio $ {toComaSep(Number($property.price))}.</h2>
+						</div>
+						<div class="prop__features">
+							{#if $property.selectTP === 'Casa' || $property.selectTP === 'Departamento'}
+								<span> {Number($property.beds)} {$property.beds === 1? 'Recámara' : 'Recámaras'}</span>
+								<span> {Number($property.bathroom)} {$property.bathroom === 1? 'Baño' : 'Baños'}</span>
+							{:else if $property.typeProperty === 'Terreno'}
+								<span>{$property.areaTotal} m²</span>
+							{/if}
+						</div>
+					</div>
+					<div class="actions">
+						<i on:click={() => {editProp($property.id)}} on:keydown={() => {}} class="fa-regular fa-pen-to-square" />
+						<i on:click={() => {deleProperty($property.id)}}	on:keydown={() => {}}	class="fa-regular fa-trash-can"	/>
+					</div>
 				</div>
 			</div>
-		</div>
-		
-		<div class="cards__container">
-			{#each contToRender as cont}
-			<div class="card__container">
-				<input type="checkbox" on:change={contSelected(cont)}  value={cont}>
-				<CardContact {cont}/>         
+	<!-- Botones -->
+			<div class="btn__options">
+				<BtnWA on:click={sendWA} />
+				<BtnFind on:click={findCustomers} />
+				<BtnCancel on:click={actCancel} />
+				<BtnFollLink />
 			</div>
-			{/each}        
-		</div>  
-	{/if}
 
-</div>
+	<!-- Muestra opciones para buscar contactos interesados -->
+			{#if show__contacts}
+				<div class="mainContainer">
+					<div class="sect__Title">
+						<h1>A {contInterest.length} {msg}</h1>
+						<div class="opti__cont">
+							{#each poroShowTo as list}
+									<label>
+										<input type=radio bind:group={contInterested} value={list} on:change={listToRender}>
+										{list.replaceAll("_", "  ")}
+									</label>
+							{/each}
+						</div>
+					</div>
+				</div>
+				
+	<!-- Muestra los contactos a los que le puede interesar la propiedad -->
+				<div class="cards__container">
+					{#each contToRender as cont}
+					<div class="card__container">
+						<input type="checkbox" value={cont} name={cont}  bind:group={conts} on:change={contSelected}>
+						<CardContact {cont}/>         
+					</div>
+					{/each}        
+				</div>  
+			{/if}
 
-</div>
+		</div>
+
+		</div>
 
 <style>
 	.mainContainer {
@@ -210,14 +235,15 @@
 	}
 
   .prop__image {
+		position: relative;
 		display: flex;
     width: 50%;
   }
 
 	.prop__clave {
 		position: absolute;
-		top: 130px;
-		left: 150px;
+		top: 13px;
+		left: 15px;
 		background: black;
 		opacity: 50%;
 		padding: 0 10px;

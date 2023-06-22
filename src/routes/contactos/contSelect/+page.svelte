@@ -16,10 +16,6 @@
   import CardProperty from '$lib/components/CardProperty.svelte';
   import CardBinnacle from '$lib/components/CardBinnacle.svelte';
   import { sortBinnacle } from '$lib/functions/sort.js'
-  // import { proInt } from '$lib/functions/filPropety.js'
-  // import { scale } from 'svelte/transition';
-  // import { expoInOut } from 'svelte/easing';
-  // import Binnacle from '$lib/components/Binnacle.svelte';
 
 // Declaraciones
   let searchTerm = "";
@@ -32,19 +28,6 @@
   let sortedBinn = [];
   let toRenBinn = [];
   let contacto = {};
-  // let proInt = [];
-  // let proInterest = {};
-  // $toRenBinn = dbBinnacle;
-  // let msgWA = ""; 
-  // let most = false
-  // let proInt = [];
-  // let binn = {};
-  // console.log($systStatus);
-  // let mostButtons = false;
-  // $: sortedBinn = toRenBinn;
-  // let bitacora = [];
-    // $: filtBinn = toRenBinn
-
 
 // Agendar
   // Cerrar Shedule                       
@@ -266,16 +249,16 @@
             <div class="features__search">
 
               {#if $contact.numBeds}
-                <span>{$contact.numBeds} Recámaras</span>              
+                <span>{$contact.numBeds} {$contact.numBeds === 1? 'Recámara' : 'Recámaras'}</span>              
               {/if}
               {#if $contact.numBeds}
-                <span>{$contact.numBaths} Baños</span>              
+                <span>{$contact.numBaths} {$contact.numBaths === 1? 'Baño' : 'Baños'}</span>              
               {/if}
               {#if $contact.numBeds}
-                <span>{$contact.halfBathroom} Medios Baños</span>              
+                <span>{$contact.halfBathroom} {$contact.halfBathroom === 1? 'Medio Baño' : 'Medios Baños'}</span>              
               {/if}
               {#if $contact.numBeds}
-                <span>{$contact.numParks} Estacionamientos</span>              
+                <span>{$contact.numParks} {$contact.numParks === 1? 'Estacionamiento' : 'Estacionamientos'}</span>              
               {/if}
             </div>
 

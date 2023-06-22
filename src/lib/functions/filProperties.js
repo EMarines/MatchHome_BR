@@ -2,8 +2,6 @@
 import { mosRange } from '$lib/functions/rangValue.js'
 import { dbProperties } from '../../firebase';
 
-console.log(dbProperties);
-
       /**
  * @type {any[]}
  */

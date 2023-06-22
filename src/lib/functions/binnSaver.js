@@ -17,6 +17,7 @@ export let contact = {};
  * @param {{name: any;lastname: any;telephon: any;}} binn
  */
       export async function infoToBinnacle (systStatus, binn) {  
+            console.log(binn, systStatus);
          try {
             const binnacleToAdd = collection(db, "binnacles")
             await addDoc(binnacleToAdd, binn);
