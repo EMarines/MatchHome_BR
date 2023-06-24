@@ -63,44 +63,44 @@ let conInterest = []
           conIntB=[];
           conIntR=[];
 
-  // Filtra por Ubicación  
-          try {
-            conInt = conInt.filter(cont => {
-              if(cont.locaProperty.length > 0){
-                // console.log("object");
-                conIntB = conInt.filter(cont => cont.locaProperty.some((/** @type {any} */ ubic) => (property.locaProperty).includes(ubic)));
-              } else {
-                conIntR = conInt.filter((cont) => cont.locaProperty.length === 0)
-              }
-            });            
-          } catch (error) {
-            console.log(error)
-          }
-          conInt = conIntR.concat(conIntB) 
-          conIntB=[];
-          conIntR=[];
+  // // Filtra por Ubicación  
+  //         try {
+  //           conInt = conInt.filter(cont => {
+  //             if(cont.locaProperty.length > 0){
+  //               // console.log("object");
+  //               conIntB = conInt.filter(cont => cont.locaProperty.some((/** @type {any} */ ubic) => (property.locaProperty).includes(ubic)));
+  //             } else {
+  //               conIntR = conInt.filter((cont) => cont.locaProperty.length === 0)
+  //             }
+  //           });            
+  //         } catch (error) {
+  //           console.log(error)
+  //         }
+  //         conInt = conIntR.concat(conIntB) 
+  //         conIntB=[];
+  //         conIntR=[];
 
-  // Filtra por Etiquetas
-        if(property.tagsProperty.length > 0){
-          try {
-            conInt = conInt.filter(cont => {
-              if(cont.tagsProperty.length > 0){
-                conIntB = conInt.filter(cont => property.tagsProperty.every((/** @type {any} */ tag) => cont.tagsProperty.includes(tag)));
-              } else {
-                conIntR = conInt.filter((cont) => cont.tagsProperty.length === 0)
+  // // Filtra por Etiquetas
+  //       if(property.tagsProperty.length > 0){
+  //         try {
+  //           conInt = conInt.filter(cont => {
+  //             if(cont.tagsProperty.length > 0){
+  //               conIntB = conInt.filter(cont => property.tagsProperty.every((/** @type {any} */ tag) => cont.tagsProperty.includes(tag)));
+  //             } else {
+  //               conIntR = conInt.filter((cont) => cont.tagsProperty.length === 0)
 
-              }
-            });            
-          } catch (error) {
-            console.log(error)
-          }
-        };
+  //             }
+  //           });            
+  //         } catch (error) {
+  //           console.log(error)
+  //         }
+  //       };
 
-          conInt = conIntR.concat(conIntB) 
-          conIntB=[];
-          conIntR=[];
-          
-          return contToRender = conInt
+      // conInt = conIntR.concat(conIntB) 
+      // conIntB=[];
+      // conIntR=[];
+      
+      return contToRender = conInt
     };
 
 

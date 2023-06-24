@@ -249,17 +249,25 @@
             <div class="features__search">
 
               {#if $contact.numBeds}
-                <span>{$contact.numBeds} {$contact.numBeds === 1? 'Recámara' : 'Recámaras'}</span>              
+                <span>{$contact.numBeds} <i class="fa-solid fa-bed to__show"></i></span>              
               {/if}
               {#if $contact.numBeds}
-                <span>{$contact.numBaths} {$contact.numBaths === 1? 'Baño' : 'Baños'}</span>              
+                <span>{$contact.numBaths} <i class="fa-solid fa-bath to__show"></i></span>              
               {/if}
-              {#if $contact.numBeds}
-                <span>{$contact.halfBathroom} {$contact.halfBathroom === 1? 'Medio Baño' : 'Medios Baños'}</span>              
+              {#if $contact.halfBathroom}
+                <span>{$contact.halfBathroom} <i class="fa-solid fa-toilet to__show"></i></span>              
               {/if}
-              {#if $contact.numBeds}
-                <span>{$contact.numParks} {$contact.numParks === 1? 'Estacionamiento' : 'Estacionamientos'}</span>              
+              {#if $contact.numParks}
+                <span>{$contact.numParks} <i class="fa-solid fa-car-rear to__show"></i></span>              
               {/if}
+              <div>
+                {#if $contact.locaProperty}
+                  <span> <i class="fa-sharp fa-regular fa-compass to__showR"></i> {$contact.locaProperty.toString().replaceAll(",", ", ")} </span>              
+                {/if}
+                {#if $contact.tagsProperty}
+                  <span><i class="fa-solid fa-tags to__showR"></i> {$contact.tagsProperty.toString().replaceAll("_", " ").replaceAll(",", ", ")} </span>              
+                {/if}
+              </div>
             </div>
 
           </div>
@@ -382,7 +390,8 @@
       box-shadow: 1px 2px rgba(255,255,255, 0.5);
       background: rgb(56, 56, 56);
       padding: 5px;
-      overflow: scroll;
+      overflow-y: scroll;
+      border-radius: 8px;
       gap: 10px;
     }
 
@@ -432,7 +441,7 @@
         gap: 4px;
         /* background: yellow; */
     }
-
+   
     .btn__actions {
       display: flex;
       flex-direction: column;
@@ -545,7 +554,17 @@
 
       i {
         font-size: 1.8rem;
-        padding: 5px 10px 5px 0;
+        padding: 5px 15px 5px 0;
+      }
+
+      .to__show {
+        font-size: 1rem;
+        padding: 5px 20px 5px 5px;
+      }
+
+      .to__showR {
+        font-size: 1rem;
+        padding: 5px 5px 5px 20px;
       }
 
       .fa-square-whatsapp {

@@ -11,7 +11,7 @@
 		import BtnCancel from '$lib/components/BtnCancel.svelte';
 		import { filtPropContInte } from '$lib/functions/filContacts.js'
 		import { goto } from '$app/navigation';
-		import { deleteDoc, doc, collection, updateDoc, onSnapshot, addDoc } from '@firebase/firestore';
+		import { deleteDoc, doc, collection, updateDoc, onSnapshot, addDoc, persistentMultipleTabManager } from '@firebase/firestore';
 		import { onDestroy } from 'svelte';
 		import CardContact from '$lib/components/CardContact.svelte'
 		import { sortBinnacle } from '$lib/functions/sort.js'
@@ -158,17 +158,37 @@
 
 				<div class="prop__card">
 					<div class="prop__info">
-						<h1>Colonia {$property.colonia} {$property.selectTP} en {$property.selecTO}</h1>
+						<h1 class="title">Colonia {$property.colonia} {$property.selectTP} en {$property.selecTO}</h1>
 						<div class="prop__price">
 							<h2>Precio $ {toComaSep(Number($property.price))}.</h2>
 						</div>
-						<div class="prop__features">
-							{#if $property.selectTP === 'Casa' || $property.selectTP === 'Departamento'}
-								<span> {Number($property.beds)} {$property.beds === 1? 'Recámara' : 'Recámaras'}</span>
-								<span> {Number($property.bathroom)} {$property.bathroom === 1? 'Baño' : 'Baños'}</span>
-							{:else if $property.typeProperty === 'Terreno'}
-								<span>{$property.areaTotal} m²</span>
-							{/if}
+						<div class="prop__cont">
+							<div class="prop__features">
+								{#if $property.selectTP === 'Casa' || $property.selectTP === 'Departamento'}
+									<span> {Number($property.beds)}  <i class="fa-solid fa-bed to__show"></i></span>
+									<span> {Number($property.bathroom)} <i class="fa-solid fa-bath to__show"></i></span>
+									{#if $property.halfBathroom}
+										<span> {Number($property.halfBathroom)} <i class="fa-solid fa-toilet to__show"></i></span>										
+									{/if}
+									{#if $property.park}
+										<span> {Number($property.park)} <i class="fa-solid fa-car-rear to__show"></i></span>										
+									{/if}
+									<!-- <span> {Number($property.halfBathroom)} <i class="fa-solid fa-bath to__show"></i></span> -->
+
+									<span>{Number($property.areaBuilding)} m² <i class="fa-solid fa-ruler-combined"></i></span>
+									<span>{$property.areaTotal} m² <i class="fa-solid fa-chart-area"></i></span>
+								{:else if $property.typeProperty === 'Terreno'}
+									<span>{$property.areaTotal} m² <i class="fa-solid fa-chart-area"></i></span>
+								{/if}
+							</div>
+							<div class="prop__features">
+								<!-- {#if $property.locaProperty.length > 0} -->
+										<span> <i class="fa-sharp fa-regular fa-compass to__showR"></i> {$property.locaProperty.toString().replaceAll(",", ", ")} </span>              
+								<!-- {/if} -->
+								{#if $property.tagsProperty.length > 0}
+										<span><i class="fa-solid fa-tags to__showR"></i> {$property.tagsProperty.toString().replaceAll("_", " ").replaceAll(",", ", ")} </span>              
+								{/if}
+							</div>
 						</div>
 					</div>
 					<div class="actions">
@@ -274,6 +294,14 @@
 		font-weight: 300;
 	}
 
+	.title{
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		text-transform: capitalize;
+		font-size: .5rem;
+	}
+
 	.prop__info {
 		display: flex;
 		flex-direction: column;
@@ -291,10 +319,18 @@
 		display: flex;
 		justify-content: center;
 	}
-	.prop__features {
+	.prop__cont {
 		display: flex;
+		flex-direction: column;
 		gap: 10px;
 		justify-content: space-evenly;
+	}
+
+	.prop__features {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 20px;
 	}
 
 	.actions {
@@ -383,8 +419,8 @@
       font-size: .8rem;
     }
     .prop__clave {
-			top: 350px;
-			left: 30px;
+			top: 15px;
+			left: 15px;
     }
   
 	}
