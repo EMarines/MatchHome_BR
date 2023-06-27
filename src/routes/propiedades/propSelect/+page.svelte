@@ -182,9 +182,7 @@
 								{/if}
 							</div>
 							<div class="prop__features">
-								<!-- {#if $property.locaProperty.length > 0} -->
 										<span> <i class="fa-sharp fa-regular fa-compass to__showR"></i> {$property.locaProperty.toString().replaceAll(",", ", ")} </span>              
-								<!-- {/if} -->
 								{#if $property.tagsProperty.length > 0}
 										<span><i class="fa-solid fa-tags to__showR"></i> {$property.tagsProperty.toString().replaceAll("_", " ").replaceAll(",", ", ")} </span>              
 								{/if}
@@ -209,7 +207,7 @@
 			{#if show__contacts}
 				<div class="mainContainer">
 					<div class="sect__Title">
-						<h1>A {contInterest.length} {msg}</h1>
+						<h1>A {contToRender > 0 ? contToRender.length : contInterest.length} {msg}</h1>
 						<div class="opti__cont">
 							{#each poroShowTo as list}
 									<label>

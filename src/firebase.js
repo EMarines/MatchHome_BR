@@ -25,7 +25,7 @@ import { getAuth } from 'firebase/auth';
 
   
 
-  // // // Your web app's Firebase configuration svelte-tutorial
+  // // Your web app's Firebase configuration svelte-tutorial
   // const firebaseConfig = {
   //   apiKey: "AIzaSyCquwgpISPQ8TMZeFSi6VhiNLtOaGUtPcA",
   //   authDomain: "svelte-tutorial-f5d82.firebaseapp.com",

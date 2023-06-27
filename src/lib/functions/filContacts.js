@@ -1,3 +1,4 @@
+// @ts-nocheck
 
 import { mosRange } from '../functions/rangValue'
 
@@ -15,8 +16,6 @@ let conInt = [];
 /**
  * @type {never[]}
  */
-let conInterest = []
-// let cont = [];
 
 // Filtrar property -- properties
     /**
@@ -42,19 +41,41 @@ let conInterest = []
         if (property.numBaths > 0) {
           return conInt = conInt.filter((cont) => cont.numBaths >= property.bathroom);
         };
-
+        
   // Estacionamientos
         if (property.numParks > 0) {
-          return conInt = conInt.filter((cont) => cont.numPark >= property.parks);
+          conInt = conInt.filter((cont) => cont.numPark >= property.parks);
         };
   // Presupuesto
         try {
             conInt = conInt.filter((cont) =>{ 
-              if(cont.budget == ""){
-                conIntB = conInt.filter((cont) => cont.budget >= property.price *.7 && cont.budget <= property.price * 1.1 )
+              if(cont.budget){
+                if(Number(cont.budget*0.7) <= Number(property.price) && Number(cont.budget)  * 1.1 >= Number(property.price))
+                conIntB = [...conIntB, cont]
               } else {
-                conIntR = conInt.filter((cont) => cont.rangeProp === mosRange(property.price));
+                if(cont.rangeProp === mosRange(property.price))
+                conIntR = [...conIntR, cont]
               };              
+            });            
+        } catch (error) {
+            console.log(error)
+        }
+        conInt = conIntR.concat(conIntB) 
+        conIntB=[];
+        conIntR=[];
+
+  // Filtra por Ubicación  
+          try {
+            conInt = conInt.filter(cont => {
+              if(!!cont.locaProperty){
+                if(cont.locaProperty.length > 0){
+                  if(property.locaProperty.every(loca => cont.locaProperty.includes(loca))){
+                    conIntB = [...conIntB, cont]
+                  }
+                }
+              } else {
+                conIntR = [... conIntR, cont]
+              }
             });            
           } catch (error) {
             console.log(error)
@@ -63,42 +84,25 @@ let conInterest = []
           conIntB=[];
           conIntR=[];
 
-  // // Filtra por Ubicación  
-  //         try {
-  //           conInt = conInt.filter(cont => {
-  //             if(cont.locaProperty.length > 0){
-  //               // console.log("object");
-  //               conIntB = conInt.filter(cont => cont.locaProperty.some((/** @type {any} */ ubic) => (property.locaProperty).includes(ubic)));
-  //             } else {
-  //               conIntR = conInt.filter((cont) => cont.locaProperty.length === 0)
-  //             }
-  //           });            
-  //         } catch (error) {
-  //           console.log(error)
-  //         }
-  //         conInt = conIntR.concat(conIntB) 
-  //         conIntB=[];
-  //         conIntR=[];
-
-  // // Filtra por Etiquetas
-  //       if(property.tagsProperty.length > 0){
-  //         try {
-  //           conInt = conInt.filter(cont => {
-  //             if(cont.tagsProperty.length > 0){
-  //               conIntB = conInt.filter(cont => property.tagsProperty.every((/** @type {any} */ tag) => cont.tagsProperty.includes(tag)));
-  //             } else {
-  //               conIntR = conInt.filter((cont) => cont.tagsProperty.length === 0)
-
-  //             }
-  //           });            
-  //         } catch (error) {
-  //           console.log(error)
-  //         }
-  //       };
-
-      // conInt = conIntR.concat(conIntB) 
-      // conIntB=[];
-      // conIntR=[];
+  // Filtra por Etiquetas
+          try {
+            conInt = conInt.filter(cont => {
+              if(!!cont.tagsProperty){
+                if(cont.tagsProperty.length > 0){
+                  if(cont.tagsProperty.every(tag => property.tagsProperty.includes(tag))){
+                    conIntB = [...conIntB, cont]}
+                } else {
+                  conIntR = [...conIntR, cont]
+                }
+              }            
+            });
+          } catch (error) {
+            console.log(error)
+          }
+        
+      conInt = conIntR.concat(conIntB) 
+      conIntB=[];
+      conIntR=[];
       
       return contToRender = conInt
     };
