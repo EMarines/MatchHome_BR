@@ -30,7 +30,7 @@
         {#if cont.tagsProperty}
           <span><i class="fa-solid fa-tags to__showR"></i> {cont.tagsProperty.toString().replaceAll(",", ", ")}</span>
         {/if}
-        {#if cont.tagsProperty}
+        {#if cont.locaProperty}
           <span><i class="fa-sharp fa-regular fa-compass to__showR"></i> {cont.locaProperty.toString().replaceAll(",", ", ")}</span>
         {/if}
       </div>

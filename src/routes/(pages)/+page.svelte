@@ -1,14 +1,47 @@
     <script>
+// @ts-nocheck
+
         import What from '$lib/What.svelte';
         import Seo from '$lib/Seo.svelte';
-        import { dbContacts } from '../../firebase.js';
-        import { currPropList } from '$lib/stores/store.js';
+        import { db, dbContacts } from '../../firebase.js';
+        import { currPropList, currContList } from '$lib/stores/store.js';
+        import { onSnapshot, collection } from '@firebase/firestore'
+        import { onDestroy } from 'svelte';
 
 
         export let data;
 
-        let totProp = $currPropList.length;
-        let totCont = dbContacts.length;
+        $: totProp = $currPropList.length;
+        $: totCont = dbContacts.length;
+
+    // Renderiza currPropList
+          const unsubC = onSnapshot(
+           collection(db, "contacts"),
+           (querySnapshot) => {
+              $currContList = querySnapshot.docs.map(doc => {
+                 return{...doc.data(), id: doc.id}
+              })
+              return $currContList
+           },
+              (err) =>{
+                 console.log(err);
+           }
+        );           
+        onDestroy(unsubC)
+
+        const unsubB = onSnapshot(
+           collection(db, "properties"),
+           (querySnapshot) => {
+              $currPropList = querySnapshot.docs.map(doc => {
+                 return{...doc.data(), id: doc.id}
+              })
+              return $currPropList
+           },
+              (err) =>{
+                 console.log(err);
+           }
+        );           
+        onDestroy(unsubB)
         
         const { posts } = data;
     </script>
@@ -21,7 +54,7 @@
             <div>
                 <h2>{title}</h2>
                 <img src = {image} alt={title} />
-                <p>{body.substring(0, 100)}</p>
+                <p>{body.substring(0, 100)}{totCont}</p>
             </div>
             {/each}
         </div>

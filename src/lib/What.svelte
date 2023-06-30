@@ -4,12 +4,11 @@
     import Button from '../lib/button.svelte';
     import Contact from '$lib/Contact.svelte';
     import { currContList, currPropList } from './stores/store';
-    import { dbProperties } from '../firebase'
+    // import { dbProperties } from '../firebase'
 
     $: totProp = $currPropList.length;
     $: totCont = $currContList.length;
   
-
  </script>
 <div class="container grid">
     <div class="what">

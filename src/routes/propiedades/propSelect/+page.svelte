@@ -368,11 +368,17 @@
 		gap: 8px;
 	}
 
+	/* .card__container input{
+		position: absolute;
+		top: 10px;
+		left: 10px;
+	} */
+
 	.card__container { 
       display: flex; 
       flex-direction: column; 
       width: 350px;
-      height: 130px;   
+      /* height: auto;    */
       justify-content: center;
       align-items: center;  
       color: grey;
