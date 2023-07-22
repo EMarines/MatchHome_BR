@@ -176,14 +176,13 @@
       );
             
     onDestroy(unsubs)
-    // console.log(filtBinn);
     
   // Busca la bitácora del contacto
       function contBinn(){
         let bitacora = toRenBinn.filter(item => item.to === $contact.telephon)
         return sortedBinn = sortBinnacle(bitacora)
       };
-      // contBinn(filtBinn)
+   
 
 
   // Intento de enviar varios WA por medio de each

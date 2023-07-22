@@ -27,6 +27,7 @@
       let prop;
       let ubication = "";
       let tags = "";
+      // $systStatus="";
       
       /**
        * @type {never[]}
@@ -37,7 +38,9 @@
 
   // Handle Submit
       async function handleSubmit() { 
+    // Edita a contacto
           if($systStatus === "editing"){ 
+            console.log("estas en editing");
             try {
               await updateDoc(doc(db, "contacts", $contact.id), $contact);
               $binnacle = {"date": Date.now(), "comment": "Se editó", "to": $contact.telephon, "action": "Se editó a: "}
@@ -46,7 +49,7 @@
               console.log(error);
             } 
           } else {
-  // Da de alta al contacto con los datos de la propiedad por la que contactó
+    // Da de alta al contacto con los datos de la propiedad por la que contactó
             try {
               let createdAt = Date.now();
               let selecTP = $property.selectTP

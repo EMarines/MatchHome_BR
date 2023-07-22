@@ -7,6 +7,9 @@
     import Sun from "./icons/sun.svelte";
     import { isLoggedIn, user } from '../store';
 
+    let currentTheme = "";
+    let nav__links = "wide"
+
     const logout = async () => {
       try {
         await signOut(auth)
@@ -24,7 +27,7 @@
     })
 
 
-    let currentTheme = "";
+    
     
     onMount(() => {
     // currentTheme = document.documentElement.dataset.theme;
@@ -47,29 +50,35 @@
     $: routeId = $page.route.id;
     $: url = $page.url.href
 
+    function showHide() {
+     if(nav__links === "small"){
+      nav__links = "wide"
+     } else {
+      nav__links = "small"
+     }
+    } 
+
 </script>
 
-<nav>
+  <nav>
     <div class="container">
+      <!-- <div class="nav__bugger"> -->
+        <h1>MatchHome</h1>  
+        <button  class="nav__target" on:click={showHide}><i class="fa-solid fa-bars nav__icon"></i></button>
+      <!-- </div> -->
 
-        <h1>MatchHome</h1>
         <ul>
-            <!-- {#each navs as {title, href}}
-                <li>
-                    <a {href} class:active={href === "/" ? routeId === href: url.includes(href)} {title}>{title}</a>
-                </li>
-            {/each} -->
-            <div class="li__dist">
+            <div class={nav__links} id="menu" on:click={showHide} on:keypress={showHide}>
               
               <li><a href="/">Home</a></li>
               {#if $isLoggedIn}
-                <li><a href="/contactos">Contacto</a></li>
-                <li><a href="/propiedades">Propiedades</a></li>
-                <li><a href="/agenda">Agenda</a></li>
+                <li><a href="/contactos" class="nav__link">Contacto</a></li>
+                <li><a href="/propiedades" class="nav__link">Propiedades</a></li>
+                <li><a href="/agenda" class="nav__link">Agenda</a></li>
                 <!-- <li><a href="/(app)/profile">Profile</a></li> -->
-                <li><a href="/" on:click={logout}>Logout</a></li> 
+                <li><a href="/" class="nav__link" on:click={logout}>Logout</a></li> 
               {:else}
-                <li><a href="/login">Login</a></li>
+                <li><a href="/login" class="nav__link">Login</a></li>
               {/if}
               <li class="relative">
                 {#if currentTheme == "light"}
@@ -86,7 +95,7 @@
             </div>
         </ul>
     </div>
-</nav>
+  </nav>
 
 <style>
     nav{
@@ -108,7 +117,7 @@
         font-size: 1em;
     }
 
-    .li__dist {
+    .wide {
       display: flex;
       flex-direction: row;
       gap: 20px;
@@ -124,20 +133,81 @@
         color: #aaa;        
     }
 
+    .nav__target{
+      display: none;
+      padding: 25px;
+      background: #343a40;
+      border: none;
+    }
+
     @media(max-width: 800px) {
       nav{
         color: blue;
         position: static;
       }
-      .li__dist {
+      /* .nav__links {
         flex-direction: column;
         color: red;
         padding-right: 50px;
-      }
+      } */
    
     }
-    /* .active{
-        color: white;
-    } */
+ 
+  @media(max-width: 402px){
+      
+    nav{
+      width: 100%;
+      padding: 0 40px;
+      height: 80px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      /* justify-content: space-between; */
+    }
+
+    .wide{
+      display: none;
+    }
+
+    .small {
+      display: block;
+      flex-direction: column;
+      position: fixed;
+      left: 0px;
+      bottom: 0;
+      top: 80px;
+      right: 0px;
+      color:#343a40;
+      background-color: gray;
+      height: 500px;
+      width: 100%;
+      gap: 40px;
+      padding: 10px 0 0 150px;
+    }
+
+    .nav__target{
+      display:block;
+    }
+
+    .container{
+      display: flex;
+      width: 100%;
+      gap: 100px;
+    }
+
+    li{
+      padding: 10px 0;
+      margin-bottom: 20px;
+    }
+
+    .nav__link {
+    text-decoration: none;
+    color: #fff;			 
+    }
+
+
+
+  }
+
 
 </style>
