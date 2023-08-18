@@ -4,7 +4,7 @@
     <p><strong>Match Home</strong></p>
     <p>Garcia Valdéz # 2956</p>
     <p>Chihuahua, Chih.</p>
-    <p>Tel: (614) 275 4512</p>
+    <p>Tel: (614) 540 4003</p>
     <p>Email: <a href="mailto:matchhome@hotmail.com">machhome@hotmail.com</a></p>
 </div>
 

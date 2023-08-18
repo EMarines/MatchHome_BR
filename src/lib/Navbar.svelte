@@ -116,8 +116,7 @@
         list-style: none;
         font-size: 1em;
     }
-
-    .wide {
+    .wide, .small {
       display: flex;
       flex-direction: row;
       gap: 20px;
@@ -132,10 +131,9 @@
         text-decoration: none;
         color: #aaa;        
     }
-
     .nav__target{
       display: none;
-      padding: 25px;
+      padding: 23px;
       background: #343a40;
       border: none;
     }
@@ -156,6 +154,7 @@
   @media(max-width: 402px){
       
     nav{
+      position: sticky;
       width: 100%;
       padding: 0 40px;
       height: 80px;
@@ -186,7 +185,7 @@
     }
 
     .nav__target{
-      display:block;
+      display: block;
     }
 
     .container{
@@ -203,6 +202,10 @@
     .nav__link {
     text-decoration: none;
     color: #fff;			 
+    }
+
+    .nav__icon{
+      font-size: 2rem;
     }
 
 
