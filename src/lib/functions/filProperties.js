@@ -47,14 +47,16 @@ import { dbProperties } from '../../firebase';
         }};
         
   // Filtra por Ubicación 
-        if(contact.locaProperty.length > 0){
-        try {
-              proInt = proInt.filter(prop => 
-              (contact.locaProperty).some((/** @type {any} */ c) => (prop.locaProperty).includes(c))
-          );          
-        } catch (error) {
-          console.log(error);
-        }} 
+        // if(contact.locaProperty){
+          try {
+            if(contact.locaProperty.length > 0)
+                proInt = proInt.filter(prop => 
+                (contact.locaProperty).some((/** @type {any} */ c) => (prop.locaProperty).includes(c))
+            );          
+          } catch (error) {
+            console.log(error);
+          }
+        // }
         
     // Filtra por Etiquetas
         try {

@@ -4,13 +4,19 @@
    * @type {any}
    */
 	  export let searchTerm;
+		/**
+	 * @type {any}
+	 */
+		 export let placeHolder;
+
+		 console.log(searchTerm);
 </script>
 
 <div id="search-input-cont">
 	<input class="searchInput"
 		type="text" 
 		id="search-field" 
-		placeholder="Enter Search Term" 
+		placeholder={placeHolder} 
 		autocomplete="off"
 		bind:value={searchTerm}
 		on:input />

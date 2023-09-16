@@ -76,6 +76,7 @@
                 <li><a href="/propiedades" class="nav__link">Propiedades</a></li>
                 <li><a href="/agenda" class="nav__link">Agenda</a></li>
                 <!-- <li><a href="/(app)/profile">Profile</a></li> -->
+                <li><a href="/tramites">Trámites</a></li>
                 <li><a href="/" class="nav__link" on:click={logout}>Logout</a></li> 
               {:else}
                 <li><a href="/login" class="nav__link">Login</a></li>
