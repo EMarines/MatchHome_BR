@@ -2,7 +2,7 @@
 // @ts-nocheck
   // Importaciones
     import { currPropList, currContList, property } from '$lib/stores/store.js';
-    import { onSnapshot, collection } from '@firebase/firestore'
+    import { onSnapshot, collection, addDoc} from '@firebase/firestore'
     import { db, dbBinnacle } from '../../firebase'
     import { systStatus } from '$lib/stores/store.js';
     import { onDestroy } from 'svelte';
@@ -10,6 +10,9 @@
     import { goto } from '$app/navigation';
     import CardProperty from '$lib/components/CardProperty.svelte';
     import Search from '$lib/components/Search.svelte';
+    import propadd from '$lib/jsonProperties.json'
+    // import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc, onSnapshot} from 'firebase/firestore';
+
 
   // Declarations
     $property = {};
@@ -53,6 +56,13 @@
       });  
     };
 
+    function addPropertyS() {
+      propadd.forEach(async prop => {       
+            const contToAdd = collection(db, "properties")
+            await addDoc(contToAdd, prop);
+      });
+    }
+
   </script>
     
   <!-- Renderización -->
@@ -63,6 +73,7 @@
         <div class="title__inter">
           <Search bind:searchTerm on:input={searProp} on:keydown={()=>{}}/>
           <button class="btn__submit" on:click={addProperty}>Alta de Propiedad</button>
+          <button class="btn__submit" on:click={addPropertyS}>Descargar Listado de Propieades</button>
         </div>
       </div>
 

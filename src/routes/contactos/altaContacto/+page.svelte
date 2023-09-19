@@ -166,7 +166,7 @@
           <select class="in__sel feat" bind:value={$contact.selecMC}>
             <option disabled selected value="">Modo de Contacto</option>
             {#each modeContact as selecMC}
-            <option  value={selecMC}>{selecMC}</option>
+              <option  value={selecMC}>{selecMC}</option>
             {/each}
           </select>
         </label>
