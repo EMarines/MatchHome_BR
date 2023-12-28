@@ -75,16 +75,20 @@ let upRange;
  * @param {number} price
  */
     export function mosRange(price){
+      console.log(price);
       if(price <= 1000000){
         rng = "PRM";                 // PRM
       }
       else if (price <= 2500000) {
         rng = "SGN"            // SGN
+        console.log("sgn");
       }
       else if (price <= 5000000) {
+        console.log("trc");
         rng = "TRC"            // TRC
       }
       else if (price <= 8000000) {
+        console.log("crt");
         rng = "CRT"            // CRT
       }
       else if (price <= 12000000) {   // QNT

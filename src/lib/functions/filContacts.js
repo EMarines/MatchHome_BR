@@ -28,41 +28,46 @@ let conInt = [];
   // Tipo de contacto
       // @ts-ignore
         conInt = conInt.filter((cont) => cont.typeContact === "Comprador");
-
-  // Tipo de propiedad
-        conInt = conInt.filter((cont) => cont.selecTP === property.selectTP);
-
-  // Numero de recámaras   
-        if (property.numBeds > 0) {
-          return conInt = conInt.filter((cont) => cont.numBeds >= property.beds);
-        };
-
-  // Numero de baños
-        if (property.numBaths > 0) {
-          return conInt = conInt.filter((cont) => cont.numBaths >= property.bathroom);
-        };
         
-  // Estacionamientos
-        if (property.numParks > 0) {
-          conInt = conInt.filter((cont) => cont.numPark >= property.parks);
+        
+        // Tipo de propiedad
+        conInt = conInt.filter((cont) => cont.selecTP === property.selectTP);
+        
+        // Numero de recámaras   
+        if (property.beds > 0) {
+           conInt = conInt.filter(cont => cont.numBeds <= property.beds);
+          };
+          
+          // Numero de baños
+          if (property.bathroom > 0) {
+          conInt = conInt.filter(cont => cont.numBaths <= property.bathroom);
         };
-  // Presupuesto
+        // Estacionamientos
+        if (property.park > 0) {
+          conInt = conInt.filter((cont) => cont.numParks <= property.park);
+        };
+        // Presupuesto
+        console.log(property.price);
         try {
-            conInt = conInt.filter((cont) =>{ 
-              if(cont.budget){
-                if(Number(cont.budget*0.7) <= Number(property.price) && Number(cont.budget)  * 1.1 >= Number(property.price))
-                conIntB = [...conIntB, cont]
-              } else {
-                if(cont.rangeProp === mosRange(property.price))
-                conIntR = [...conIntR, cont]
-              };              
-            });            
-        } catch (error) {
-            console.log(error)
-        }
-        conInt = conIntR.concat(conIntB) 
-        conIntB=[];
-        conIntR=[];
+          conInt = conInt.filter(cont =>{ 
+            if(cont.budget){
+              console.log(cont.name);
+              if(Number(cont.budget*0.7) <= Number(property.price) && Number(cont.budget)  * 1.1 >= Number(property.price))
+              conIntB = [...conIntB, cont]
+          } else {
+            // console.log(cont.name);
+            if(cont.rangeProp === mosRange(property.price))
+            console.log("rango", rng);
+            conIntR = [...conIntR, cont]
+        };              
+      });            
+    } catch (error) {
+      console.log(error)
+    }
+    conInt = conIntR.concat(conIntB) 
+    conIntB=[];
+    conIntR=[];
+    console.log(conInt);
 
   // Filtra por Ubicación  
           try {
