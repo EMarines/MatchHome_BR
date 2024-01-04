@@ -3,6 +3,9 @@
 </svelte:head>
 
 <script>
+    /**
+	 * @type {any[]}
+	 */
     let toDoList = []; // array of ToDos
     let textInput = "";
 
@@ -11,11 +14,18 @@
         textInput="";
     }
 
+    /**
+	 * @param {number} i
+	 * @param {boolean} isEditing
+	 */
     function setEditing(i, isEditing) {
         toDoList[i].editing = isEditing; // true / false
         textInput="";
     }
 
+    /**
+	 * @param {number} i
+	 */
     function deleteTodo(i) {
         toDoList.splice(i, 1);
         toDoList = toDoList; // https://svelte.dev/tutorial/updating-arrays-and-objects
