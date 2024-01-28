@@ -18,7 +18,6 @@ import { dbProperties } from '../../firebase';
           proInt = proInt.filter((item) =>
             contact.selecTP.toLowerCase() === item.selectTP.toLowerCase()
             );
-    
         if (contact.numBeds > 0) {
           proInt = proInt.filter((item) => item.beds >= contact.numBeds);
           }

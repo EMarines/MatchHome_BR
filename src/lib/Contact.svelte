@@ -3,9 +3,10 @@
     <h3>Contactanos</h3>
     <p><strong>Match Home</strong></p>
     <p>Fco. Villa # 5700 y Rep. de Brasil</p>
+    <p>Col. Panamericana</p>
     <p>Chihuahua, Chih.</p>
     <p>Tel: (614) 540 4003</p>
-    <p>Email: <a href="mailto:matchhome@hotmail.com">machhome@hotmail.com</a></p>
+    <p>Email: <a href="mailto:matchhome@hotmail.com">macthhome@hotmail.com</a></p>
 </div>
 
 <style>

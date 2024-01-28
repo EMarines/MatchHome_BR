@@ -123,7 +123,7 @@
       height: 130px;   
       justify-content: center;
       align-items: center;  
-      color: grey;
+      /* color: grey; */
       border: 1px solid grey;
       border-radius: 5px;
       padding: 8px;

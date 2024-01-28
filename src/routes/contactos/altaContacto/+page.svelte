@@ -13,22 +13,20 @@
     import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc} from 'firebase/firestore';
     import { goto } from '$app/navigation';
     import CardProperty from '$lib/components/CardProperty.svelte';
-    // import { formatDate } from '$lib/functions/dateFunctions.js';
-    // import { toComaSep } from '$lib/functions/format.js' 
-    // import { scale } from 'svelte/transition';
-    // import { expoInOut } from 'svelte/easing';
-    // import { searProp } from '$lib/functions/searchProperty.js'
+    import { cleanNumber } from '$lib/functions/format';
+	// import { l } from 'vitest/dist/index-5aad25c1';
 
   // Declaraciones
       let searchTerm = "";
       let showProp = false;
       let detaAdd = false;
       let propChecked = "";
+      let name = "";
+      let lastname = "";
       let prop;
       let ubication = "";
       let tags = "";
-      // $systStatus="";
-      
+
       /**
        * @type {never[]}
        */
@@ -38,27 +36,44 @@
 
   // Handle Submit
       async function handleSubmit() { 
+        // capitalizeWords($contact)
     // Edita a contacto
           if($systStatus === "editing"){ 
-            console.log("estas en editing");
             try {
               await updateDoc(doc(db, "contacts", $contact.id), $contact);
               $binnacle = {"date": Date.now(), "comment": "Se editó", "to": $contact.telephon, "action": "Se editó a: "}
-              infoToBinnacle($systStatus, $binnacle);              
+              // infoToBinnacle($systStatus, $binnacle);              
             } catch (error) {
               console.log(error);
             } 
           } else {
     // Da de alta al contacto con los datos de la propiedad por la que contactó
             try {
-              let createdAt = Date.now();
-              let selecTP = $property.selectTP
-              let propCont = $property.nameProperty;
-              let rangeProp = mosRange($property.price)
+              let createdAt = Date.now();              
               let contactStage = "Etapa 1"
-                $contact = {         
-                  ...$contact, createdAt, propCont, rangeProp, selecTP, contactStage
-                } 
+              // name = capitalizeWords(name);
+              // console.log(name, "si");
+              // name = name.trim();
+              // console.log(name, "si");
+              // lastname = capitalizeWords(lastname)
+              // lastname = lastname.trim();
+              // console.log(lastname, "si");
+              $contact.telephon = cleanNumber($contact.telephon);
+              console.log($contact.telephon);
+                if($property ===  null || $property === undefined ){
+                  let selecTP = $property.selectTP
+                  let propCont = $property.nameProperty;
+                  let rangeProp = mosRange($property.price);
+                  
+                  $contact = {
+                    ...$contact, createdAt, propCont, rangeProp, selecTP, contactStage
+                  } 
+                } else {
+                  $contact = {
+                    ...$contact, createdAt, contactStage
+                  } 
+                }
+                // console.log($contact);
                 const contToAdd = collection(db, "contacts")
                 await addDoc(contToAdd, $contact);
                 $systStatus = "addContact"              
@@ -102,6 +117,20 @@
         // console.log(propChecked);
       }
 
+      // function capitalizeWords(string) {
+      //   console.log(string);
+      //   let result = ""; 
+      //   let split = string.split(" ");
+      //   if(split.length > 0){
+      //   for (var i = 0; i < split.length; i++) {
+      //       result +=  split[i][0].toUpperCase() +  split[i].slice(1).toLowerCase()+    " ";
+      //   }
+      //   }else{
+      //       result = string.toUpperCase() + string.slice(1).toLowerCase();
+      //   }
+      //   return result;
+      // }
+
 </script>
 
   <!-- Muestro o oculta la fecha para mostrar o editar -->
@@ -124,12 +153,13 @@
       <div class="inp__lat">
         <label class="label__title">
           <p class={$contact.name ? ' above' : ' center'}>Nombre</p>
-          <input class="in__sel" name="hbathrooms" bind:value={$contact.name} placeholder="* Nombre" required>
+          <input class="in__sel" name="name" bind:value={$contact.name} placeholder="* Nombre" required >
         </label>
 
         <label class="label__title">
           <p class={$contact.lastname ? ' above' : ' center'}>Apellido</p>
-          <input class="in__sel" name="lastname" bind:value={$contact.lastname} placeholder="* Apellido " >
+          <input class="in__sel capitalize" name="lastname" bind:value={$contact.lastname} placeholder="* Apellido " >
+          <!-- <input type="text" oninput="this.value = capitalizeWords(this.value)"> -->
         </label>
       </div>
 
@@ -350,6 +380,10 @@
     font-size: .8em;
     font-weight: 600;
     color: darkblue;  
+  }
+
+  input {
+    text-transform: capitalize;
   }
 
   .features {

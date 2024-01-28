@@ -11,7 +11,6 @@
     import CardProperty from '$lib/components/CardProperty.svelte';
     import Search from '$lib/components/Search.svelte';
     import propadd from '$lib/jsonProperties.json'
-    // import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc, onSnapshot} from 'firebase/firestore';
 
 
   // Declarations
@@ -130,7 +129,7 @@
       flex-direction: column;   
       width: 200px;
       height: 250px;     
-      color: grey;
+      /* color: grey; */
       border: 1px solid grey;
       border-radius: 5px;
       justify-content: center;

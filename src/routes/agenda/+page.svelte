@@ -259,7 +259,7 @@
   td {
     font-size: .8rem;
     font-weight: 300;
-    color: rgb(137, 136, 136);
+    /* color: rgb(137, 136, 136); */
     padding: 8px;
     border: 1px solid rgb(42, 41, 41, .3);
   }

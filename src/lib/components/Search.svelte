@@ -9,7 +9,6 @@
 	 */
 		 export let placeHolder;
 
-		 console.log(searchTerm);
 </script>
 
 <div id="search-input-cont">

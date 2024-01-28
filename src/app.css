@@ -39,6 +39,9 @@ h1.title {
   font-size: 2.5em;
   font-weight: 350;
 }
+h1 , h2{
+  text-transform: capitalize;
+}
 
 h2.title {
   font-size: 2em;

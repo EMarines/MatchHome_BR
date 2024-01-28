@@ -42,41 +42,35 @@ let conInt = [];
           if (property.bathroom > 0) {
           conInt = conInt.filter(cont => cont.numBaths <= property.bathroom);
         };
-        // Estacionamientos
+      // Estacionamientos
         if (property.park > 0) {
           conInt = conInt.filter((cont) => cont.numParks <= property.park);
         };
-        // Presupuesto
-        console.log(property.price);
+
+      // Presupuesto
         try {
           conInt = conInt.filter(cont =>{ 
             if(cont.budget){
-              console.log(cont.name);
               if(Number(cont.budget*0.7) <= Number(property.price) && Number(cont.budget)  * 1.1 >= Number(property.price))
               conIntB = [...conIntB, cont]
-          } else {
-            // console.log(cont.name);
-            if(cont.rangeProp === mosRange(property.price))
-            console.log("rango", rng);
-            conIntR = [...conIntR, cont]
-        };              
-      });            
-    } catch (error) {
-      console.log(error)
-    }
-    conInt = conIntR.concat(conIntB) 
-    conIntB=[];
-    conIntR=[];
-    console.log(conInt);
+            } else {
+              if(cont.rangeProp === mosRange(property.price))
+                conIntR = [...conIntR, cont]
+            };
+          });            
+        } catch (error) {
+          console.log(error)
+        }; 
+        conInt = conIntR.concat(conIntB) 
+        conIntB=[];
+        conIntR=[];
 
-  // Filtra por Ubicación  
+      // Filtra por Ubicación  
           try {
             conInt = conInt.filter(cont => {
-              if(!!cont.locaProperty){
-                if(cont.locaProperty.length > 0){
-                  if(property.locaProperty.every(loca => cont.locaProperty.includes(loca))){
-                    conIntB = [...conIntB, cont]
-                  }
+              if(cont.locaProperty.length > 0){
+                if(cont.locaProperty.includes(property.locaProperty)){
+                  conIntB = [...conIntB, cont]
                 }
               } else {
                 conIntR = [... conIntR, cont]
@@ -89,7 +83,7 @@ let conInt = [];
           conIntB=[];
           conIntR=[];
 
-  // Filtra por Etiquetas
+      // Filtra por Etiquetas
           try {
             conInt = conInt.filter(cont => {
               if(!!cont.tagsProperty){
@@ -105,10 +99,9 @@ let conInt = [];
             console.log(error)
           }
         
-      conInt = conIntR.concat(conIntB) 
-      conIntB=[];
-      conIntR=[];
-      
+          conInt = conIntR.concat(conIntB) 
+          conIntB=[];
+          conIntR=[];
       return contToRender = conInt
     };
 

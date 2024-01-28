@@ -12,7 +12,7 @@ export let contact = {};
 // Añadir Información a Bitácora para Alta de Contacto 
       /**
  * @param {string} systStatus
- * @param {{name: any;lastname: any;telephon: any;}} binn
+ * @param {{name: any; lastname: any; telephon: any;}} binn
  */
       export async function infoToBinnacle (systStatus, binn) {  
          try {

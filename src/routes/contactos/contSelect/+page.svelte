@@ -2,11 +2,12 @@
 // @ts-nocheck
 
 // Importaciones
-  import { contact, systStatus, currPropList, binnacle, property } from '$lib/stores/store'
-  import { formatDate } from '../../../lib/functions/dateFunctions';
+  import { sendWhatsApp } from '$lib/functions/sendWhatsApp';
+  import { contact, systStatus, currPropList, binnacle, property } from '$lib/stores/store';
+  import { formatDate } from '$lib/functions/dateFunctions';
   import { toComaSep, toTele } from '$lib/functions/format.js'
   import { infoToBinnacle } from '$lib/functions/binnSaver';
-  import { db, dbBinnacle } from '../../../firebase'
+  import { db, dbBinnacle } from '../../../firebase';
   import Search from '$lib/components/Search.svelte';
   import AddToSchedule from '$lib/components/AddToSchedule.svelte'
   import { filtContPropInte } from '$lib/functions/filProperties';
@@ -15,11 +16,11 @@
   import { onDestroy } from 'svelte';
   import CardProperty from '$lib/components/CardProperty.svelte';
   import CardBinnacle from '$lib/components/CardBinnacle.svelte';
-  import { sortBinnacle } from '$lib/functions/sort.js'
+  import { sortBinnacle } from '$lib/functions/sort.js';
 
 // Declaraciones
   let searchTerm = "";
-  let contCheck = []
+  let propCheck = []
   let mostBusq = false;
   let showProp = false;
   let isActivated = false;
@@ -28,6 +29,13 @@
   let sortedBinn = [];
   let toRenBinn = [];
   let contacto = {};
+  let propFalt = 0;
+  let sig = 0;
+  let msg = "";
+
+  $: tel = $contact.telephon;
+  $: faltanProp = propFalt;
+
 
 // Agendar
   // Cerrar Shedule                       
@@ -46,6 +54,7 @@
       contacto = $contact
       propToRender = filtContPropInte(contacto) 
       showProp = true;
+      $systStatus = "sendProp"
         };
 
   // Search property by name
@@ -65,7 +74,7 @@
 // CRUD edit and delete
   // Edit contact
       function editContact(){
-      $systStatus = "editing"
+        $systStatus = "editing"
         goto("/contactos/altaContacto")
       }
 
@@ -83,67 +92,77 @@
 
 // Buttons actions
   // Selecciona Mensaje para WA
-    async function selMsgWA(msgWA) {
+    async function selMsgWA() {
       if($systStatus === "addContact"){
-          // Envía la propiedad seleccionada del listado (propCheck) Alta de Contacto
+        // Envía la propiedad seleccionada del listado (propCheck) Alta de Contacto
           $binnacle = {"date": Date.now(), "comment": (`${$contact.name} ${$contact.lastname}`), "to": $contact.telephon, "action": "Se agregó a: "}
           infoToBinnacle($systStatus, $binnacle)
-          msgWA = $property.urlProp;
-          sendWA(msgWA)
+          msg = $property.urlProp;
+          sendWhatsApp(tel, msg)
           $systStatus = "msgGratitude";
-        } else if($systStatus === "msgGratitude") {
-          // Envía en mensaje de agradecimiento
+      } else if($systStatus === "msgGratitude") {
+        // Envía en mensaje de agradecimiento
           $binnacle = {"date": Date.now(), "comment": $property.nameProperty, "to": $contact.telephon, "action": "Propiedad enviada: "}
           infoToBinnacle($systStatus, $binnacle)
-          msgWA = "Gracias por contactarnos. Enrique Marines, asesor de ventas en Match Home, tel. 614 540 4003, email matchhome@hotmail.com ✔ Visita matchhome.net ✔ ¡Seguro encuentras algo de interés!"
-          sendWA(msgWA)
-        } else if($systStatus === "sendComm"){
-          // Envía por WA lo que está en TextArea y guarda la bitácora
-          msgWA = commInpuyBinnacle;
-          sendWA(msgWA)
+          msg = "Gracias por contactarnos. Enrique Marines, asesor de ventas en Match Home, tel. 614 540 4003, email matchhome@hotmail.com ✔ Visita matchhome.net ✔ ¡Seguro encuentras algo de interés!"
+          sendWhatsApp(tel, msg)
+      } else if($systStatus === "sendComm"){
+        // Envía por WA lo que está en TextArea y guarda la bitácora
+          msg = commInpuyBinnacle;
+          sendWhatsApp(tel, msg)
           $systStatus = "sendWA"
           $binnacle = {"date": Date.now(), "comment": commInpuyBinnacle, "to": $contact.telephon, "action": "WhatsApp enviado: "}
           infoToBinnacle($systStatus, $binnacle)
-        } else if($systStatus === "sendProp"){
-          // Envía por WA lo que está en TextArea y guarda la bitácora
-          $property = contCheck[0]
-          msgWA = $property.urlProp;
-          sendWA(msgWA)
-          $systStatus = "sendProp"
+      } else if($systStatus === "sendProp"){
+        // Envía por WA lo que está en TextArea y guarda la bitácora
+          $property = propCheck[0]
+          msg = $property.urlProp;
+          sendWhatsApp(tel, msg)
           $binnacle = {"date": Date.now(), "comment": $property.nameProperty, "to": $contact.telephon, "action": "Propiedad enviada: "}
           infoToBinnacle($systStatus, $binnacle)
-        } else {
-          console.log($systStatus);
-        }
+      };
         
       if($systStatus !== "msgGratitude") {
-        msgWA = "";
-        contCheck = [];
+        msg = "";
+        propCheck = [];
         commInpuyBinnacle = "";
         searchTerm = "";
         $systStatus = "";
-        contBinn($contact)
+        contBinn($contact);
       }
     };
     
   // Cambia systStatus al escribir en Text Area
     function textAreaComm() {
       $systStatus = "sendComm"
-      contCheck = [];
+      propCheck = [];
     }
 
   // Cambia el systStatus as escojer una propiedad
     function sendProp() {
       $systStatus = "sendProp"
       commInpuyBinnacle = "";
-    }
+    };    
+ 
+  // Envios masivos por WA ya dados de alta
+    function sendProperties() {
+        $systStatus = "sendProps"
+        propFalt = propCheck.length - (sig + 1)
+        let msg = propCheck[sig].urlProp
+        sendWhatsApp(tel, msg)
+        if ( propCheck.length === sig + 1 ) {
+          setTimeout ( function(){
+            $systStatus = "";
+            propCheck = [];
+            showProp = false;
+            sig = 0;
+            propFalt = 0;
+            return
+          }, 2500);
+        };
+          sig ++        
+    };    
 
-  // Envia link para WA
-    function sendWA(msgWA) {      
-      let link = (`https://api.whatsapp.com/send?phone=52${$contact.telephon}&text=${msgWA}`)
-      window.open(link, "ventana1","width=350,height=350,scrollbars=NO" );
-      // $systStatus = "";
-    }
   // Cancel Button ""start""
     function onCancel() {
           goto("/contactos")
@@ -163,7 +182,6 @@
       collection(db, "binnacles"),
       (querySnapshot) => {
           toRenBinn = querySnapshot.docs.map(doc => {
-              // console.log(toRenBinn);
               return{...doc.data(), id: doc.id}
           })
           sortBinnacle(toRenBinn)
@@ -183,19 +201,6 @@
         return sortedBinn = sortBinnacle(bitacora)
       };
    
-
-
-  // Intento de enviar varios WA por medio de each
-      // function mostLinks() {
-      //   contCheck.forEach(item => {
-      //     n=n+1
-      //     if(confirm("Deseas continuar?")==true){
-      //       fun(item)
-      //     }
-      //   })
-      // }
-    
- 
 </script> 
 
   <!-- Contact Data -->
@@ -279,55 +284,55 @@
         <div class="btn__actions">
           <!-- Iconos edit, delete -->
                   <div class="icon__actions">
-                      <button class="btn__common" on:click = {addSchedule($contact)} ><i class="fa-solid fa-calendar-days"></i>Agendar</button>
-                      <button class="btn__common" on:click = { fitProp($contact)}> <i class="fa-solid fa-house-laptop"></i>Propiedades</button>
-                      <button class="btn__common" on:click = {mostSearch}> <i class="fa-solid fa-house-user"></i>Propiedad</button>
-                      <button class="btn__common" on:click={onCancel}><i class="fa-solid fa-rotate-left"></i>Regresar</button>
-                      
+                    <button class="btn__common" on:click = {addSchedule($contact)} ><i class="fa-solid fa-calendar-days"></i>Agendar</button>
+                    <button class="btn__common" on:click = { fitProp($contact)}> <i class="fa-solid fa-house-laptop"></i>Propiedades</button>
+                    <button class="btn__common" on:click = {mostSearch}> <i class="fa-solid fa-house-user"></i>Propiedad</button>
+                    <button class="btn__common" on:click={onCancel}><i class="fa-solid fa-rotate-left"></i>Regresar</button>                      
+                  </div>
+
+                  {#if mostBusq}
+                    <div class="search">
+                      <Search bind:searchTerm on:input={searProp} on:keydown={()=>{}}/>
                     </div>
-                    {#if mostBusq}
-                      <div class="search">
-                        <Search bind:searchTerm on:input={searProp} on:keydown={()=>{}}/>
-                      </div>
-                    {/if}            
-                    {#if isActivated}
-                      <AddToSchedule {...$contact} on:closeIt = {close} />
-                    {/if}
+                  {/if} 
+
+                  {#if isActivated}
+                    <AddToSchedule {...$contact} on:closeIt = {close} />
+                  {/if}
               
   <!-- Botonies enviar WA o guardar nota para bitácora -->
               
-                <div class="textAreaCont">
-                    <textarea on:change={textAreaComm} class="texArea" bind:value = {commInpuyBinnacle} placeholder ="Ingresa un comentario"/> 
-                    <div class="waSave">
-                      {#if !!commInpuyBinnacle || contCheck.length >= 1 || $systStatus === "addContact" || $systStatus === "msgGratitude" }
-                        <button  class="btn__common" on:click={selMsgWA}><i class="fa-brands fa-square-whatsapp"></i>WhatsApp</button>
-                        <button class="btn__common" on:click={saveNote($systStatus, commInpuyBinnacle)}><i class="fa-solid fa-floppy-disk"></i>Guardar Info</button>
-                      {/if}
-                  </div>
+              <div class="textAreaCont">
+                  <textarea on:change={textAreaComm} class="texArea" bind:value = {commInpuyBinnacle} placeholder ="Ingresa un comentario"/> 
+                  <div class="waSave">
+                    {#if !!commInpuyBinnacle || $systStatus === "addContact" || $systStatus === "msgGratitude" }
+                      <button  class="btn__common" on:click={selMsgWA}><i class="fa-brands fa-square-whatsapp"></i>WhatsApp</button>
+                      <button class="btn__common" on:click={saveNote($systStatus, commInpuyBinnacle)}><i class="fa-solid fa-floppy-disk"></i>Guardar Info</button>
+                    {/if}
                 </div>
+              </div>
                 
         </div>
 
       </div>
-
-      <div class="rigthContainer">
-
-        <h1 class="title">Bitácora</h1>
-
-  <!-- Bitácora del contacto -->
-
-        <div>
-          <div class="schedule">
-            <div class="binnacleHome">
-              {#each sortedBinn as binn}
-                <CardBinnacle {binn} />
-                <!-- <Binnacle /> -->
-              {/each}
-            </div>              
+      
+      <!-- Bitácora del contacto -->
+        {#if $systStatus != "sendProp"}
+          <div class="rigthContainer">
+            <h1 class="title">Bitácora</h1>
+            <div>
+              <div class="schedule">
+                <div class="binnacleHome">
+                  {#each sortedBinn as binn}
+                    <CardBinnacle {binn} />
+                  {/each}
+                </div>              
+              </div>
+            </div>
           </div>
-        </div>
- 
-      </div>
+        {/if}
+
+
       
       </div>
     </div>
@@ -340,11 +345,15 @@
         <div class="title__props">
           <h2 class="title sub">{propToRender.length} Propiedades encontradas</h2>
         </div>
-
+        <div class="buttonSend">
+          <button class="buttSendProps" on:click={sendProperties}>
+            {$systStatus !== "sendProps" ? "Enviar propiedades seleccionadas" : `Total para enviar ${propCheck.length}. faltan ${faltanProp}`}
+            </button>
+        </div>
         <div class="card__container">
           {#each propToRender as prop}
             <div class="card__prop">
-              <input type="checkbox" value={prop} class="form__contCheck" bind:group={contCheck} on:input={sendProp}/>	
+              <input type="checkbox" value={prop} class="form__propCheck" bind:group={propCheck} on:input={sendProp}/>	
               <CardProperty {prop} />
             </div>
           {/each}
@@ -407,6 +416,20 @@
       align-items: center;
       width: 100%;
     }
+
+    .buttonSend {
+      display: flex;
+      width: 100%;
+      padding: 8px;
+      justify-content: center;
+      align-items: center;
+      background: wheat;
+    }
+
+    .buttSendProps{
+      padding: 8px 15px;
+    }
+
 
     .card__container {
       display: flex;
@@ -547,7 +570,7 @@
         /* align-items: right;         */
       }
 
-      .form__contCheck {
+      .form__propCheck {
         padding: 0;
       }
 

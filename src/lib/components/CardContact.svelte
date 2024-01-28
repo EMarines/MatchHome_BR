@@ -9,7 +9,7 @@
 
   <div class="card__info">
     <div class="card__infoHead">
-      <span>{cont.name} {cont.lastname}</span>
+      <span class="card__Title">{cont.name} {cont.lastname}</span>
       <span class="date">{formatDate(cont.createdAt)}</span>
     </div>
     <div class="info__cont">      
@@ -52,6 +52,10 @@
     font-weight: 400;
     /* align-items: center; */
     /* padding: 5px; */
+  }
+
+  .card__Title {
+    text-transform: capitalize;
   }
 
   .card__infoHead {
