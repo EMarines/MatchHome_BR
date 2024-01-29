@@ -53,7 +53,7 @@
   // Search Contact by name, lastname and telephon
       function searCont() {
         return contToRender = $currContList.filter((contact) => {
-          let contInfo = (contact.name + " " + contact.lastname + contact.telephon).toLowerCase();
+          let contInfo = (contact.name + " " + contact.lastname + contact.telephon).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
           return contInfo.includes(searchTerm.toLowerCase());
         });  
       };

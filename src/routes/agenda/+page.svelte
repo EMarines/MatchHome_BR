@@ -271,6 +271,7 @@
 
   .td__task {
     width: 150px;
+    text-transform: capitalize;
   }
 
   @media(max-width: 400px){

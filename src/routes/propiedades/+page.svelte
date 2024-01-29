@@ -50,10 +50,14 @@
   // Search property by name
     function searProp() {
       return propToRender = $currPropList.filter((propety) => {
-        let contInfo = (propety.nameProperty + " " + propety.colonia + " " + propety.claveEB).toLowerCase();
+        let contInfo = (propety.nameProperty + " " + propety.colonia + " " + propety.claveEB).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
         return contInfo.includes(searchTerm.toLowerCase());
       });  
     };
+
+    const removeAccents = (str) => {
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
 
     function addPropertyS() {
       propadd.forEach(async prop => {       

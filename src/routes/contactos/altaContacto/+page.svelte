@@ -41,7 +41,8 @@
           if($systStatus === "editing"){ 
             try {
               await updateDoc(doc(db, "contacts", $contact.id), $contact);
-              $binnacle = {"date": Date.now(), "comment": "Se editó", "to": $contact.telephon, "action": "Se editó a: "}
+              // ya no guarda en bitácora
+              // $binnacle = {"date": Date.now(), "comment": "Se editó", "to": $contact.telephon, "action": "Se editó a: "}
               // infoToBinnacle($systStatus, $binnacle);              
             } catch (error) {
               console.log(error);
@@ -51,13 +52,6 @@
             try {
               let createdAt = Date.now();              
               let contactStage = "Etapa 1"
-              // name = capitalizeWords(name);
-              // console.log(name, "si");
-              // name = name.trim();
-              // console.log(name, "si");
-              // lastname = capitalizeWords(lastname)
-              // lastname = lastname.trim();
-              // console.log(lastname, "si");
               $contact.telephon = cleanNumber($contact.telephon);
               console.log($contact.telephon);
                 if($property ===  null || $property === undefined ){

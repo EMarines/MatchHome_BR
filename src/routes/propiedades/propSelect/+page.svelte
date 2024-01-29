@@ -118,7 +118,6 @@
 
 	// Muestra listado de contactos interesados
 		function findCustomers() {
-			console.log($currContList);
 			contInterested = "Por_Enviar"
 			listToRender($property, $currContList)
 			show__contacts = !show__contacts
@@ -147,15 +146,6 @@
 			}
 		}
 
-	// Le da el valor del contacto seleccionado para envar prop por WA a $contact
-		function contSelected(cont) {
-			console.log(contCheck);
-			// $contact = contCheck[0];
-			// if(conts.length > 1){
-			// 	alert("no puedesseleccionar más de uno, borra la segunda selección")
-			// }
-		}
-
 	// Envía en bucle la propiedad a uno o varios contactos
 		function sendProperty() {
 			console.log("contCheck = ", contCheck);
@@ -176,8 +166,12 @@
 				}, 2000);
 			};
 				sig ++
-		}
+		};
 
+	// Selecciona todos los contactos o los deselecciona
+		function selectAll(e){
+			contCheck = e.target.checked ? [...contToRender] : [];
+		}
 
 </script>
 
@@ -272,13 +266,16 @@
 	<!-- Muestra los contactos a los que le puede interesar la propiedad -->
 				<div class="btn__send">
 					{#if showBtn}
-					<button id="Evio_prop_selec" class="send__Prop" on:click={sendProperty}>{`Total para enviar ${contIntToSend}. faltan ${contFalt}`}</button>
-					{/if}
+						<button id="Evio_prop_selec" class="send__Prop" on:click={sendProperty}>{`Total para enviar ${contIntToSend}. faltan ${contFalt}`}</button>
+						<label>
+							<input type="checkbox" on:change={selectAll}> Selleccionar todos
+						</label>
+						{/if}
 				</div>
 				<div class="cards__container">
 					{#each contToRender as cont}
 					<div class="card__container">
-						<input type="checkbox" value={cont} name={cont}  bind:group={contCheck} on:change={contSelected}>
+						<input type="checkbox" value={cont} name={cont}  bind:group={contCheck} >
 						<CardContact {cont}/>         
 					</div>
 					{/each}        
@@ -425,7 +422,9 @@
 
 	.btn__send {
 		display: flex;
-		justify-content: center;		
+		justify-content: space-evenly;	
+		padding: 10px;
+		/* background: yellowgreen;	 */
 	}
 
 	.send__Prop {
