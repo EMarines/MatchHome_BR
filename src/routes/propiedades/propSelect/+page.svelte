@@ -1,7 +1,7 @@
 <script>
 	// @ts-nocheck
 	// Importaciones
-  	import { sendWhatsApp } from '$lib/functions/sendWhatsApp';
+  	import { sendWhatsApp, closeWindow } from '$lib/functions/sendWhatsApp';
 		import { db, dbBinnacle, dbContacts } from '../../../firebase';
 		import { property, contact, binnacle, systStatus, currPropList, currContList, currBinnList } from '$lib/stores/store';
 		import { toComaSep } from '$lib/functions/format.js';
@@ -63,13 +63,11 @@
 	//  Delete Property
 		async function deleProperty() {
 			if (confirm('Deseas eleiminar definitivamente la propiedad?')) {
-				// $systStatus = "propDeleting"
 				await deleteDoc(doc(db, 'properties', $property.id));
-				$property = [];
+				goto('/propiedades');
 			} else {
 				return;
 			}
-			goto('/propiedades');
 		}
 
 	// Cancel
@@ -148,8 +146,6 @@
 
 	// Envía en bucle la propiedad a uno o varios contactos
 		function sendProperty() {
-			console.log("contCheck = ", contCheck);
-			// let urlProp = $property.urlProp
 			contToSend = contCheck[sig]
 			contFalt = contCheck.length - (sig + 1)
 			$systStatus = "sendProps"

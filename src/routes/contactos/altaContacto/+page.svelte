@@ -13,7 +13,7 @@
     import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc} from 'firebase/firestore';
     import { goto } from '$app/navigation';
     import CardProperty from '$lib/components/CardProperty.svelte';
-    import { cleanNumber } from '$lib/functions/format';
+    import { cleanNumber, cleanNomber } from '$lib/functions/format';
 	// import { l } from 'vitest/dist/index-5aad25c1';
 
   // Declaraciones
@@ -36,8 +36,7 @@
 
   // Handle Submit
       async function handleSubmit() { 
-        // capitalizeWords($contact)
-    // Edita a contacto
+          // Edita a contacto
           if($systStatus === "editing"){ 
             try {
               await updateDoc(doc(db, "contacts", $contact.id), $contact);
@@ -48,11 +47,14 @@
               console.log(error);
             } 
           } else {
-    // Da de alta al contacto con los datos de la propiedad por la que contactó
+            // Da de alta al contacto con los datos de la propiedad por la que contactó
             try {
               let createdAt = Date.now();              
               let contactStage = "Etapa 1"
               $contact.telephon = cleanNumber($contact.telephon);
+              $contact.name = cleanNomber($contact.name);
+              $contact.lastname = cleanNomber($contact.lastname);
+              $contact.budget = cleanNumber($contact.budget);
               console.log($contact.telephon);
                 if($property ===  null || $property === undefined ){
                   let selecTP = $property.selectTP
@@ -111,20 +113,6 @@
         // console.log(propChecked);
       }
 
-      // function capitalizeWords(string) {
-      //   console.log(string);
-      //   let result = ""; 
-      //   let split = string.split(" ");
-      //   if(split.length > 0){
-      //   for (var i = 0; i < split.length; i++) {
-      //       result +=  split[i][0].toUpperCase() +  split[i].slice(1).toLowerCase()+    " ";
-      //   }
-      //   }else{
-      //       result = string.toUpperCase() + string.slice(1).toLowerCase();
-      //   }
-      //   return result;
-      // }
-
 </script>
 
   <!-- Muestro o oculta la fecha para mostrar o editar -->
@@ -133,102 +121,102 @@
       <h1 class="title">Alta de Contacto</h1>
 
       <div class="features">
-      <div>
-        {#if $systStatus === "editing"}
-          <label class="label__title">
-            <p class={$contact.createdAt ? ' above' : ' center'}>Alta en </p>
-            <input class="in__sel" type="date" name="createdAt" bind:value={$contact.createdAt} placeholder="* Alta el: " required>
-            <!-- <input class=" dataInput" type="date" bind:value={$contact.createdAt}  placeholder="* Alta el "/> -->
-          </label>
-        {/if}
-      </div>
+        <div>
+          {#if $systStatus === "editing"}
+            <label class="label__title">
+              <p class={$contact.createdAt ? ' above' : ' center'}>Alta en </p>
+              <input class="in__sel" type="date" name="createdAt" bind:value={$contact.createdAt} placeholder="* Alta el: " required>
+              <!-- <input class=" dataInput" type="date" bind:value={$contact.createdAt}  placeholder="* Alta el "/> -->
+            </label>
+          {/if}
+        </div>
 
   <!-- Nombre y apellido -->
-      <div class="inp__lat">
-        <label class="label__title">
-          <p class={$contact.name ? ' above' : ' center'}>Nombre</p>
-          <input class="in__sel" name="name" bind:value={$contact.name} placeholder="* Nombre" required >
-        </label>
+        <div class="inp__lat">
+          <label class="label__title">
+            <p class={$contact.name ? ' above' : ' center'}>Nombre</p>
+            <input class="in__sel" name="name" bind:value={$contact.name} placeholder="* Nombre" required >
+          </label>
 
-        <label class="label__title">
-          <p class={$contact.lastname ? ' above' : ' center'}>Apellido</p>
-          <input class="in__sel capitalize" name="lastname" bind:value={$contact.lastname} placeholder="* Apellido " >
-          <!-- <input type="text" oninput="this.value = capitalizeWords(this.value)"> -->
-        </label>
-      </div>
+          <label class="label__title">
+            <p class={$contact.lastname ? ' above' : ' center'}>Apellido</p>
+            <input class="in__sel capitalize" name="lastname" bind:value={$contact.lastname} placeholder="* Apellido " >
+            <!-- <input type="text" oninput="this.value = capitalizeWords(this.value)"> -->
+          </label>
+        </div>
 
   <!-- Modo de contacto -->
-    <div class="inp__lat">
-      <label class="label__title">
-        <p class={$contact.telephon ? ' above' : ' center'}>Teléfono</p>
-        <input type="telephon" class="in__sel" name="telephon" bind:value={$contact.telephon} placeholder="* Teléfono " required>
-      </label>
-      
-      <label class="label__title">
-        <p class={$contact.email ? ' above' : ' center'}>Email</p>
-        <input class="in__sel" name="email" bind:value={$contact.email} placeholder="* Email " required>
-      </label>
-    </div>
+        <div class="inp__lat">
+          <label class="label__title">
+            <p class={$contact.telephon ? ' above' : ' center'}>Teléfono</p>
+            <input type="telephon" class="in__sel" name="telephon" bind:value={$contact.telephon} placeholder="* Teléfono " required>
+          </label>
+          
+          <label class="label__title">
+            <p class={$contact.email ? ' above' : ' center'}>Email</p>
+            <input class="in__sel" name="email" bind:value={$contact.email} placeholder="* Email " required>
+          </label>
+        </div>
 
   <!-- Tipo de contacto -->
-      <div class="featContact">
+        <div class="featContact">
 
-        <label class="label__title">
-          <p class={$contact.typeContact ? ' above' : ' center'}>Tipo de Contacto</p>
-          <select class="in__sel feat" bind:value={$contact.typeContact}>
-            <option class={$contact.typeContact ? ' above' : ' center'} value="">Tipo de Contacto</option>
-            {#each typeContacts as typeContac}
-              <option  value={typeContac}>{typeContac}</option>
-            {/each}
-          </select>   
-        </label>    
-      
-    <!-- Fuente del Contacto -->
+          <label class="label__title">
+            <p class={$contact.typeContact ? ' above' : ' center'}>Tipo de Contacto</p>
+            <select class="in__sel feat" bind:value={$contact.typeContact}>
+              <option class={$contact.typeContact ? ' above' : ' center'} value="">Tipo de Contacto</option>
+              {#each typeContacts as typeContac}
+                <option  value={typeContac}>{typeContac}</option>
+              {/each}
+            </select>   
+          </label>    
+        
+          <!-- Fuente del Contacto -->
 
-        <label class="label__title">
-          <p class={$contact.selecMC ? ' above' : ' center'}>Modo de Contacto</p>
-          <select class="in__sel feat" bind:value={$contact.selecMC}>
-            <option disabled selected value="">Modo de Contacto</option>
-            {#each modeContact as selecMC}
-              <option  value={selecMC}>{selecMC}</option>
-            {/each}
-          </select>
-        </label>
-      
-    <!-- Tipo de propiedad buscada -->
-      {#if detaAdd}
-        <label class="label__title">      
-          <p class={$contact.selecTP ? ' above' : ' center'}>Tipo de Propiedad</p>
-            <select class="in__sel feat" id="selTP" name="selTP" bind:value={$contact.selecTP}>
-              <option disabled selected value="">Tipo de Propiedad</option>
-              {#each typeProperties as selecTP}
-                <option value={selecTP}>{selecTP}</option>
+          <label class="label__title">
+            <p class={$contact.selecMC ? ' above' : ' center'}>Modo de Contacto</p>
+            <select class="in__sel feat" bind:value={$contact.selecMC}>
+              <option disabled selected value="">Modo de Contacto</option>
+              {#each modeContact as selecMC}
+                <option  value={selecMC}>{selecMC}</option>
               {/each}
             </select>
           </label>
-      {/if}  
-    </div>
+        
+          <!-- Tipo de propiedad buscada -->
+          {#if detaAdd}
+            <label class="label__title">      
+              <p class={$contact.selecTP ? ' above' : ' center'}>Tipo de Propiedad</p>
+                <select class="in__sel feat" id="selTP" name="selTP" bind:value={$contact.selecTP}>
+                  <option disabled selected value="">Tipo de Propiedad</option>
+                  {#each typeProperties as selecTP}
+                    <option value={selecTP}>{selecTP}</option>
+                  {/each}
+                </select>
+              </label>
+          {/if}  
+        </div>
 
 
-  <!-- Nota de inicio -->
-      <label class="label__title">
-        <p class={$contact.comContact ? ' above' : ' center'}>Comentarios</p>
-        <textarea class="in__sel notes" name="comContact" bind:value={$contact.comContact} placeholder="* Comentarios" />
-      </label>
-
-  <!-- Search -->
-      <Search bind:searchTerm on:input={searProp(searchTerm)}/>
-
-  <!-- Presupuesto -->
-      {#if detaAdd}
-      <div>
+        <!-- Nota de inicio -->
         <label class="label__title">
-          <p class={$contact.budget ? ' above' : ' center'}>Presupuesto</p>
-          <input class="in__sel" name="budget" bind:value={$contact.budget} placeholder="* Presupuesto " required>
+          <p class={$contact.comContact ? ' above' : ' center'}>Comentarios</p>
+          <textarea class="in__sel notes" name="comContact" bind:value={$contact.comContact} placeholder="* Comentarios" />
         </label>
-      </div>
 
-  <!-- Metodo de Pago -->
+        <!-- Search -->
+        <Search bind:searchTerm on:input={searProp(searchTerm)}/>
+
+      <!-- Presupuesto -->
+      {#if detaAdd}
+        <div>
+          <label class="label__title">
+            <p class={$contact.budget ? ' above' : ' center'}>Presupuesto</p>
+            <input class="in__sel" name="budget" bind:value={$contact.budget} placeholder="* Presupuesto " required>
+          </label>
+        </div>
+
+        <!-- Metodo de Pago -->
         <label class="label__title">
           <p class={$contact.modePay ? ' above' : ' center'}>Modo de Pago</p>
             <select class="in__sel" bind:value={$contact.modePay}>
@@ -250,48 +238,48 @@
             </select>
         </label>
 
-       <label class="label__title">
-        <p class={$contact.numBaths ? ' above' : ' center'}>Baños</p>
-          <select class="in__sel" bind:value={$contact.numBaths}>
-              <option disabled selected value=""># Baños</option>
-              {#each oneToFour as bathroom}
-                <option value={bathroom}>{bathroom} baños</option>
-              {/each}
-          </select>
-       </label> 
+        <label class="label__title">
+          <p class={$contact.numBaths ? ' above' : ' center'}>Baños</p>
+            <select class="in__sel" bind:value={$contact.numBaths}>
+                <option disabled selected value=""># Baños</option>
+                {#each oneToFour as bathroom}
+                  <option value={bathroom}>{bathroom} baños</option>
+                {/each}
+            </select>
+        </label> 
 
        
-       <label class="label__title">
-        <p class={$contact.halfBathroom ? ' above' : ' center'}>Medios Baños</p>
-          <select class="in__sel" bind:value={$contact.halfBathroom}>
-              <option disabled selected value=""># Medios Baños</option>
-              {#each oneToFour as numberHalfBath}
-              <option value={numberHalfBath}>{numberHalfBath}Medios Baños</option>
+        <label class="label__title">
+          <p class={$contact.halfBathroom ? ' above' : ' center'}>Medios Baños</p>
+            <select class="in__sel" bind:value={$contact.halfBathroom}>
+                <option disabled selected value=""># Medios Baños</option>
+                {#each oneToFour as numberHalfBath}
+                <option value={numberHalfBath}>{numberHalfBath}Medios Baños</option>
+                {/each}
+            </select>
+          </label>
+
+        <label class="label__title">
+          <p class={$contact.numParks ? ' above' : ' center'}>Estacionamientos</p>
+          <select  class="in__sel"bind:value={$contact.numParks}>
+              <option disabled selected value=""># Estacionamientos</option>
+              {#each oneToFour as park}
+              <option value={park}>{park}Estacionamientos</option>
               {/each}
           </select>
         </label>
 
-       <label class="label__title">
-        <p class={$contact.numParks ? ' above' : ' center'}>Estacionamientos</p>
-        <select  class="in__sel"bind:value={$contact.numParks}>
-            <option disabled selected value=""># Estacionamientos</option>
-            {#each oneToFour as park}
-            <option value={park}>{park}Estacionamientos</option>
-            {/each}
-        </select>
-       </label>
+        <label class="label__title">
+          <p class={$contact.rangeProp ? ' above' : ' center'}>Rango</p>
+          <select  class="in__sel" bind:value={$contact.rangeProp}>
+              <option disabled selected value="">Rango</option>
+              {#each range as rng}
+              <option value={rng.slice(0,3)}>{rng}</option>
+              {/each}
+          </select>
+        </label>
 
-       <label class="label__title">
-        <p class={$contact.rangeProp ? ' above' : ' center'}>Rango</p>
-        <select  class="in__sel" bind:value={$contact.rangeProp}>
-            <option disabled selected value="">Rango</option>
-            {#each range as rng}
-            <option value={rng.slice(0,3)}>{rng}</option>
-            {/each}
-        </select>
-       </label>
-
-  <!-- Stages -->
+        <!-- Stages -->
         <label class="label__title">
           <p class={$contact.contactStage ? ' above' : ' center'}>Etapa</p>
           <select class="in__sel" name="typeOperation" bind:value={$contact.contactStage} placeholder="">
@@ -302,12 +290,12 @@
           </select>
         </label>
 
-  <!-- Ubicacion y etiquetas -->
-       <div class="ubi__Tags">
-          <Ubication bind:ubication = {$contact.locaProperty} />
-          <Tags bind:tags = {$contact.tagsProperty} />
-       </div>
-    {/if}
+        <!-- Ubicacion y etiquetas -->
+        <div class="ubi__Tags">
+            <Ubication bind:ubication = {$contact.locaProperty} />
+            <Tags bind:tags = {$contact.tagsProperty} />
+        </div>
+      {/if}
 
     <button class="btn__save" on:click={detaAlta}>Alta Detalles</button>
 
@@ -322,28 +310,28 @@
   <!-- Renderiza las Tarjetas para Propiedad -->
       {#if showProp} 
 
-      <h2 class="title sub">{propToRender.length} Propiedades encontradas</h2>
-      <div class="card__container">
+        <h2 class="title sub">{propToRender.length} Propiedades encontradas</h2>
+          <div class="card__container">
 
-        {#each propToRender as prop}
+            {#each propToRender as prop}
 
-          <div class="card__prop">
+              <div class="card__prop">
 
-            <div class="sel__prop">
-              <input  type="checkbox" name={prop.claveEB} value={prop} bind:group={propChecked} on:change={propCheck}>
-            </div>
-            <div >
-              <CardProperty {prop} />
-            </div>
+                <div class="sel__prop">
+                  <input  type="checkbox" name={prop.claveEB} value={prop} bind:group={propChecked} on:change={propCheck}>
+                </div>
+                <div >
+                  <CardProperty {prop} />
+                </div>
 
+              </div>
+
+            {/each}
+
+            {#if propToRender.length === 0}
+              <h3>"No hay Propiedades para este contacto"</h3>
+            {/if}
           </div>
-
-        {/each}
-
-        {#if propToRender.length === 0}
-        <h3>"No hay Propiedades para este contacto"</h3>
-        {/if}
-      </div>
       {/if}
       
      
@@ -370,7 +358,6 @@
     width: 250px;
     border-radius: 8px;
     border-color: 2px solid blue;
-    /* font-family: cursive; */
     font-size: .8em;
     font-weight: 600;
     color: darkblue;  
@@ -384,8 +371,6 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    /* width: 550px; */
-    /* max-width: 550px; */
     margin: 0 auto;
   }
 

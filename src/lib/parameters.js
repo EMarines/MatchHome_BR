@@ -1,9 +1,9 @@
 
   export const operTypes = [
-    "",
     "Venta",
     "Renta",
-    "Renta Temporal"
+    "Renta Temporal",
+    ""
   ]
   
   export const range = [
@@ -79,14 +79,17 @@
 
   export const typeProperties = [
     "Casa",
-    "Terreno",
     "Departamento",
     "Casa o Departamento",
+    "Bodega",
     "Local Comercial",
     "Edificio",
-    "Bodega",
+    "Terreno",
+    "Terreno Comercial",
+    "Terreno Industrial",	
+    "Rancho",
     "Casa de Campo",
-    "",
+    ""
   ];
 
   export const modePays = [
@@ -107,7 +110,8 @@
     "Recamara en P.B.",
     "Patio Amplio",
     "Lista para Habitarse",
-    "Nueva"
+    "Nueva",
+    ""
   ]
 
   export const contactStage = [

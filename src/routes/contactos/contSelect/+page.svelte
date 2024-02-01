@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 // Importaciones
-  import { sendWhatsApp } from '$lib/functions/sendWhatsApp';
+  import { sendWhatsApp, closeWindow } from '$lib/functions/sendWhatsApp';
   import { contact, systStatus, currPropList, binnacle, property } from '$lib/stores/store';
   import { formatDate } from '$lib/functions/dateFunctions';
   import { toComaSep, toTele } from '$lib/functions/format.js'
@@ -144,9 +144,12 @@
       commInpuyBinnacle = "";
     };    
  
+    // import {closeWindow} from '$lib/functions/sendWhatsApp.svelte';
   // Envios masivos por WA ya dados de alta
     function sendProperties() {
+      // closeWindow();
         $systStatus = "sendProps"
+        linkToSend.close();
         propFalt = propCheck.length - (sig + 1)
         let msg = propCheck[sig].urlProp
         sendWhatsApp(tel, msg)

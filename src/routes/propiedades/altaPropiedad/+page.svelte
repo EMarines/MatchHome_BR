@@ -68,7 +68,7 @@
     
 </script>
 
-<div class="cont__alta">
+<div class="prop__alta">
   <h1>Alta Propiedad</h1>
 
   <div class="features">
@@ -92,6 +92,10 @@
         {/each}
       </select>
     </label>
+
+  </div>
+
+  <div class="features">
 
     <label class="label__title">
       <p class={$property.beds ? ' above' : ' center'}>Número de Recámaras</p>
@@ -144,19 +148,23 @@
     </label>
 
     <label class="label__title">
-      <p class={$property.nameProperty ? ' above' : ' center'}>Nombre de la Propiead</p>
-      <input class="in__sel" name="nameProperty" bind:value={$property.nameProperty} placeholder="* Nombre de la Propiead">
-    </label>
-
-    <label class="label__title">
       <p class={$property.colonia ? ' above' : ' center'}>Colonia</p>
-      <input class="in__sel" name="colonia" bind:value={$property.colonia} placeholder="* Colonia">
-    </label>
+      <input class="in__sel capitalize" name="colonia" bind:value={$property.colonia} placeholder="* Colonia">
+    </label>    
 
     <label class="label__title">
       <p class={$property.price ? ' above' : ' center'}>Precio</p>
       <input class="in__sel" name="Price" bind:value={$property.price} placeholder="* Precio">
-    </label>  
+    </label> 
+  </div>
+  
+  <div class="features">
+  
+
+    <label class="label__title">
+      <p class={$property.nameProperty ? ' above' : ' center'}>Nombre de la Propiead</p>
+      <input class="in__sel capitalize" name="nameProperty" bind:value={$property.nameProperty} placeholder="* Nombre de la Propiead">
+    </label>
     
     <label class="label__title">
       <p class={$property.claveEB ? ' above' : ' center'}>Clave</p>
@@ -170,8 +178,9 @@
 
     <label class="label__title">
       <p class={$property.urlProp ? ' above' : ' center'}>Link Propiedad</p>
-      <input class="in__sel" name="urlProp" bind:value={$property.urlProp} placeholder="* Link Propiedd">
+      <input class="in__sel" name="urlProp" bind:value={$property.urlProp} placeholder="* Link Propiedad">
     </label>
+
 
     <label class="label__title">
       <p class={$property.locaProperty ? ' above' : ' center'}>Ubicación</p>
@@ -182,64 +191,92 @@
         {/each}
       </select>
     </label>
+  </div>
+
+  <div class="prop__tags">
 
     <Tags bind:tags = {$property.tagsProperty}/>
 
   </div>
   
-    <button class="bt__SaveEdit" on:click={handleSubmit}>{#if $systStatus === "addProperty"}Guardar{:else}Editar{/if}</button>
+    <button class=" btn bt__saveEdit" on:click={handleSubmit}>{#if $systStatus === "addProperty"}Guardar{:else}Editar{/if}</button>
 
-    <button class="btn-cancel" on:click={onCancel}>Cancel</button>
+    <button class="btn btn__cancel" on:click={onCancel}>Cancel</button>
 </div>
 
 
 
 <style>
 
-  .bt__SaveEdit {
-    width: 300px;
-    margin: 15px;
-    padding: 5px;
-    border-radius: 8px;
-    color: white;
-    background: blue;
-  }
+ 
 
-  .cont__alta{
+  .prop__alta{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin: 0 20px;
     flex: 1;
-  }
-
-  .in__sel {    
-    padding: 13px 0 10px 8px;
-    width: 550px;
-    border-radius: 4px;
-    border-color: 2px solid blue;
-    font-family: cursive;
-    font-size: 1em;
-    font-weight: 550;
-    color: darkblue;  
+    /* background-color: antiquewhite; */
   }
 
   .features {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    padding: 15px;
+    align-items: center;
+    justify-content: center;
     gap: 8px;
+    flex-wrap: wrap;
+    /* background: aquamarine; */
     /* width: 550px; */
     /* max-width: 550px; */
-    margin: 0 auto;
+    /* margin: 0 auto; */
+  }
+
+  .prop__tags {
+    display: flex;  
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
 
   .label__title {
     position: relative;
-    /* border: 1px solid navy; */
-    /* padding: 3px; */
+  }
+
+  .in__sel {  
+    padding: 8px;
+    width: 300px;
+    border-radius: 6px;
+    border-color: 2px solid blue;
+    /* font-family: cursive; */
+    font-size: .8em;
+    font-weight: 550;
+    color: darkblue;  
+  }
+
+  .capitalize{
+    text-transform: capitalize;
   }
 
   input::placeholder{
     color: navy;
+  }
+
+  .btn{
+    width: 300px;
+    margin: 15px;
+    padding: 5px;
+    border-radius: 8px;
+    color: gray;
+  }
+
+  .bt__saveEdit {    
+    background: blue;
+  }
+
+  .btn__cancel {    
+    background: yellow;
   }
 </style>

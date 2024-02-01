@@ -36,3 +36,15 @@ export function cleanNumber(numToClean){
 		console.log(error);
 	}
 }
+
+export function cleanNomber(nomToClean){
+	console.log(nomToClean);
+	try {
+		let newNomber = nomToClean.trim();
+		console.log("nombre ", newNomber)
+		return newNomber;
+
+	} catch (error) {
+		console.log(error);
+	}
+}
