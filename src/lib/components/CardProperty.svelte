@@ -1,48 +1,61 @@
 <script>
 // @ts-nocheck
-  import { toComaSep } from '../functions/format'
+  import { toComaSep } from '$lib/functions/format'
 
   export let prop={};
 </script>
 
-
-  <div class="img__cont">
-    <img src="{prop.urlImage}" alt="casa">
-  </div>
-
-  <div class="info__cont">
-
-    <div class="card__info">
-      <span>{prop.colonia}</span>
-      <span>$ {toComaSep(Number(prop.price))}.</span>
+  <div class="card__prop">
+  
+    <div class="img__cont">
+      <img src="{prop.urlImage}" alt="casa">
     </div>
 
-    <div class="card__features">
-      {#if  prop.selectTP === "casa" || prop.selectTP === "departamento"}
-        <span>Recámaras {Number(prop.beds)}</span>
-        <span>Baños {Number(prop.bathroom)}</span> 
-      {:else if prop.selectTP === "terreno"}  
-        <span>{toComaSep(Number(prop.areaTotal))} m²</span>
-      {/if}
+    <div class="info__cont">
+
+      <div class="card__info">
+        <span class="capitalize">{prop.colonia}</span>
+        <span>$ {toComaSep(Number(prop.price))}.</span>
+      </div>
+
+      <div class="card__features">
+        {#if  prop.selectTP === "casa" || prop.selectTP === "departamento"}
+            <span>Recámaras {Number(prop.beds)}</span>
+            <span>Baños {Number(prop.bathroom)}</span> 
+          {:else if prop.selectTP === "terreno"}  
+            <span>{toComaSep(Number(prop.areaTotal))} m²</span>
+        {/if}
+      </div>
+
     </div>
-
-  </div>
-
+  </div> 
 
 <style>
+
+    .card__prop { 
+      display: flex; 
+      flex-direction: column;   
+      width: 200px;
+      height: 250px;     
+      border: 1px solid grey;
+      border-radius: 5px;
+      justify-content: center;
+      padding: 8px;
+      gap: 4px;
+    }
 
     .img__cont{
       display: flex;
       width: 100%;
-      height: 58%;
+      height: 50%;
       align-items: baseline;
       justify-content: center;
       margin-bottom: 20px;
-    }
+    }    
     
     img{
       width: 100%;
-      height: 100%;
+      height:100%;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 0 0 20px 0;
@@ -51,7 +64,7 @@
     
     .info__cont{
       width: 100%;
-      height: 38%;
+      /* height: 50%; */
       /* align-items: baseline;s */
     }
     

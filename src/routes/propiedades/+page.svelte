@@ -128,18 +128,17 @@
       gap: 10px;
   }
 
-  .card__prop { 
+  /* .card__prop { 
       display: flex; 
       flex-direction: column;   
       width: 200px;
       height: 250px;     
-      /* color: grey; */
       border: 1px solid grey;
       border-radius: 5px;
       justify-content: center;
       padding: 8px;
       gap: 4px;
-    }
+    } */
 
     @media(max-width: 400px) {
       .card__container {

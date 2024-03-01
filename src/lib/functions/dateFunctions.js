@@ -1,8 +1,6 @@
-// import { db } from '../db'
-// import { proInterest, property } from '../../stores/stores'
 const diaSemana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado' ];
 const mesAnyo = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic' ];
-let fecha;
+let fecha ;
 let saludoHora;
 let dia, mes, ano;
 // let mes;
@@ -10,6 +8,7 @@ let dia, mes, ano;
 
 
 // Convertir fecha en timestamp a formato legible SIN hora
+
       export function formatDate(fecha){
         if(typeof fecha == "number"){
           let factZonaHorario= 64800000  // Diferencia de zona GTM a esta zona(18 horas  a milisegundos)
@@ -57,6 +56,9 @@ let dia, mes, ano;
       
 
 //  Extraer dia de la semana
+        /**
+ * @param {string | number | Date} fecha
+ */
         export function formatDay(fecha){
           fecha = new Date(+fecha)
             dia = diaSemana[fecha.getDay()];

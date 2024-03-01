@@ -1,4 +1,7 @@
 <script>
+// @ts-nocheck
+
+
   // importaciones
     import { property, systStatus, currPropList } from '$lib/stores/store.js'
     import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc, onSnapshot} from 'firebase/firestore';
@@ -6,41 +9,48 @@
     import{ goto } from '$app/navigation'
     import { operTypes, typeProperties, ubications, oneToFour, oneToFive } from '$lib/parameters';
     import Tags from '$lib/components/Tags.svelte'
-    // import { onSnapshot } from '@firebase/firestore'
     import { onDestroy } from 'svelte';
     import { sortList } from '$lib/functions/sort.js'
-
-
-
-    
+    import InputOptions from '$lib/components/InputOptions.svelte';
+    import InputText from '$lib/components/InputText.svelte';
+    import InputDate from '$lib/components/InputDate.svelte';
+    import { cleanNumber } from '$lib/functions/format.js'
+    // import { formatDate } from '$lib/functions/dateFunctions.js'
+    // import { onSnapshot } from '@firebase/firestore'
 
   // HandeleSubmit
       async function handleSubmit() { 
-         if($systStatus === "editing"){      
-            // @ts-ignore
-            await updateDoc(doc(db, "properties", $property.id), $property)
-          goto("/propiedades/propSelect")
+        // $property.price = parseInt($property.price) 
+        if($property.price){$property.price = cleanNumber($property.price)};
 
-         } else {
-          let createdAt = Date.now()
-            $property = {         
+        try { 
+          if($systStatus === "editing"){      
               // @ts-ignore
-              ...$property, createdAt
-            } 
-            const contToAdd = collection(db, "properties")
-            await addDoc(contToAdd, $property);
-
-          let result = window.confirm("Deseas compartir esta propiead?")
-        if(result){
-            console.log("no borrar y continuar")
+              await updateDoc(doc(db, "properties", $property.id), $property)
+            goto("/propiedades/propSelect")
           } else {
-            // @ts-ignore
-            $property = {}
+            let createdAt = Date.now()
+              $property = {         
+                // @ts-ignore
+                ...$property, createdAt
+              } 
+              const contToAdd = collection(db, "properties")
+              await addDoc(contToAdd, $property);
+
+            let result = window.confirm("Deseas compartir esta propiead?")
+          if(result){
+              console.log("no borrar y continuar")
+            } else {
+              // @ts-ignore
+              $property = {}
+            }
+            goto("/propiedades")
           }
-          goto("/propiedades")
+              $systStatus = ""
+        } catch (error) {
+          console.log(error)
         }
-            $systStatus = ""
-      };
+      }
 
   // Cancel Button
     function onCancel() {
@@ -63,152 +73,78 @@
           
         onDestroy(unsubC)
       // $: propToRender = $currPropList
-
-
-    
 </script>
 
 <div class="prop__alta">
   <h1>Alta Propiedad</h1>
 
-  <div class="features">
+    <div class="features">
+      <div>
+        {#if $systStatus === "editing"}
+          <InputDate identifier="createdAt" name="* Alta en " bind:value={$property.createdAt} />
+        {/if}
+      </div>
 
-    <label class="label__title">
-      <p class={$property.selecTO ? ' above' : ' center'}>Tipo de Operación</p>
-      <select class="in__sel" name="selecTO" bind:value={$property.selecTO} placeholder="Tipo de Operación">
-        <option value="" disabled selected>* Tipo de Operación</option>
-        {#each operTypes as operType}
-          <option value={operType.toLocaleLowerCase()}>{operType}</option>
-        {/each}
-      </select>
-    </label>
-
-    <label class="label__title">
-      <p class={$property.selectTP ? ' above' : ' center'}>Tipo de Propiedad</p>
-      <select class="in__sel" name="selectTP" bind:value={$property.selectTP}>
-        <option value="" disabled selected>* Tipo de Propiedad</option>
-        {#each typeProperties as propType}
-          <option value={propType} >{propType}</option>
-        {/each}
-      </select>
-    </label>
-
-  </div>
-
-  <div class="features">
-
-    <label class="label__title">
-      <p class={$property.beds ? ' above' : ' center'}>Número de Recámaras</p>
-      <select class="in__sel" name="bedrooms" bind:value={$property.beds} >
-        <option value="" disabled selected>* Número de Recámaras</option>
-        {#each oneToFive as bedrooms}
-          <option value={bedrooms} >{bedrooms}</option>
-        {/each}
-      </select>
-    </label>
+      <InputOptions identificador="selecTO" name="Tipo de Operación" choices={operTypes} bind:value ={$property.selecTO}/>
     
-    <label class="label__title">
-      <p class={$property.bathroom ? ' above' : ' center'}>Numero de Baños</p>
-      <select class="in__sel" name="bathrooms" bind:value={$property.bathroom} placeholder="Baños">
-        <option value="" disabled selected>* Número de Baños</option>
-        {#each oneToFour as baths}
-          <option value={baths} >{baths}</option>
-        {/each}
-      </select>
-    </label>
+      <InputOptions identificador="selectTP" name="Tipo de Propiedad" choices={typeProperties} bind:value ={$property.selectTP}/>
 
-    <label class="label__title">
-      <p class={$property.halfBathroom ? ' above' : ' center'}>Medios Baños</p>
-      <select class="in__sel" name="halfBathroom" bind:value={$property.halfBathroom} placeholder="Medios Baños">
-        <option value="" disabled selected>* Medios Baños</option>
-        {#each oneToFour as hbaths}
-          <option value={hbaths} >{hbaths}</option>
-        {/each}
-      </select>
-    </label>
-
-    <label class="label__title">
-      <p class={$property.park ? ' above' : ' center'}>Estacionamientos</p>
-      <select class="in__sel" name="park" bind:value={$property.park} placeholder="Estacionamientos">
-        <option value="" disabled selected>* Estacionamientos</option>
-        {#each oneToFour as parks}
-          <option value={parks} >{parks}</option>
-        {/each}
-      </select>
-    </label>
-
-    <label class="label__title">
-      <p class={$property.areaBuilding ? ' above' : ' center'}>Construcción</p>
-      <input class="in__sel" name="areaBulding" bind:value={$property.areaBuilding} placeholder="* Construcción">
-    </label>
-
-    <label class="label__title">
-      <p class={$property.areaTotal ? ' above' : ' center'}>Terreno</p>
-      <input class="in__sel" name="areaTotal" bind:value={$property.areaTotal} placeholder="* Terreno">
-    </label>
-
-    <label class="label__title">
-      <p class={$property.colonia ? ' above' : ' center'}>Colonia</p>
-      <input class="in__sel capitalize" name="colonia" bind:value={$property.colonia} placeholder="* Colonia">
-    </label>    
-
-    <label class="label__title">
-      <p class={$property.price ? ' above' : ' center'}>Precio</p>
-      <input class="in__sel" name="Price" bind:value={$property.price} placeholder="* Precio">
-    </label> 
-  </div>
+    </div>
   
-  <div class="features">
-  
+    <div class="features">
+      
+      <InputOptions  identificador="bedrooms" name="* Número de Recámaras" choices={oneToFive} bind:value ={$property.beds}/>
+      
+      <InputOptions identificador="bathroom" name="* Número de Baños" choices={oneToFour} bind:value ={$property.bathroom}/>
+      
+      <InputOptions identificador="halfBathroom" name="* Medios Baños" choices={oneToFour} bind:value ={$property.halfBathroom}/>
+      
+      <InputOptions identificador="parks" name="* Estacionamientos" choices={oneToFour} bind:value ={$property.park}/>
 
-    <label class="label__title">
-      <p class={$property.nameProperty ? ' above' : ' center'}>Nombre de la Propiead</p>
-      <input class="in__sel capitalize" name="nameProperty" bind:value={$property.nameProperty} placeholder="* Nombre de la Propiead">
-    </label>
+    </div>
+
+    <div class="features">
+
+      <InputText identifier="areaBuilding" name="* Construcción" bind:value={$property.areaBuilding} />  
+
+      <InputText identifier="areaTotal" name="* Terreno" bind:value={$property.areaTotal} /> 
+      
+      <InputText identifier="colonia" name="* Colonia" bind:value={$property.colonia} /> 
     
-    <label class="label__title">
-      <p class={$property.claveEB ? ' above' : ' center'}>Clave</p>
-      <input class="in__sel" name="claveEB" bind:value={$property.claveEB} placeholder="* Clave">
-    </label>
+      <InputText identifier="price" name="* Precio" bind:value={$property.price} /> 
+        
+    </div>
+    
+    <div class="features">
+      
+      <InputText identifier="nameProperty" name="* Nombre de la Propiedad" bind:value={$property.nameProperty} /> 
+      
+      <InputText identifier="claveEB" name="* Clave" bind:value={$property.claveEB} /> 
+      
+      <InputText identifier="urlImage" name="* Link Imagen" bind:value={$property.urlImage} /> 
+      
+      <InputText identifier="urlProp" name="* Link Propiedad" bind:value={$property.urlProp} /> 
+      
+    </div>
 
-    <label class="label__title">
-      <p class={$property.urlImage ? ' above' : ' center'}>Link Imagen</p>
-      <input class="in__sel" name="urlImage" bind:value={$property.urlImage} placeholder="* Link Image">
-    </label>
+    <div class="prop__tags">
 
-    <label class="label__title">
-      <p class={$property.urlProp ? ' above' : ' center'}>Link Propiedad</p>
-      <input class="in__sel" name="urlProp" bind:value={$property.urlProp} placeholder="* Link Propiedad">
-    </label>
+      <InputOptions identificador="locaProperty" name="Ubicación" choices={ubications} bind:value ={$property.locaProperty}/>
 
+      <Tags bind:tags = {$property.tagsProperty}/>
 
-    <label class="label__title">
-      <p class={$property.locaProperty ? ' above' : ' center'}>Ubicación</p>
-      <select class="in__sel" name="locaProperty" bind:value={$property.locaProperty}>
-        <option value="" disabled selected>* Ubicación</option>
-        {#each ubications as ubication}
-          <option value={ubication} >{ubication}</option>
-        {/each}
-      </select>
-    </label>
-  </div>
+    </div>
 
-  <div class="prop__tags">
+    <div class="features">
+    
+      <button class=" btn bt__saveEdit" on:click={handleSubmit}>{#if $systStatus === "addProperty"}Guardar{:else}Editar{/if}</button>
 
-    <Tags bind:tags = {$property.tagsProperty}/>
+      <button class="btn btn__cancel" on:click={onCancel}>Cancel</button>
 
-  </div>
-  
-    <button class=" btn bt__saveEdit" on:click={handleSubmit}>{#if $systStatus === "addProperty"}Guardar{:else}Editar{/if}</button>
-
-    <button class="btn btn__cancel" on:click={onCancel}>Cancel</button>
+    </div>
 </div>
 
-
-
 <style>
-
- 
 
   .prop__alta{
     display: flex;
@@ -217,7 +153,6 @@
     justify-content: center;
     margin: 0 20px;
     flex: 1;
-    /* background-color: antiquewhite; */
   }
 
   .features {
@@ -227,42 +162,17 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    margin-bottom: 5px;
     flex-wrap: wrap;
-    /* background: aquamarine; */
-    /* width: 550px; */
-    /* max-width: 550px; */
-    /* margin: 0 auto; */
   }
 
   .prop__tags {
-    display: flex;  
+    display: flex;
+    flex-direction: column;  
     align-items: center;
     justify-content: center;
     gap: 8px;
-  }
-
-  .label__title {
-    position: relative;
-  }
-
-  .in__sel {  
-    padding: 8px;
-    width: 300px;
-    border-radius: 6px;
-    border-color: 2px solid blue;
-    /* font-family: cursive; */
-    font-size: .8em;
-    font-weight: 550;
-    color: darkblue;  
-  }
-
-  .capitalize{
-    text-transform: capitalize;
-  }
-
-  input::placeholder{
-    color: navy;
-  }
+  } 
 
   .btn{
     width: 300px;

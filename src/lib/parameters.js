@@ -7,12 +7,12 @@
   ]
   
   export const range = [
-    "PRM 0.0 <> 1.0",
-    "SGN 1.0 <> 2.5",
-    "TRC 2.5 <> 5.0",
-    "CRT 5.0 <> 8.0",
-    "QNT 8.0 <> 12",
-    "SXT 12 > X",
+    "PRM",
+    "SGN",
+    "TRC",
+    "CRT",
+    "QNT",
+    "SXT",
     ""
   ]
 

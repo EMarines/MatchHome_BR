@@ -1,83 +1,72 @@
 <script>
 // @ts-nocheck
 
+
   // Importaciones
     import { db, dbProperties } from '../../../firebase';
     import { contact, currPropList, systStatus, property, binnacle } from '$lib/stores/store.js';
     import Search from '$lib/components/Search.svelte'
     import Tags from '$lib/components/Tags.svelte'
     import Ubication from '$lib/components/Ubication.svelte'
-    import { mosRange } from '../../../lib/functions/rangValue'
+    import { mosRange } from '$lib/functions/rangValue'
     import { infoToBinnacle } from '$lib/functions/binnSaver'
     import { typeContacts, modeContact, typeProperties, modePays, oneToFive, oneToFour, oneToThree, contactStage, range } from '$lib/parameters.js';
     import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc} from 'firebase/firestore';
     import { goto } from '$app/navigation';
     import CardProperty from '$lib/components/CardProperty.svelte';
-    import { cleanNumber, cleanNomber } from '$lib/functions/format';
-	// import { l } from 'vitest/dist/index-5aad25c1';
+    import { cleanNumber, cleanName } from '$lib/functions/format';
+    import InputText from '$lib/components/InputText.svelte';
+    import InputOptions from '$lib/components/InputOptions.svelte';
+    import InputEmail from '$lib/components/InputEmail.svelte';
+      import InputDate from '$lib/components/InputDate.svelte';
 
   // Declaraciones
       let searchTerm = "";
-      let showProp = false;
-      let detaAdd = false;
-      let propChecked = "";
-      let name = "";
-      let lastname = "";
-      let prop;
-      let ubication = "";
-      let tags = "";
+        let showProp = false;
+        let dataAdd = false;
+        let propChecked = "";
+        // let choices = "{}"
 
-      /**
-       * @type {never[]}
-       */
-      let contCheck = [];
+      // let contCheck = [];
+
+      console.log("sys", $systStatus, "dataAdd", dataAdd);
       
       $: propToRender = $currPropList
 
   // Handle Submit
-      async function handleSubmit() { 
-          // Edita a contacto
-          if($systStatus === "editing"){ 
-            try {
-              await updateDoc(doc(db, "contacts", $contact.id), $contact);
-              // ya no guarda en bitácora
-              // $binnacle = {"date": Date.now(), "comment": "Se editó", "to": $contact.telephon, "action": "Se editó a: "}
-              // infoToBinnacle($systStatus, $binnacle);              
-            } catch (error) {
-              console.log(error);
-            } 
-          } else {
-            // Da de alta al contacto con los datos de la propiedad por la que contactó
-            try {
-              let createdAt = Date.now();              
-              let contactStage = "Etapa 1"
-              $contact.telephon = cleanNumber($contact.telephon);
-              $contact.name = cleanNomber($contact.name);
-              $contact.lastname = cleanNomber($contact.lastname);
-              $contact.budget = cleanNumber($contact.budget);
-              console.log($contact.telephon);
-                if($property ===  null || $property === undefined ){
-                  let selecTP = $property.selectTP
-                  let propCont = $property.nameProperty;
-                  let rangeProp = mosRange($property.price);
-                  
-                  $contact = {
-                    ...$contact, createdAt, propCont, rangeProp, selecTP, contactStage
-                  } 
-                } else {
-                  $contact = {
-                    ...$contact, createdAt, contactStage
-                  } 
-                }
-                // console.log($contact);
-                const contToAdd = collection(db, "contacts")
-                await addDoc(contToAdd, $contact);
-                $systStatus = "addContact"              
-            } catch (error) {
-              console.log(error);
-            }
-          }   
-          goto("/contactos/contSelect")
+      async function handleSubmit(propChecked) {
+        $property = propChecked[0];
+        console.log("estas en el propCheked", $property);
+        try {
+          $contact.telephon = cleanNumber($contact.telephon);
+          $contact.name = cleanName($contact.name);
+          $contact.lastname = cleanName($contact.lastname);
+          if($contact.budget){$contact.budget = cleanNumber($contact.budget)};
+        } catch (error) {
+          console.log(error);
+        }        
+        // Edita a contacto
+        if($systStatus === "editing"){ 
+          try {
+            await updateDoc(doc(db, "contacts", $contact.id), $contact);
+          } catch (error) {
+            console.log(error);
+          } 
+        } else {
+          // Da de alta al contacto con los datos de la propiedad por la que contactó
+          $contact.createdAt= Date.now();            
+          $contact.contactStage = "Etapa 1"
+          if($property){$contact.rangeProp = mosRange(Number($property.price))};
+
+          try {
+            const contToAdd = collection(db, "contacts")
+            await addDoc(contToAdd, $contact);
+            $systStatus = "addContact"              
+          } catch (error) {
+            console.log(error);
+          }
+        }   
+        goto("/contactos/contSelect")
       }
 
   // Cancel
@@ -86,6 +75,9 @@
       }
 
   // Search property by name
+      /**
+	 * @param {string} searchTerm
+	 */
       function searProp(searchTerm) {
         if(searchTerm.length !== 0){
         showProp = true;
@@ -98,20 +90,12 @@
       }
       };
 
-  // Muestra el resto del fromulario
-      function detaAlta(){
-         detaAdd = !detaAdd;
+      // Muestra el resto del fromulario
+      function detaAlta(e){
+        e.preventDefault();
+         dataAdd = !dataAdd;
       }
-      
-      function propCheck(){
-        $property = propChecked[0]
-        if(propChecked.length >1){
-          alert("Solo puedes escoger una propiead a la vez")
-          // console.log(propChecked);
-          // return
-        }
-        // console.log(propChecked);
-      }
+
 
 </script>
 
@@ -119,227 +103,112 @@
 
     <div class="cont__alta">
       <h1 class="title">Alta de Contacto</h1>
+      <form on:submit = {handleSubmit(propChecked)} id="altaContactos">      
+        <div class="features">
+          <div>
+            {#if $systStatus === "editing"}
+              <InputDate identifier="createdAt" name="* Alta en " bind:value={$contact.createdAt} />
+            {/if}
+          </div>
 
-      <div class="features">
-        <div>
-          {#if $systStatus === "editing"}
-            <label class="label__title">
-              <p class={$contact.createdAt ? ' above' : ' center'}>Alta en </p>
-              <input class="in__sel" type="date" name="createdAt" bind:value={$contact.createdAt} placeholder="* Alta el: " required>
-              <!-- <input class=" dataInput" type="date" bind:value={$contact.createdAt}  placeholder="* Alta el "/> -->
-            </label>
-          {/if}
-        </div>
+          <div class="inp__lat">  
+            <InputText identifier="name" name="* Nombre" bind:value={$contact.name} />            
+            <InputText identifier="lastname" name="* Apellido" bind:value={$contact.lastname} />
+          </div>
+          
+          <div class="inp__lat">          
+            <InputText identifier="telephon" name="* Teléfono" bind:value={$contact.telephon} />  
+            <InputEmail identifier="email" name="* Email" bind:value={$contact.email}/>        
+          </div>
 
-  <!-- Nombre y apellido -->
-        <div class="inp__lat">
-          <label class="label__title">
-            <p class={$contact.name ? ' above' : ' center'}>Nombre</p>
-            <input class="in__sel" name="name" bind:value={$contact.name} placeholder="* Nombre" required >
-          </label>
-
-          <label class="label__title">
-            <p class={$contact.lastname ? ' above' : ' center'}>Apellido</p>
-            <input class="in__sel capitalize" name="lastname" bind:value={$contact.lastname} placeholder="* Apellido " >
-            <!-- <input type="text" oninput="this.value = capitalizeWords(this.value)"> -->
-          </label>
-        </div>
-
-  <!-- Modo de contacto -->
-        <div class="inp__lat">
-          <label class="label__title">
-            <p class={$contact.telephon ? ' above' : ' center'}>Teléfono</p>
-            <input type="telephon" class="in__sel" name="telephon" bind:value={$contact.telephon} placeholder="* Teléfono " required>
+          <div class="inp__lat">
+            <InputOptions identificador="typeContact" name="Tipo de Contacto" choices={typeContacts} bind:value ={$contact.typeContact}/>
+            <InputOptions identificador="selecMC" name="Modo de Contacto" choices={modeContact} bind:value ={$contact.selecMC}/>
+          </div>
+          
+          <label class="inp__lat">
+            <p class={$contact.comContact ? ' above' : ' center'}>Comentarios</p>
+            <textarea class="in__sel notes" name="comContact" bind:value={$contact.comContact} placeholder="* Comentarios" />
           </label>
           
-          <label class="label__title">
-            <p class={$contact.email ? ' above' : ' center'}>Email</p>
-            <input class="in__sel" name="email" bind:value={$contact.email} placeholder="* Email " required>
-          </label>
-        </div>
+          {#if !dataAdd }
+            <Search bind:searchTerm on:input={searProp(searchTerm)}/>          
+          {/if}
+          
+          {#if dataAdd}
+            <div class="inp__lat">
+              <InputOptions identificador="selecTP" name="Tipo de Propiedad" choices={typeProperties} bind:value ={$contact.selecTP}/>
+              <InputText identifier="budget" name="* Presupuesto" bind:value={$contact.budget} />
+            </div>
 
-  <!-- Tipo de contacto -->
-        <div class="featContact">
-
-          <label class="label__title">
-            <p class={$contact.typeContact ? ' above' : ' center'}>Tipo de Contacto</p>
-            <select class="in__sel feat" bind:value={$contact.typeContact}>
-              <option class={$contact.typeContact ? ' above' : ' center'} value="">Tipo de Contacto</option>
-              {#each typeContacts as typeContac}
-                <option  value={typeContac}>{typeContac}</option>
-              {/each}
-            </select>   
-          </label>    
-        
-          <!-- Fuente del Contacto -->
-
-          <label class="label__title">
-            <p class={$contact.selecMC ? ' above' : ' center'}>Modo de Contacto</p>
-            <select class="in__sel feat" bind:value={$contact.selecMC}>
-              <option disabled selected value="">Modo de Contacto</option>
-              {#each modeContact as selecMC}
-                <option  value={selecMC}>{selecMC}</option>
-              {/each}
-            </select>
-          </label>
-        
-          <!-- Tipo de propiedad buscada -->
-          {#if detaAdd}
-            <label class="label__title">      
-              <p class={$contact.selecTP ? ' above' : ' center'}>Tipo de Propiedad</p>
-                <select class="in__sel feat" id="selTP" name="selTP" bind:value={$contact.selecTP}>
-                  <option disabled selected value="">Tipo de Propiedad</option>
-                  {#each typeProperties as selecTP}
-                    <option value={selecTP}>{selecTP}</option>
-                  {/each}
-                </select>
-              </label>
-          {/if}  
-        </div>
-
-
-        <!-- Nota de inicio -->
-        <label class="label__title">
-          <p class={$contact.comContact ? ' above' : ' center'}>Comentarios</p>
-          <textarea class="in__sel notes" name="comContact" bind:value={$contact.comContact} placeholder="* Comentarios" />
-        </label>
-
-        <!-- Search -->
-        <Search bind:searchTerm on:input={searProp(searchTerm)}/>
-
-      <!-- Presupuesto -->
-      {#if detaAdd}
-        <div>
-          <label class="label__title">
-            <p class={$contact.budget ? ' above' : ' center'}>Presupuesto</p>
-            <input class="in__sel" name="budget" bind:value={$contact.budget} placeholder="* Presupuesto " required>
-          </label>
-        </div>
-
-        <!-- Metodo de Pago -->
-        <label class="label__title">
-          <p class={$contact.modePay ? ' above' : ' center'}>Modo de Pago</p>
-            <select class="in__sel" bind:value={$contact.modePay}>
-                <option disabled selected value="">Modo de Pago</option>
-                {#each modePays as modeP}
-                  <option  value={modeP}>{modeP}</option>
-                {/each}
-            </select>
-        </label>
-  <!-- Características buscadas -->
+            <div class="inp__unic">
+              <InputOptions identificador="modePay" name="Modo de Pago" choices={modePays} bind:value ={$contact.modePay}/>
+            </div>
             
-        <label class="label__title">
-          <p class={$contact.numBeds ? ' above' : ' center'}>Recámaras</p>
-            <select class="in__sel" bind:value={$contact.numBeds}>
-                <option disabled selected value="" ># Recámaras</option>
-                {#each oneToFive as beds}
-                  <option value={beds} >{beds} Recámaras</option>
-                {/each}
-            </select>
-        </label>
+            <div class="inp__lat">
+              <InputOptions identificador="numBeds" name="# Recámaras" choices={oneToFive} bind:value ={$contact.numBeds}/>
+              <InputOptions identificador="numBaths" name="# Baños" choices={oneToFive} bind:value ={$contact.numBaths}/>
+            </div>
+            
+            <div class="inp__lat">
+              <InputOptions identificador="halfBathroom" name="# Medios Baños" choices={oneToThree} bind:value ={$contact.halfBathroom}/>
+              <InputOptions identificador="numParks" name="# Estacionamientos" choices={oneToFive} bind:value ={$contact.numParks}/>
+            </div>
+            
+            <div class="inp__lat">
+              <InputOptions identificador="rangeProp" name="Rango" choices={range} bind:value ={$contact.rangeProp}/>
+              <InputOptions identificador="contactStage" name="Etapa" choices={contactStage} bind:value ={$contact.contactStage}/>
+            </div>
 
-        <label class="label__title">
-          <p class={$contact.numBaths ? ' above' : ' center'}>Baños</p>
-            <select class="in__sel" bind:value={$contact.numBaths}>
-                <option disabled selected value=""># Baños</option>
-                {#each oneToFour as bathroom}
-                  <option value={bathroom}>{bathroom} baños</option>
-                {/each}
-            </select>
-        </label> 
+            <div class="ubi__Tags">
+                <Ubication bind:ubication = {$contact.locaProperty} />
+                <Tags bind:tags = {$contact.tagsProperty} />
+            </div>
+          {/if}
 
-       
-        <label class="label__title">
-          <p class={$contact.halfBathroom ? ' above' : ' center'}>Medios Baños</p>
-            <select class="in__sel" bind:value={$contact.halfBathroom}>
-                <option disabled selected value=""># Medios Baños</option>
-                {#each oneToFour as numberHalfBath}
-                <option value={numberHalfBath}>{numberHalfBath}Medios Baños</option>
-                {/each}
-            </select>
-          </label>
+          <!-- Botones Guardar Eiditar y Regresar-->
+          <div class="inp__lat">
+            <button class="btn__save" on:click={detaAlta}>Alta Detalles</button>  
+            <button class="bt__SaveEdit" type="submit">{#if $systStatus === "addContact"}Guardar{:else}Editar{/if}</button>
+            <button class="btn-cancel" on:click={onCancel}>Regresar</button>
+          </div>
 
-        <label class="label__title">
-          <p class={$contact.numParks ? ' above' : ' center'}>Estacionamientos</p>
-          <select  class="in__sel"bind:value={$contact.numParks}>
-              <option disabled selected value=""># Estacionamientos</option>
-              {#each oneToFour as park}
-              <option value={park}>{park}Estacionamientos</option>
-              {/each}
-          </select>
-        </label>
-
-        <label class="label__title">
-          <p class={$contact.rangeProp ? ' above' : ' center'}>Rango</p>
-          <select  class="in__sel" bind:value={$contact.rangeProp}>
-              <option disabled selected value="">Rango</option>
-              {#each range as rng}
-              <option value={rng.slice(0,3)}>{rng}</option>
-              {/each}
-          </select>
-        </label>
-
-        <!-- Stages -->
-        <label class="label__title">
-          <p class={$contact.contactStage ? ' above' : ' center'}>Etapa</p>
-          <select class="in__sel" name="typeOperation" bind:value={$contact.contactStage} placeholder="">
-            <option value="" disabled selected>* Etapa</option>
-            {#each contactStage as stage}
-              <option value={stage}>{stage}</option>
-            {/each}
-          </select>
-        </label>
-
-        <!-- Ubicacion y etiquetas -->
-        <div class="ubi__Tags">
-            <Ubication bind:ubication = {$contact.locaProperty} />
-            <Tags bind:tags = {$contact.tagsProperty} />
         </div>
-      {/if}
-
-    <button class="btn__save" on:click={detaAlta}>Alta Detalles</button>
-
-  <!-- Botones Guardar Eiditar y Regresar-->
-        <button class="bt__SaveEdit" on:click={handleSubmit}>{#if $systStatus === "addContact"}Guardar{:else}Editar{/if}</button>
-        <button class="btn-cancel" on:click={onCancel}>Regresar</button>
-
-      </div>
-      
-    </div>  
+      </form>
+    </div>
       
   <!-- Renderiza las Tarjetas para Propiedad -->
       {#if showProp} 
-
         <h2 class="title sub">{propToRender.length} Propiedades encontradas</h2>
           <div class="card__container">
-
             {#each propToRender as prop}
-
               <div class="card__prop">
-
                 <div class="sel__prop">
-                  <input  type="checkbox" name={prop.claveEB} value={prop} bind:group={propChecked} on:change={propCheck}>
+                  <input  type="checkbox" name={prop.claveEB} value={prop} bind:group={propChecked} >
                 </div>
                 <div >
                   <CardProperty {prop} />
                 </div>
-
               </div>
-
             {/each}
-
             {#if propToRender.length === 0}
               <h3>"No hay Propiedades para este contacto"</h3>
             {/if}
           </div>
       {/if}
-      
-     
-
-
 
 <style>
 
+.features {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 800px;
+    gap: 8px;
+    margin: 0 auto;
+    padding: 20px 0;
+  }
   .cont__alta{
     display: flex;
     flex-direction: column;
@@ -349,48 +218,18 @@
   }
 
   .inp__lat {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .in__sel {    
-    padding: 5px 0 5px 8px;
-    width: 250px;
-    border-radius: 8px;
-    border-color: 2px solid blue;
-    font-size: .8em;
-    font-weight: 600;
-    color: darkblue;  
-  }
-
-  input {
-    text-transform: capitalize;
-  }
-
-  .features {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin: 0 auto;
-  }
-
-  .featContact {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .feat{
-    width: 160px;
-    margin: 5px;
-  }
-
-  .label__title {
     position: relative; 
-    border: 1px solid navy;
-    padding: 3px; 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
   }
 
+  .inp__unic {
+    display: flex;
+    justify-content: center;
+  }
+  textarea::placeholder,
   input::placeholder{
     color: navy;
   }
@@ -416,17 +255,17 @@
   }
 
   .card__prop { 
-      display: flex; 
-      flex-direction: column;   
-      width: 200px;
-      height: 250px;     
-      font-family: cursive;
-      color: grey;
-      border: 1px solid grey;
-      border-radius: 5px;
-      justify-content: baseline;
-      padding: 8px;
-      gap: 4px;
+    display: flex; 
+    flex-direction: column;   
+    width: 200px;
+    height: 250px;     
+    font-family: cursive;
+    color: grey;
+    border: 1px solid grey;
+    border-radius: 5px;
+    justify-content: baseline;
+    padding: 8px;
+    gap: 4px;
   }
 
   .sel__prop {

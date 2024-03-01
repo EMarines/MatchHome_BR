@@ -26,10 +26,8 @@ export function toTele(tel){
 }
 
 export function cleanNumber(numToClean){
-	console.log(numToClean);
 	try {
-		let newNumber = numToClean.replaceAll(" ", "").replaceAll("-", "").replaceAll("(", "").replaceAll(")", "");
-		console.log("tel ", newNumber)
+		let newNumber = numToClean.replaceAll(",", "").replaceAll(" ", "").replaceAll("-", "").replaceAll("(", "").replaceAll(")", "");
 		return newNumber;
 
 	} catch (error) {
@@ -37,11 +35,9 @@ export function cleanNumber(numToClean){
 	}
 }
 
-export function cleanNomber(nomToClean){
-	console.log(nomToClean);
+export function cleanName(nomToClean){
 	try {
 		let newNomber = nomToClean.trim();
-		console.log("nombre ", newNomber)
 		return newNomber;
 
 	} catch (error) {

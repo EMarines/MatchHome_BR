@@ -30,12 +30,14 @@
   let toRenBinn = [];
   let contacto = {};
   let propFalt = 0;
+  let layOut = "";
   let sig = 0;
   let msg = "";
 
   $: tel = $contact.telephon;
-  $: faltanProp = propFalt;
-
+  // $: xyz = propCheck.length
+  $: faltanProp = propCheck.length ;
+  // $: numPropSelect = faltanProp.length;
 
 // Agendar
   // Cerrar Shedule                       
@@ -54,12 +56,18 @@
       contacto = $contact
       propToRender = filtContPropInte(contacto) 
       showProp = true;
-      $systStatus = "sendProp"
+      layOut = "sendProps"
         };
 
   // Search property by name
     function searProp() {
+
       showProp = true;
+      faltanProp = propCheck.length
+      if(searchTerm.length > 0 ) {
+        $systStatus = "sendProp";
+        layOut = "sendProp";
+      }
       return propToRender = $currPropList.filter((propety) => {
         let contInfo = (propety.nameProperty + " " + propety.colonia + " " + propety.claveEB).toLowerCase();
         return contInfo.includes(searchTerm.toLowerCase());
@@ -69,11 +77,13 @@
   // Muestra search Properties
       function mostSearch () {
           mostBusq = !mostBusq;
+          layOut = "sendProp";
         };
 
 // CRUD edit and delete
   // Edit contact
       function editContact(){
+        console.log("editContact", $contact.id);
         $systStatus = "editing"
         goto("/contactos/altaContacto")
       }
@@ -90,46 +100,61 @@
         }
       };
 
-// Buttons actions
+  // Buttons actions
   // Selecciona Mensaje para WA
     async function selMsgWA() {
+      // Envía la propiedad seleccionada del listado (propCheck) Alta de Contacto
       if($systStatus === "addContact"){
-        // Envía la propiedad seleccionada del listado (propCheck) Alta de Contacto
           $binnacle = {"date": Date.now(), "comment": (`${$contact.name} ${$contact.lastname}`), "to": $contact.telephon, "action": "Se agregó a: "}
-          infoToBinnacle($systStatus, $binnacle)
+          infoToBinnacle($binnacle)
           msg = $property.urlProp;
           sendWhatsApp(tel, msg)
           $systStatus = "msgGratitude";
+      // Envia mensaje de agradecimiento después de enviar la propiedad en alta de contacto
       } else if($systStatus === "msgGratitude") {
         // Envía en mensaje de agradecimiento
           $binnacle = {"date": Date.now(), "comment": $property.nameProperty, "to": $contact.telephon, "action": "Propiedad enviada: "}
-          infoToBinnacle($systStatus, $binnacle)
+          infoToBinnacle($binnacle)
           msg = "Gracias por contactarnos. Enrique Marines, asesor de ventas en Match Home, tel. 614 540 4003, email matchhome@hotmail.com ✔ Visita matchhome.net ✔ ¡Seguro encuentras algo de interés!"
           sendWhatsApp(tel, msg)
+      // Envía por WA lo que está en TextArea y guarda la bitácora
       } else if($systStatus === "sendComm"){
-        // Envía por WA lo que está en TextArea y guarda la bitácora
           msg = commInpuyBinnacle;
           sendWhatsApp(tel, msg)
           $systStatus = "sendWA"
           $binnacle = {"date": Date.now(), "comment": commInpuyBinnacle, "to": $contact.telephon, "action": "WhatsApp enviado: "}
-          infoToBinnacle($systStatus, $binnacle)
-      } else if($systStatus === "sendProp"){
-        // Envía por WA lo que está en TextArea y guarda la bitácora
-          $property = propCheck[0]
-          msg = $property.urlProp;
+          infoToBinnacle($binnacle)
+      // Envía por WA las propiedades seleccionadas
+      } else if($systStatus === "sendProps"){
+          faltanProp = propCheck.length - (sig + 1)
+          let msg = propCheck[sig].urlProp
           sendWhatsApp(tel, msg)
-          $binnacle = {"date": Date.now(), "comment": $property.nameProperty, "to": $contact.telephon, "action": "Propiedad enviada: "}
-          infoToBinnacle($systStatus, $binnacle)
-      };
-        
-      if($systStatus !== "msgGratitude") {
-        msg = "";
-        propCheck = [];
-        commInpuyBinnacle = "";
-        searchTerm = "";
-        $systStatus = "";
-        contBinn($contact);
-      }
+          $binnacle = {"date": Date.now(), "comment": propCheck[sig].nameProperty, "to": $contact.telephon, "action": "Propiedad enviada: "}
+          infoToBinnacle($binnacle)
+          if ( propCheck.length === sig + 1 ) {
+            setTimeout ( function(){
+              $systStatus = "";
+              propCheck = [];
+              showProp = false;
+              sig = 0;
+              faltanProp = 0;
+              return
+            }, 2500);
+          };
+          sig ++ 
+   
+        };
+        // Borra la información del envío
+        if($systStatus !== "msgGratitude") {
+          if($systStatus !== "sendProps") {
+            msg = "";
+            propCheck = [];
+            commInpuyBinnacle = "";
+            searchTerm = "";
+            $systStatus = "";
+            contBinn($contact);
+          }          
+        }
     };
     
   // Cambia systStatus al escribir en Text Area
@@ -138,33 +163,11 @@
       propCheck = [];
     }
 
-  // Cambia el systStatus as escojer una propiedad
-    function sendProp() {
-      $systStatus = "sendProp"
-      commInpuyBinnacle = "";
-    };    
- 
-    // import {closeWindow} from '$lib/functions/sendWhatsApp.svelte';
-  // Envios masivos por WA ya dados de alta
-    function sendProperties() {
-      // closeWindow();
+  // Cambia el systStatus as escojer una propiedad o varias propiedades
+    function sendPropF() {
         $systStatus = "sendProps"
-        linkToSend.close();
-        propFalt = propCheck.length - (sig + 1)
-        let msg = propCheck[sig].urlProp
-        sendWhatsApp(tel, msg)
-        if ( propCheck.length === sig + 1 ) {
-          setTimeout ( function(){
-            $systStatus = "";
-            propCheck = [];
-            showProp = false;
-            sig = 0;
-            propFalt = 0;
-            return
-          }, 2500);
-        };
-          sig ++        
-    };    
+          commInpuyBinnacle = "";
+        };    
 
   // Cancel Button ""start""
     function onCancel() {
@@ -213,28 +216,39 @@
 
         <div class="leftContainer">
 
-          <div class="data__container">
-            <div class="headTitle">
-              <div class="titleIcons">
+          <!-- Heaer -->
+          <div class="data__container">            
+              <div class="left__title">
+                <h1 class="name">{$contact.name} {$contact.lastname}</h1>
+              </div>
+              <div class="rigth__title">
+                <div class="icon__title">
                   <i on:click={()=>{editContact($contact.id)}} on:keydown={()=>{}} class="fa-regular fa-pen-to-square" />
                   <i on:click={()=>{deleContact($contact.id)}} on:keydown={()=>{}} class="fa-regular fa-trash-can" />
                 </div>
-                <div class="titleRight">
-                  <h1 class="name">{$contact.name} {$contact.lastname}</h1>
-                  <span class="date">Fecha Alta: {formatDate($contact.createdAt)}</span>  
+                  <span>Alta el: {formatDate($contact.createdAt)}</span>  
               </div>
-            </div>
           </div>
 
+        <!-- Contact, notes and features-->
         <div>
-          <div class="stage">
+
+          <div class="sub__title">
+            {#if $contact.budget}
+                <span>Presupuesto $ {toComaSep(Number($contact.budget))}.</span>
+              {:else}
+                <span>Rango: {$contact.rangeProp}</span>
+            {/if}
             <span>{$contact.contactStage}</span>
           </div>
 
-          {#if $contact.comContact}
-            <span>Notas: {$contact.comContact}</span>              
-          {/if}
-  
+          <div class="notes">
+            {#if $contact.comContact}
+              <h3>Notas:</h3>
+              <span>{$contact.comContact}</span>              
+            {/if}
+          </div>  
+
           <div class="cont__contact">
             <span>Contactar en:</span>
             {#if $contact.telephon}
@@ -243,18 +257,12 @@
             {#if $contact.email}
               <span>Email: {$contact.email}</span>              
             {/if}
-
           </div>
   
           <div class="cont__requires">          
-            {#if $contact.budget}
-              <span>Presupuesto $ {toComaSep(Number($contact.budget))}.</span>
-            {:else}
-              <span>{$contact.rangeProp}</span>
-            {/if}
+         
             
             <div class="features__search">
-
               {#if $contact.numBeds}
                 <span>{$contact.numBeds} <i class="fa-solid fa-bed to__show"></i></span>              
               {/if}
@@ -267,60 +275,59 @@
               {#if $contact.numParks}
                 <span>{$contact.numParks} <i class="fa-solid fa-car-rear to__show"></i></span>              
               {/if}
-              <div>
-                {#if $contact.locaProperty}
-                  <span> <i class="fa-sharp fa-regular fa-compass to__showR"></i> {$contact.locaProperty.toString().replaceAll(",", ", ")} </span>              
-                {/if}
-                {#if $contact.tagsProperty}
-                  <span><i class="fa-solid fa-tags to__showR"></i> {$contact.tagsProperty.toString().replaceAll("_", " ").replaceAll(",", ", ")} </span>              
-                {/if}
-              </div>
-            </div>
+
+                <div>
+                  {#if $contact.locaProperty}
+                    <span> <i class="fa-sharp fa-regular fa-compass to__showR"></i> {$contact.locaProperty.toString().replaceAll(",", ", ")} </span>              
+                  {/if}
+                  {#if $contact.tagsProperty}
+                    <span><i class="fa-solid fa-tags to__showR"></i> {$contact.tagsProperty.toString().replaceAll("_", " ").replaceAll(",", ", ")} </span>              
+                  {/if}
+                </div>
+
+            </div> 
 
           </div>
 
-          
         </div>
         
-        
-  <!-- Botones and search-->
+        <!-- Buttons schedule, props, prop y return -->
         <div class="btn__actions">
-          <!-- Iconos edit, delete -->
-                  <div class="icon__actions">
-                    <button class="btn__common" on:click = {addSchedule($contact)} ><i class="fa-solid fa-calendar-days"></i>Agendar</button>
-                    <button class="btn__common" on:click = { fitProp($contact)}> <i class="fa-solid fa-house-laptop"></i>Propiedades</button>
-                    <button class="btn__common" on:click = {mostSearch}> <i class="fa-solid fa-house-user"></i>Propiedad</button>
-                    <button class="btn__common" on:click={onCancel}><i class="fa-solid fa-rotate-left"></i>Regresar</button>                      
-                  </div>
 
-                  {#if mostBusq}
-                    <div class="search">
-                      <Search bind:searchTerm on:input={searProp} on:keydown={()=>{}}/>
-                    </div>
-                  {/if} 
+          <div class="icon__actions">
+            <button class="btn__common" on:click = {addSchedule($contact)} ><i class="fa-solid fa-calendar-days"></i>Agendar</button>
+            <button class="btn__common" on:click = { fitProp($contact)}> <i class="fa-solid fa-house-laptop"></i>Propiedades</button>
+            <button class="btn__common" on:click = {mostSearch}> <i class="fa-solid fa-house-user"></i>Propiedad</button>
+            <button class="btn__common" on:click={onCancel}><i class="fa-solid fa-rotate-left"></i>Regresar</button>                      
+          </div>
 
-                  {#if isActivated}
-                    <AddToSchedule {...$contact} on:closeIt = {close} />
-                  {/if}
+          {#if mostBusq}
+            <div class="search">
+              <Search bind:searchTerm on:input={searProp} on:keydown={()=>{}}/>
+            </div>
+          {/if} 
+
+          {#if isActivated}
+            <AddToSchedule {...$contact} on:closeIt = {close} />
+          {/if}
               
-  <!-- Botonies enviar WA o guardar nota para bitácora -->
-              
-              <div class="textAreaCont">
-                  <textarea on:change={textAreaComm} class="texArea" bind:value = {commInpuyBinnacle} placeholder ="Ingresa un comentario"/> 
-                  <div class="waSave">
-                    {#if !!commInpuyBinnacle || $systStatus === "addContact" || $systStatus === "msgGratitude" }
-                      <button  class="btn__common" on:click={selMsgWA}><i class="fa-brands fa-square-whatsapp"></i>WhatsApp</button>
-                      <button class="btn__common" on:click={saveNote($systStatus, commInpuyBinnacle)}><i class="fa-solid fa-floppy-disk"></i>Guardar Info</button>
-                    {/if}
-                </div>
-              </div>
+          <!-- Botonies enviar WA o guardar nota para bitácora -->              
+          <div class="textAreaCont">
+              <textarea on:change={textAreaComm} class="texArea" bind:value = {commInpuyBinnacle} placeholder ="Ingresa un comentario"/> 
+              <div class="waSave">
+                {#if !!commInpuyBinnacle || $systStatus === "addContact" || $systStatus === "msgGratitude" || layOut === "sendProp" }
+                  <button  class="btn__common" on:click={selMsgWA}><i class="fa-brands fa-square-whatsapp"></i>WhatsApp</button>
+                  <button class="btn__common" on:click={saveNote($systStatus, commInpuyBinnacle)}><i class="fa-solid fa-floppy-disk"></i>Guardar Info</button>
+                {/if}
+            </div>
+          </div>
                 
         </div>
 
       </div>
       
       <!-- Bitácora del contacto -->
-        {#if $systStatus != "sendProp"}
+        {#if !layOut }
           <div class="rigthContainer">
             <h1 class="title">Bitácora</h1>
             <div>
@@ -335,28 +342,30 @@
           </div>
         {/if}
 
-
-      
       </div>
     </div>
 
   <!-- Tarjeta para propiedad -->
-    {#if showProp} 
+    {#if layOut === "sendProps" || layOut === "sendProp"} 
 
       <div class="container">
 
         <div class="title__props">
           <h2 class="title sub">{propToRender.length} Propiedades encontradas</h2>
         </div>
-        <div class="buttonSend">
-          <button class="buttSendProps" on:click={sendProperties}>
-            {$systStatus !== "sendProps" ? "Enviar propiedades seleccionadas" : `Total para enviar ${propCheck.length}. faltan ${faltanProp}`}
-            </button>
-        </div>
-        <div class="card__container">
+
+          {#if $systStatus === "sendProps"}
+            <div class="buttonSend">
+              <button class="buttSendProps fa-brands fa-square-whatsapp" on:click={selMsgWA} >
+                {$systStatus !== "sendProps" ? "Enviar propiedades seleccionadas" : `Total para enviar ${propCheck.length}. faltan ${faltanProp}`}
+              </button>
+            </div>          
+          {/if}
+
+        <div class="card__container">          
           {#each propToRender as prop}
-            <div class="card__prop">
-              <input type="checkbox" value={prop} class="form__propCheck" bind:group={propCheck} on:input={sendProp}/>	
+            <div class="select__props">
+              <input type="checkbox" value={prop} name={prop} class="form__propCheck" bind:group={propCheck} on:click={sendPropF}/>	
               <CardProperty {prop} />
             </div>
           {/each}
@@ -371,6 +380,8 @@
     .mainContainer {
       display: flex;
       flex-direction: row;
+      justify-content: center;
+      align-items: center;
       gap: 10px;
       flex: 1;
     }
@@ -379,6 +390,7 @@
       display: flex;
       flex-direction: column;
       width: 60%;
+      height: 500px;
       margin-top: 10px;
       border: 1px solid rgb(56, 56, 56);
       border-radius: 8px;
@@ -393,7 +405,7 @@
       font-size: .8rem;
       font-weight: 300;
       line-height: 2rem;
-      max-height: 550px;
+      height: 500px;
       width: 40%;
       margin-top: 10px;
       border: 1px solid rgb(56, 56, 56);
@@ -412,13 +424,44 @@
       justify-content: center;
     }
 
+    .sub__title {
+      display: flex;
+      justify-content: space-evenly;
+      padding: 10px 0 0 0;
+    }
+
     .data__container {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       justify-content: center;
       align-items: center;
       width: 100%;
+      height: 60px;
+      padding: 25px 0 20px 0;
+      /* background: green; */
     }
+
+    .left__title{
+        display: flex;
+        width: 70%;
+        height: 60px;
+        justify-content: center;
+        /* background-color: bisque; */
+      }
+
+      .rigth__title {
+        display: flex;
+        width: 30%;
+        height: 60px;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .icon__title {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+      }
 
     .buttonSend {
       display: flex;
@@ -451,22 +494,6 @@
       padding: 15px;
     }
 
-    .card__prop { 
-        display: flex; 
-        flex-direction: column;   
-        /* width: 150px; */
-        /* height: 250px;      */
-        /* font-family: cursive; */
-        color: grey;
-        border: 1px solid grey;
-        border-radius: 5px;
-        align-items: center;
-        justify-content: center;
-        padding: 8px;
-        gap: 4px;
-        /* background: yellow; */
-    }
-   
     .btn__actions {
       display: flex;
       flex-direction: column;
@@ -509,19 +536,11 @@
       margin-bottom: 12px;
     }
     
-    .headTitle {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      padding: 20px 0 10px 0;
-      justify-content: space-around;
-    }
-    
-    .stage {
+    .notes {
       display: flex;
       padding: 5px;
       justify-content: center;
-      align-items: center;
+      gap: 10px;      
     }
 
     .features__search {
@@ -557,11 +576,6 @@
       justify-content: space-evenly;
     }
 
-    .card__prop {
-      width: 200px;
-      /* justify-content: center; */
-    }
-
       .schedule{
         display: flex;
         align-items: left;
@@ -570,12 +584,9 @@
       .binnacleHome {
         display: flex;
         flex-direction: column;
-        /* align-items: right;         */
       }
 
-      .form__propCheck {
-        padding: 0;
-      }
+    
 
       i {
         font-size: 1.8rem;
@@ -596,25 +607,7 @@
         color: rgb(2, 255, 2);
       }
 
-      .titleIcons{
-        display: flex;
-        width: 100%;
-        height: 10px;
-        position: relative;
-        top: -15px;
-        justify-content: right;
-        gap: 50px;
-      }
-
-      .titleRight {
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .date {
-        position: relative;
-        top: 20px;
-      }
+    
 
       .fa-pen-to-square, .fa-trash-can {
         display: flex;
@@ -634,6 +627,15 @@
         color: rgb(153, 153, 0);
       }
 
+      .select__props{
+        position: relative;
+      }
+
+      .form__propCheck {
+        position: absolute;
+        top: 10px; left: 10px;
+      }
+
 
       @media (max-width:1200px){
       .mainContainer{
@@ -647,10 +649,6 @@
       .leftContainer {
           width: 100%;
         }
-      .date, .titleIcons {
-        position: static;
-      }
-    
     }
 
     @media (max-width:400px){
@@ -675,17 +673,14 @@
         flex-direction: column;
       }
 
-      .date {
-        position: relative;
-        top: 30px;
-      }
-
-      .card__prop {
-        width: auto;
-      }
       .title__props {
         font-size: .6rem;
         padding: 20px;
+      }
+
+      .form__propCheck {
+        position: absolute;
+        top: 5px; left: 5px;
       }
          
     }

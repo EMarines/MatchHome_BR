@@ -13,21 +13,26 @@ import { dbProperties } from '../../firebase';
       export function filtContPropInte(contact){
         // @ts-ignore
         proInt = dbProperties;
-
         // Filtra por tipo de propiedad y numero de piezas
+        try {
           proInt = proInt.filter((item) =>
-            contact.selecTP.toLowerCase() === item.selectTP.toLowerCase()
-            );
-        if (contact.numBeds > 0) {
-          proInt = proInt.filter((item) => item.beds >= contact.numBeds);
+          contact.selecTP.toLowerCase() === item.selectTP.toLowerCase()
+          );
+
+          if (contact.numBeds > 0) {
+            proInt = proInt.filter((item) => item.beds >= contact.numBeds);
           }
 
           if (contact.numBaths > 0) {
             proInt = proInt.filter((item) => item.bathroom >= contact.numBaths);
           }
 
-          if (contact.numParks > 0) {
-            proInt = proInt.filter((item) => item.park >= contact.numParks);
+            if (contact.numParks > 0) {
+              proInt = proInt.filter((item) => item.park >= contact.numParks);
+          }
+          
+        } catch (error) {
+          console.log(error);
         }
 
   // Filtra por Rango

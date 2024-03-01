@@ -1,6 +1,6 @@
 <script>
 	// @ts-nocheck
-	// Importaciones
+	// Importaciones y declaraciónes
   	import { sendWhatsApp, closeWindow } from '$lib/functions/sendWhatsApp';
 		import { db, dbBinnacle, dbContacts } from '../../../firebase';
 		import { property, contact, binnacle, systStatus, currPropList, currContList, currBinnList } from '$lib/stores/store';
@@ -16,28 +16,31 @@
 		import { onDestroy } from 'svelte';
 		import CardContact from '$lib/components/CardContact.svelte'
 		import { sortBinnacle } from '$lib/functions/sort.js'
+		import { formatDate } from '$lib/functions/dateFunctions.js'
+		
+			let saludoHora = '';
+			let modeAction = '';
+			let poroShowTo =["Por_Enviar", "Ya_Se_Envió", "Posobles_Interesados" ];
+			let contInterested = "";
+			let contInterest = [];
+			let contToRender = [];
+			let contCheck = [];
+			let contToSend = {};
+			let sent =[];
+			let toSend = [];
+			let tosend =[];
+			let res = [];
+			let msgToShow = "Contactos les puede interesar esta propiedad";
+			let show__contacts = false;
+			let showBtn = false;
+			let sig = 0;
 
-	// declaraciones
-		let saludoHora = '';
-		let modeAction = '';
-		let poroShowTo =["Por_Enviar", "Ya_Se_Envió", "Posobles_Interesados" ];
-    let contInterested = "";
-		let contInterest = [];
-		let contToRender = [];
-		let contCheck = [];
-		let contToSend = {};
-    let sent =[];
-    let toSend = [];
-    let tosend =[];
-    let res = [];
-    let msgToShow = "Contactos les puede interesar esta propiedad";
-		let show__contacts = false;
-		let showBtn = false;
-		let sig = 0;
+			$: contFalt = contIntToSend - sig;
+			$: contIntToSend = contCheck.length;
+			$: contInitial = contToRender;
 
-		$: contFalt = contIntToSend - sig;
-		$: contIntToSend = contCheck.length;
-		$: contInitial = contToRender;
+			
+
   
 	// Renderiza currBinnList
 			const unsubB = onSnapshot(
@@ -129,7 +132,6 @@
 			let msg = `${$property.urlProp}  🏠  ${$contact.name}. ${saludoHora}  Te envío esta casa que creo te va a interesar. ¡Saludos!  👍`;
 			let tel = $contact.telephon
 			sendWhatsApp(tel, msg)
-
 			$binnacle = {"date": Date.now(), "comment": $property.nameProperty, "to": $contact.telephon, "action": "Propiedad enviada: "}
 			try {
 				const binnacleToAdd = collection(db, "binnacles")
@@ -148,6 +150,7 @@
 		function sendProperty() {
 			contToSend = contCheck[sig]
 			contFalt = contCheck.length - (sig + 1)
+			console.log(contFalt);
 			$systStatus = "sendProps"
 			sendWA(contToSend)
 			if ( contIntToSend === sig + 1 ) {
@@ -164,7 +167,7 @@
 				sig ++
 		};
 
-	// Selecciona todos los contactos o los deselecciona
+			// Selecciona todos los contactos o los deselecciona
 		function selectAll(e){
 			contCheck = e.target.checked ? [...contToRender] : [];
 		}
@@ -186,9 +189,12 @@
 
 				<div class="prop__card">
 					<div class="prop__info">
-						<h1 class="title">Colonia {$property.colonia} {$property.selectTP} en {$property.selecTO}</h1>
+						<div class="propTitle">
+							<h1 class="title">{$property.selectTP} en {$property.colonia} en {$property.selecTO}</h1>
+						</div>
 						<div class="prop__price">
 							<h2>Precio $ {toComaSep(Number($property.price))}.</h2>
+							<p class="alta__prop">Alta: {formatDate($property.createdAt)}</p>
 						</div>
 						<div class="prop__cont">
 							<div class="prop__features">
@@ -251,7 +257,7 @@
 						<div class="opti__cont">
 							{#each poroShowTo as list}
 									<label>
-										<input type=radio bind:group={contInterested} value={list} on:change={listToRender}>
+										<input type="radio" bind:group={contInterested} value={list} on:change={listToRender}>
 										{list.replaceAll("_", "  ")}
 									</label>
 							{/each}
@@ -264,7 +270,7 @@
 					{#if showBtn}
 						<button id="Evio_prop_selec" class="send__Prop" on:click={sendProperty}>{`Total para enviar ${contIntToSend}. faltan ${contFalt}`}</button>
 						<label>
-							<input type="checkbox" on:change={selectAll}> Selleccionar todos
+							<input type="checkbox" on:change={selectAll}> Seleccionar todos
 						</label>
 						{/if}
 				</div>
@@ -364,6 +370,8 @@
 	.prop__price {
 		display: flex;
 		justify-content: center;
+		align-items: center;
+		gap: 15px;
 	}
 	.prop__cont {
 		display: flex;

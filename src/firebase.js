@@ -34,7 +34,7 @@ import { getAuth } from 'firebase/auth';
   // const firebaseConfig = {
   //   apiKey: "AIzaSyCquwgpISPQ8TMZeFSi6VhiNLtOaGUtPcA",
   //   authDomain: "svelte-tutorial-f5d82.firebaseapp.com",
-  //   projectId: "svelte-tutorial-f5d82",
+  //   projectId: "svelte-tutorial-f5d82", 
   //   storageBucket: "svelte-tutorial-f5d82.appspot.com",
   //   messagingSenderId: "598142412491",
   //   appId: "1:598142412491:web:73a56f9f9c232058ee1d4e"

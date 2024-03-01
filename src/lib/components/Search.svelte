@@ -1,14 +1,6 @@
 <script>
-
-	 /**
-   * @type {any}
-   */
-	  export let searchTerm;
-		/**
-	 * @type {any}
-	 */
-		 export let placeHolder;
-
+	  export let searchTerm = "";
+		 export let placeHolder ="";
 </script>
 
 <div id="search-input-cont">
@@ -29,6 +21,5 @@
 		font-size: 22px;
 		color: rgb(84, 84, 90);
 		border-radius: 5px;
-
 	}
 </style>
