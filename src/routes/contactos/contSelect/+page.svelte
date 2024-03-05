@@ -356,8 +356,8 @@
 
           {#if $systStatus === "sendProps"}
             <div class="buttonSend">
-              <button class="buttSendProps fa-brands fa-square-whatsapp" on:click={selMsgWA} >
-                {$systStatus !== "sendProps" ? "Enviar propiedades seleccionadas" : `Total para enviar ${propCheck.length}. faltan ${faltanProp}`}
+              <button class="buttSendProps" on:click={selMsgWA} >
+                <i class="fa-brands fa-square-whatsapp"></i>{$systStatus !== "sendProps" ? "Enviar propiedades seleccionadas" : `Total para enviar ${propCheck.length}. faltan ${faltanProp}`}
               </button>
             </div>          
           {/if}
@@ -473,7 +473,16 @@
     }
 
     .buttSendProps{
-      padding: 8px 15px;
+      display: flex;
+      font-size: 1.5rem;
+      padding: 2px 15px;
+      align-items: center;
+      border-radius: 20px;
+      background: rgb(57, 255, 47);
+    }
+
+    .fa-square-whatsapp{
+      color: rgb(56, 56, 56);
     }
 
 

@@ -17,6 +17,7 @@
 		import CardContact from '$lib/components/CardContact.svelte'
 		import { sortBinnacle } from '$lib/functions/sort.js'
 		import { formatDate } from '$lib/functions/dateFunctions.js'
+		import { capitalize } from '$lib/functions/capitalize.js'
 		
 			let saludoHora = '';
 			let modeAction = '';
@@ -34,6 +35,7 @@
 			let show__contacts = false;
 			let showBtn = false;
 			let sig = 0;
+			let mensaje ="";
 
 			$: contFalt = contIntToSend - sig;
 			$: contIntToSend = contCheck.length;
@@ -129,7 +131,8 @@
 		async function sendWA() {
 			saludoHora = diaTarde();
 			$contact = contToSend
-			let msg = `${$property.urlProp}  🏠  ${$contact.name}. ${saludoHora}  Te envío esta casa que creo te va a interesar. ¡Saludos!  👍`;
+			let contacto = capitalize($contact.name)
+			let msg = `${$property.urlProp}    ${contacto}. ${saludoHora}  ${mensaje}`;
 			let tel = $contact.telephon
 			sendWhatsApp(tel, msg)
 			$binnacle = {"date": Date.now(), "comment": $property.nameProperty, "to": $contact.telephon, "action": "Propiedad enviada: "}
@@ -148,9 +151,12 @@
 
 	// Envía en bucle la propiedad a uno o varios contactos
 		function sendProperty() {
+			if(mensaje === ""){
+				alert("Tienes que escribir un mensaje para enviar las propiedades")
+				return
+			}
 			contToSend = contCheck[sig]
 			contFalt = contCheck.length - (sig + 1)
-			console.log(contFalt);
 			$systStatus = "sendProps"
 			sendWA(contToSend)
 			if ( contIntToSend === sig + 1 ) {
@@ -247,7 +253,11 @@
 	<!-- Muestra opciones para buscar contactos interesados -->
 			{#if show__contacts}
 				<div class="mainContainer">
-					<div class="sect__Title">
+					<div class="sel__msg">
+							<textarea type="text" bind:value={mensaje} placeholder="Escribe el mensaje a enviar"/>
+					</div>
+					
+					<div class="sect__Title">					
 						{#if contToRender.length === 0}
 							<h1>No hay contactos para enviar</h1>
 						{:else }
@@ -402,6 +412,23 @@
 		flex-wrap: wrap;
 	}
 
+	.sel__msg {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.sel__msg textarea {
+		width: 650px;
+		height: 50px;
+		font-size: 1rem;
+		background: transparent;
+		color: white;
+			}
+
 	.sect__Title {
 		display: flex;
 		flex-direction: column;
@@ -489,6 +516,9 @@
 			top: 15px;
 			left: 15px;
     }
+		.sel__msg textarea {	
+			width: 100%;
+		}
   
 	}
 </style>
