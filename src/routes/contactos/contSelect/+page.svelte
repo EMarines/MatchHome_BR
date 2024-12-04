@@ -35,9 +35,7 @@
   let msg = "";
 
   $: tel = $contact.telephon;
-  // $: xyz = propCheck.length
   $: faltanProp = propCheck.length ;
-  // $: numPropSelect = faltanProp.length;
 
 // Agendar
   // Cerrar Shedule                       
@@ -57,7 +55,7 @@
       propToRender = filtContPropInte(contacto) 
       showProp = true;
       layOut = "sendProps"
-        };
+    };
 
   // Search property by name
     function searProp() {
@@ -313,14 +311,14 @@
               
           <!-- Botonies enviar WA o guardar nota para bitácora -->              
           <div class="textAreaCont">
-              <textarea on:change={textAreaComm} class="texArea" bind:value = {commInpuyBinnacle} placeholder ="Ingresa un comentario"/> 
-              <div class="waSave">
-                {#if !!commInpuyBinnacle || $systStatus === "addContact" || $systStatus === "msgGratitude" || layOut === "sendProp" }
-                  <button  class="btn__common" on:click={selMsgWA}><i class="fa-brands fa-square-whatsapp"></i>WhatsApp</button>
-                  <button class="btn__common" on:click={saveNote($systStatus, commInpuyBinnacle)}><i class="fa-solid fa-floppy-disk"></i>Guardar Info</button>
-                {/if}
-            </div>
+            <textarea on:change={textAreaComm} class="texArea" bind:value = {commInpuyBinnacle} placeholder ="Ingresa un comentario"/> 
+            <div class="waSave">
+              {#if !!commInpuyBinnacle || $systStatus === "addContact" || $systStatus === "msgGratitude" || layOut === "sendProp" }
+                <button  class="btn__common" on:click={selMsgWA}><i class="fa-brands fa-square-whatsapp"></i>WhatsApp</button>
+                <button class="btn__common" on:click={saveNote($systStatus, commInpuyBinnacle)}><i class="fa-solid fa-floppy-disk"></i>Guardar Info</button>
+              {/if}
           </div>
+        </div>
                 
         </div>
 

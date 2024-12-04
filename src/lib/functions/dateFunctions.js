@@ -9,6 +9,9 @@ let dia, mes, ano;
 
 // Convertir fecha en timestamp a formato legible SIN hora
 
+      /**
+ * @param {string | number | Date} fecha
+ */
       export function formatDate(fecha){
         if(typeof fecha == "number"){
           let factZonaHorario= 64800000  // Diferencia de zona GTM a esta zona(18 horas  a milisegundos)
@@ -71,16 +74,19 @@ let dia, mes, ano;
           fecha = new Date()
           let hora = fecha.getHours()
           if(hora < 12){
-            saludoHora = "Buenos días."
+            saludoHora = "Buenos días"
           } else if (hora < 21){
-            saludoHora = "Buenas tardes."
+            saludoHora = "Buenas tardes"
           } else {
-            saludoHora = "Buenas noches."
+            saludoHora = "Buenas noches"
           }
           return saludoHora
         }
 
   // Cambiar de formato de fecha de tipo xx/xxx/xxxx a timeStamp
+        /**
+ * @param {string | number | Date} fecha
+ */
         export function dateToTimeStamp(fecha){
           fecha = new Date(fecha).getTime()
           return fecha

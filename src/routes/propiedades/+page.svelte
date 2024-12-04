@@ -70,24 +70,24 @@
     
   <!-- Renderización -->
     <div class="mainContainer">
+      
       <div class="title__head">
-        <h1 class="title">Propiedadess</h1>
 
+        <h1 class="title">Propiedadess</h1>
         <div class="title__inter">
           <Search bind:searchTerm on:input={searProp} on:keydown={()=>{}}/>
           <button class="btn__submit" on:click={addProperty}>Alta de Propiedad</button>
           <button class="btn__submit" on:click={addPropertyS}>Descargar Listado de Propieades</button>
         </div>
+
       </div>
 
       <div class="card__container">
-
         {#each propToRender as prop}
           <div class="card__prop"on:click={seleProperty(prop)} on:keydown={()=>{}}>
             <CardProperty {prop} />
           </div>
         {/each}  
-
       </div>
       
     </div>

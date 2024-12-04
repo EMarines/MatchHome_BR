@@ -137,7 +137,7 @@
 
     <div class="features">
     
-      <button class=" btn bt__saveEdit" on:click={handleSubmit}>{#if $systStatus === "addProperty"}Guardar{:else}Editar{/if}</button>
+      <button class=" btn bt__saveEdit" on:click={handleSubmit}>{#if $systStatus === "addProperty"}Guardar{:else}Guardar Cambios{/if}</button>
 
       <button class="btn btn__cancel" on:click={onCancel}>Cancel</button>
 

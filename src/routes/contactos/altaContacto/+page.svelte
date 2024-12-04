@@ -10,7 +10,7 @@
     import Ubication from '$lib/components/Ubication.svelte'
     import { mosRange } from '$lib/functions/rangValue'
     import { infoToBinnacle } from '$lib/functions/binnSaver'
-    import { typeContacts, modeContact, typeProperties, modePays, oneToFive, oneToFour, oneToThree, contactStage, range } from '$lib/parameters.js';
+    import { typeContacts, modeContact, typeProperties, modePays, oneToFive, oneToFour, oneToThree, contStage, range } from '$lib/parameters.js';
     import { collection, addDoc, deleteDoc, getDoc, getDocs, doc, updateDoc} from 'firebase/firestore';
     import { goto } from '$app/navigation';
     import CardProperty from '$lib/components/CardProperty.svelte';
@@ -18,7 +18,7 @@
     import InputText from '$lib/components/InputText.svelte';
     import InputOptions from '$lib/components/InputOptions.svelte';
     import InputEmail from '$lib/components/InputEmail.svelte';
-      import InputDate from '$lib/components/InputDate.svelte';
+    import InputDate from '$lib/components/InputDate.svelte';
 
   // Declaraciones
       let searchTerm = "";
@@ -157,7 +157,7 @@
             
             <div class="inp__lat">
               <InputOptions identificador="rangeProp" name="Rango" choices={range} bind:value ={$contact.rangeProp}/>
-              <InputOptions identificador="contactStage" name="Etapa" choices={contactStage} bind:value ={$contact.contactStage}/>
+              <InputOptions identificador="contactStage" name="Etapa" choices={contStage} bind:value ={$contact.contactStage}/>
             </div>
 
             <div class="ubi__Tags">
@@ -169,7 +169,7 @@
           <!-- Botones Guardar Eiditar y Regresar-->
           <div class="inp__lat">
             <button class="btn__save" on:click={detaAlta}>Alta Detalles</button>  
-            <button class="bt__SaveEdit" type="submit">{#if $systStatus === "addContact"}Guardar{:else}Editar{/if}</button>
+            <button class="bt__SaveEdit" type="submit">{#if $systStatus === "addContact"}Guardar{:else}Guardar Cambios{/if}</button>
             <button class="btn-cancel" on:click={onCancel}>Regresar</button>
           </div>
 

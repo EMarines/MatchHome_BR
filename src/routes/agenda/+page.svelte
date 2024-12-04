@@ -12,9 +12,6 @@
      import { sortTodos } from '$lib/functions/sort.js'
      import { goto } from '$app/navigation';
      import { onDestroy } from 'svelte';
-    //  import { toComaSep, toTele } from '$lib/functions/format.js';
-    //  import { fly, fade } from 'svelte/transition';
-
 
   // Declaraciones
       $todo = {};

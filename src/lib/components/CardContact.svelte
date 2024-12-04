@@ -3,7 +3,7 @@
   import { toComaSep, toTele } from '$lib/functions/format'
   import { formatDate } from '$lib/functions/dateFunctions.js'
 
-  export let cont = {};
+  export let cont = {}; 
 </script>
 
 
@@ -14,7 +14,7 @@
     </div>
     <div class="info__cont">      
       {#if cont.telephon}
-        <span> <i class="fa-solid fa-mobile-screen-button"></i> {toTele(cont.telephon)} </span>
+        <span> <i class="fa-solid fa-mobile-screen-button"></i> {toTele(cont.telephon)} {cont.contactStage}</span>
       {/if}
       {#if cont.email }
         <span> <i class="fa-regular fa-envelope"></i> {cont.email} </span>

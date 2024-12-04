@@ -13,7 +13,7 @@
     "CRT",
     "QNT",
     "SXT",
-    ""
+    "Sin Rango"
   ]
 
   export const ubications = [
@@ -37,6 +37,9 @@
     "Inmobiliario",
     "Inmobiliario Asociado",
     "Inversionista",
+    "Constructor",
+    "Desarrollador",
+    "Captación",
     ""
   ]
 
@@ -114,11 +117,23 @@
     ""
   ]
 
-  export const contactStage = [
-    "Etapa1",
-    "Etapa2",
-    "Etapa3",
-    "Etapa4",
-    "Etapa5",
+  export const contStage = [
+    "Etapa 1",
+    "Etapa 2",
+    "Etapa 3",
+    "Etapa 4",
+    "Etapa 5",
     "",
+  ];
+
+  export const actions = [
+    "Propiedad enviada: ",    
+    "Mensaje enviado: ",
+    "Reciclar Contacto",
+    "Mensaje a Vendedor",
+    "Se agregó a: ",
+    "WhatsApp enviado: ",
+    "Se editó a: ",
+    "Nota:",
+    ""
   ]

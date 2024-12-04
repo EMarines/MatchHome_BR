@@ -37,7 +37,7 @@ export function cleanNumber(numToClean){
 
 export function cleanName(nomToClean){
 	try {
-		let newNomber = nomToClean.trim();
+		let newNomber = nomToClean.trim().toLowerCase();
 		return newNomber;
 
 	} catch (error) {

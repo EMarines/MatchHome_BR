@@ -52,7 +52,8 @@
             goto("/") 
           })
           .catch((error) => {
-            error = true
+            const errorCode = error.code;
+            const errorMessage = error.message;
           });
         } else {
         errMsg = "No coniciden la contraseña"

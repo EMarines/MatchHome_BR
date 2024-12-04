@@ -3,4 +3,4 @@
 </script>
 
 <Hero />
-<slot />
+<slot /> 

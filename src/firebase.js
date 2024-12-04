@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { collection, getDoc, getDocs, onSnapshot, getFirestore, orderBy, limit } from 'firebase/firestore'
+import { collection, getDoc, getDocs, onSnapshot, getFirestore, orderBy, limit, query} from 'firebase/firestore'
 import { getAuth } from 'firebase/auth';
 // import { currContList, currPropList, currBinnList } from './lib/stores/store';
 
@@ -28,6 +28,15 @@ import { getAuth } from 'firebase/auth';
  */
   export let dbBinnacle = [];
 
+  // const firebaseConfig = {
+  //   apiKey: "AIzaSyCkuw82zTqtiPDp3eS2qwGr8UUQFDBBglM",
+  //   authDomain: "curso-svelte-58c5d.firebaseapp.com",
+  //   projectId: "curso-svelte-58c5d",
+  //   storageBucket: "curso-svelte-58c5d.appspot.com",
+  //   messagingSenderId: "1067367490239",
+  //   appId: "1:1067367490239:web:8a8aeae384fa8319515c0a"
+  // };
+  
   
 
   // // Your web app's Firebase configuration svelte-tutorial
@@ -70,6 +79,7 @@ import { getAuth } from 'firebase/auth';
   export const app = initializeApp(firebaseConfig);
   export const db = getFirestore(app)
   export const auth = getAuth(app)
+
 
 
   

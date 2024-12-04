@@ -18,6 +18,7 @@
 		import { sortBinnacle } from '$lib/functions/sort.js'
 		import { formatDate } from '$lib/functions/dateFunctions.js'
 		import { capitalize } from '$lib/functions/capitalize.js'
+		import { tagToUbicacion, tagToFeatures } from '$lib/functions/tagConverters'
 		
 			let saludoHora = '';
 			let modeAction = '';
@@ -25,7 +26,7 @@
 			let contInterested = "";
 			let contInterest = [];
 			let contToRender = [];
-			let contCheck = [];
+			$:contCheck = [];
 			let contToSend = {};
 			let sent =[];
 			let toSend = [];
@@ -189,18 +190,18 @@
 	<!-- Muestra la propieda seleccionada -->
 			<div class="prop__ima__info">
 				<div class="prop__image">
-					<p class="prop__clave">{$property.claveEB}</p>
-					<img src={$property.urlImage} alt={$property.nameProperty} />
+					<p class="prop__clave">{$property.public_id}</p>
+					<img src={$property.images[0].url} alt={$property.location.name} />
 				</div>
 
 				<div class="prop__card">
 					<div class="prop__info">
 						<div class="propTitle">
-							<h1 class="title">{$property.selectTP} en {$property.colonia} en {$property.selecTO}</h1>
+							<h1 class="title">{$property.property_type} en {$property.location.name} en {$property.operations[0].type === "sale" ? "Venta" : "Renta"}</h1>
 						</div>
 						<div class="prop__price">
-							<h2>Precio $ {toComaSep(Number($property.price))}.</h2>
-							<p class="alta__prop">Alta: {formatDate($property.createdAt)}</p>
+							<h2>Precio $ {toComaSep(Number($property.operations[0].amount))}.</h2>
+							<p class="alta__prop">Alta: {formatDate($property.created_at)}</p>
 						</div>
 						<div class="prop__cont">
 							<div class="prop__features">
@@ -222,9 +223,9 @@
 								{/if}
 							</div>
 							<div class="prop__features">
-										<span> <i class="fa-sharp fa-regular fa-compass to__showR"></i> {$property.locaProperty.toString().replaceAll(",", ", ")} </span>              
-								{#if $property.tagsProperty.length > 0}
-										<span><i class="fa-solid fa-tags to__showR"></i> {$property.tagsProperty.toString().replaceAll("_", " ").replaceAll(",", ", ")} </span>              
+								{#if $property.tags.length > 0}
+										<span> <i class="fa-sharp fa-regular fa-compass to__showR"></i> {tagToUbicacion($property?.tags)} </span>              
+										<span><i class="fa-solid fa-tags to__showR"></i> {tagToFeatures($property.tags)} </span>              
 								{/if}
 							</div>
 						</div>

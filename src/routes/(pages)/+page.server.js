@@ -5,7 +5,9 @@ export const load = async({fetch}) => {
         return data;
     };
 
+    const posts = await getPosts();
+
     return {
-        posts: getPosts(),
+        posts,
     };
 };

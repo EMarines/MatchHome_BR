@@ -10,7 +10,7 @@
             </div>
             <div>
                 <h2>Match Home</h2>
-                <h5>¡¡¡Tu Patrimonio En Buenas Manos!!!</h5>
+                <h5>¡Tu Patrimonio En Buenas Manos!</h5>
             </div>
 
         </div>

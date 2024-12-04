@@ -8,14 +8,14 @@
   <div class="card__prop">
   
     <div class="img__cont">
-      <img src="{prop.urlImage}" alt="casa">
+      <img src="{prop.images[0].url}" alt="casa">
     </div>
 
     <div class="info__cont">
 
       <div class="card__info">
-        <span class="capitalize">{prop.colonia}</span>
-        <span>$ {toComaSep(Number(prop.price))}.</span>
+        <span class="capitalize">{prop.location.name.replace("Chihuahua, Chihuahua", "").replaceAll(",", "").replace("I, ", "").replace("II", "").replace("III", "").replace("IV", "").replace("V ", "").replaceAll("Y ", "")}</span>
+        <span>$ {toComaSep(Number(prop.operations[0].amount))}.</span>
       </div>
 
       <div class="card__features">
