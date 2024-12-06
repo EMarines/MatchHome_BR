@@ -105,13 +105,13 @@
       if($systStatus === "addContact"){
           $binnacle = {"date": Date.now(), "comment": (`${$contact.name} ${$contact.lastname}`), "to": $contact.telephon, "action": "Se agregó a: "}
           infoToBinnacle($binnacle)
-          msg = $property.urlProp;
+          msg = $property.public_url;
           sendWhatsApp(tel, msg)
           $systStatus = "msgGratitude";
       // Envia mensaje de agradecimiento después de enviar la propiedad en alta de contacto
       } else if($systStatus === "msgGratitude") {
         // Envía en mensaje de agradecimiento
-          $binnacle = {"date": Date.now(), "comment": $property.nameProperty, "to": $contact.telephon, "action": "Propiedad enviada: "}
+          $binnacle = {"date": Date.now(), "comment": $property.public_url, "to": $contact.telephon, "action": "Propiedad enviada: "}
           infoToBinnacle($binnacle)
           msg = "Gracias por contactarnos. Enrique Marines, asesor de ventas en Match Home, tel. 614 540 4003, email matchhome@hotmail.com ✔ Visita matchhome.net ✔ ¡Seguro encuentras algo de interés!"
           sendWhatsApp(tel, msg)
@@ -127,7 +127,7 @@
           faltanProp = propCheck.length - (sig + 1)
           let msg = propCheck[sig].urlProp
           sendWhatsApp(tel, msg)
-          $binnacle = {"date": Date.now(), "comment": propCheck[sig].nameProperty, "to": $contact.telephon, "action": "Propiedad enviada: "}
+          $binnacle = {"date": Date.now(), "comment": propCheck[sig].public_id, "to": $contact.telephon, "action": "Propiedad enviada: "}
           infoToBinnacle($binnacle)
           if ( propCheck.length === sig + 1 ) {
             setTimeout ( function(){

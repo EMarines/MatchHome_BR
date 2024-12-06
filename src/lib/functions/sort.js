@@ -7,14 +7,16 @@ export function sortList(PropList){
    //  console.log("Estas en la funcion", toRender);
     // @ts-ignore
     PropList.sort((a, b) => {
-        if(new Date(a.createdAt) < new Date(b.createdAt)){
+        if(new Date(a.created_at) < new Date(b.created_at)){
            return 1;
-        } else if (new Date(a.createdAt) > new Date(b.createdAt)){
+        } else if (new Date(a.created_at) > new Date(b.created_at)){
            return -1;
         } else {
            return 0;
         }
      })
+     
+     return PropList;
 }
 
 // @ts-ignore

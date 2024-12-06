@@ -82,7 +82,7 @@
         if(searchTerm.length !== 0){
         showProp = true;
         return propToRender = $currPropList.filter((propety) => {
-          let contInfo = (propety.nameProperty + " " + propety.colonia + " " + propety.claveEB).toLowerCase();
+          let contInfo = (propety.location.name + " " + propety.title + " " + propety.public_id).toLowerCase();
           return contInfo.includes(searchTerm.toLowerCase());
         });
       } else {

@@ -31,7 +31,10 @@
             $currPropList = querySnapshot.docs.map(doc => {
                return{...doc.data(), id: doc.id}
             })
-            return sortList($currPropList)
+
+            $currPropList = sortList($currPropList);
+
+            return $currPropList
          },
             (err) =>{
                console.log(err);
@@ -50,7 +53,7 @@
   // Search property by name
     function searProp() {
       return propToRender = $currPropList.filter((propety) => {
-        let contInfo = (propety.nameProperty + " " + propety.colonia + " " + propety.claveEB).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        let contInfo = (propety.location.name + " " + propety.title + " " + propety.public_id).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
         return contInfo.includes(searchTerm.toLowerCase());
       });  
     };

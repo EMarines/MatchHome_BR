@@ -1,50 +1,45 @@
-export function tagToUbicacion(obj: any) {
+export function tagToUbicacion(input: string | string[]) {
     const direcciones = [
         'norte', 'noreste', 'noroeste', 'oeste', 'este',
-        'centronorte', 'centro sur', 'sureste', 'suroeste'
+        'centronorte', 'centrosur', 'sureste', 'suroeste'
     ];
 
-    for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            const valor = obj[key].toLowerCase();
-            for (const direccion of direcciones) {
-                if (valor.includes(direccion)) {
-                    return direccion;
-                }
-            }
+    // Convertir el input a un array de palabras
+    const palabras = Array.isArray(input)
+        ? input.map(palabra => palabra.toLowerCase().trim())
+        : input.toLowerCase().trim().split(/\s+/);
+
+    // Buscar la primera coincidencia en direcciones
+    for (const palabra of palabras) {
+        if (direcciones.includes(palabra)) {
+            console.log('Dirección encontrada:', palabra);
+            return palabra;
         }
     }
 
-    return null; // Si no se encuentra ninguna dirección
+    return null;
 }
 
-export function tagToFeatures(obj: any) {
-    const direcciones = [
-        'patio amplio', 'recamara en planta baja', 'lista para habitarse', 'una planta', 'frente a parque',
+export function tagToFeatures(arr: string[]) {
+    console.log(arr)
+    const tags = [
+        'patio amplio', 'recamara en planta baja', 'lista para habitarse', 'un piso', 'frente a parque',
         'nueva', 'moderna', 'fraccionamiento privado', 'alberca'
     ];
 
     const resultados: string[] = [];
 
-    for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            const valor = obj[key].toLowerCase();
-            for (const direccion of direcciones) {
-                if (valor.includes(direccion) && !resultados.includes(direccion)) {
-                    resultados.push(direccion);
+    for (const item of arr) {
+        if (item) {
+            const valor = item.toLowerCase().trim();
+            for (const tag of tags) {
+                if (valor === tag && !resultados.includes(tag)) {
+                    resultados.push(tag);
                 }
             }
         }
     }
 
-    if (resultados.length === 0) {
-        return null;
-    }
-
-    if (resultados.length === 1) {
-        return resultados[0];
-    }
-
-    const ultimaDireccion = resultados.pop();
-    return `${resultados.join(', ')} y ${ultimaDireccion}`;
+    // Devolver todas las coincidencias encontradas
+    return resultados.length > 0 ? resultados : null;
 }

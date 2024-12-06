@@ -1,7 +1,6 @@
-
 import { mosRange } from '$lib/functions/rangValue.js'
 import { dbProperties } from '../../firebase';
-
+import { tagToUbicacion, tagToFeatures } from './tagConverters'
       /**
  * @type {any[]}
  */
@@ -16,19 +15,21 @@ import { dbProperties } from '../../firebase';
         // Filtra por tipo de propiedad y numero de piezas
         try {
           proInt = proInt.filter((item) =>
-          contact.selecTP.toLowerCase() === item.selectTP.toLowerCase()
+            item.property_type.toLowerCase() === contact.selecTP.toLowerCase()
+          // contact.selecTP.toLowerCase() === item.selectTP.toLowerCase()
           );
+          console.log(proInt)
 
           if (contact.numBeds > 0) {
-            proInt = proInt.filter((item) => item.beds >= contact.numBeds);
+            proInt = proInt.filter((item) => item.bedrooms >= contact.numBeds);
           }
 
           if (contact.numBaths > 0) {
-            proInt = proInt.filter((item) => item.bathroom >= contact.numBaths);
+            proInt = proInt.filter((item) => item.bathrooms >= contact.numBaths);
           }
 
             if (contact.numParks > 0) {
-              proInt = proInt.filter((item) => item.park >= contact.numParks);
+              proInt = proInt.filter((item) => item.parking_spaces >= contact.numParks);
           }
           
         } catch (error) {
@@ -42,33 +43,33 @@ import { dbProperties } from '../../firebase';
             let lowRange=(Number(contact.budget * .7))
             let upRange=(Number(contact.budget * 1.1))
             proInt = proInt.filter((prop) => 
-            prop.price >= lowRange && prop.price <= upRange)         
+            prop.operations[0].amount >= lowRange && prop.operations[0].amount <= upRange)         
         } else {       
-            proInt = proInt.filter((prop) => mosRange(Number(prop.price)) === contact.rangeProp);
+            proInt = proInt.filter((prop) => mosRange(Number(prop.operations[0].amount)) === contact.rangeProp);
         }          
         } catch (error) {
           console.log(error);
         }};
         
   // Filtra por Ubicación 
-        // if(contact.locaProperty){
-          try {
-            if(contact.locaProperty.length > 0)
-                proInt = proInt.filter(prop => 
-                (contact.locaProperty).some((/** @type {any} */ c) => (prop.locaProperty).includes(c))
-            );          
-          } catch (error) {
-            console.log(error);
-          }
-        // }
+        if(contact.locaProperty.length > 0)
+            proInt = proInt.filter(prop => {
+                const ubicacion = tagToUbicacion(prop.tags);
+                return ubicacion && contact.locaProperty.some((loca) => ubicacion.includes(loca));
+            });
+
+            console.log(proInt)
         
     // Filtra por Etiquetas
         try {
           if(contact.tagsProperty.length > 0)
-            proInt = proInt.filter(prop => contact.tagsProperty.every((/** @type {any} */ tags) => prop.tagsProperty.includes(tags)))         
-          } catch (error) {
-            console.log(error)
-          };
+            proInt = proInt.filter(prop => {
+                const features = tagToFeatures(prop.tags);
+                return features && contact.tagsProperty.every(tags => features.includes(tags));
+            });
+        } catch (error) {
+          console.log(error)
+        };
 
       return proInt;
 

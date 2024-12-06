@@ -197,7 +197,7 @@
 				<div class="prop__card">
 					<div class="prop__info">
 						<div class="propTitle">
-							<h1 class="title">{$property.property_type} en {$property.location.name} en {$property.operations[0].type === "sale" ? "Venta" : "Renta"}</h1>
+							<h1 class="title">{$property.property_type} en {$property.location.name.replace("Chihuahua, Chihuahua", "").replace("I,", "")} en {$property.operations[0].type === "sale" ? "Venta" : "Renta"}</h1>
 						</div>
 						<div class="prop__price">
 							<h2>Precio $ {toComaSep(Number($property.operations[0].amount))}.</h2>
@@ -205,21 +205,21 @@
 						</div>
 						<div class="prop__cont">
 							<div class="prop__features">
-								{#if $property.selectTP === 'Casa' || $property.selectTP === 'Departamento'}
-									<span> {Number($property.beds)}  <i class="fa-solid fa-bed to__show"></i></span>
-									<span> {Number($property.bathroom)} <i class="fa-solid fa-bath to__show"></i></span>
-									{#if $property.halfBathroom}
-										<span> {Number($property.halfBathroom)} <i class="fa-solid fa-toilet to__show"></i></span>										
+								{#if $property.property_type === 'Casa' || $property.property_type === 'Departamento'}
+									<span> {Number($property.bedrooms)}  <i class="fa-solid fa-bed to__show"></i></span>
+									<span> {Number($property.bathrooms)} <i class="fa-solid fa-bath to__show"></i></span>
+									{#if $property.half_bathrooms}
+										<span> {Number($property.half_bathrooms)} <i class="fa-solid fa-toilet to__show"></i></span>										
 									{/if}
-									{#if $property.park}
-										<span> {Number($property.park)} <i class="fa-solid fa-car-rear to__show"></i></span>										
+									{#if $property.parking_spaces}
+										<span> {Number($property.parking_spaces)} <i class="fa-solid fa-car-rear to__show"></i></span>										
 									{/if}
 									<!-- <span> {Number($property.halfBathroom)} <i class="fa-solid fa-bath to__show"></i></span> -->
 
-									<span>{Number($property.areaBuilding)} m² <i class="fa-solid fa-ruler-combined"></i></span>
-									<span>{$property.areaTotal} m² <i class="fa-solid fa-chart-area"></i></span>
-								{:else if $property.typeProperty === 'Terreno'}
-									<span>{$property.areaTotal} m² <i class="fa-solid fa-chart-area"></i></span>
+									<span>{Number($property.construction_size)} m² <i class="fa-solid fa-ruler-combined"></i></span>
+									<span>{$property.lot_size} m² <i class="fa-solid fa-chart-area"></i></span>
+								{:else if $property.property_type === 'Terreno'}
+									<span>{$property.lot_size} m² <i class="fa-solid fa-chart-area"></i></span>
 								{/if}
 							</div>
 							<div class="prop__features">
@@ -231,8 +231,8 @@
 						</div>
 					</div>
 					<div class="actions">
-						<i on:click={() => {editProp($property.id)}} on:keydown={() => {}} class="fa-regular fa-pen-to-square" />
-						<i on:click={() => {deleProperty($property.id)}}	on:keydown={() => {}}	class="fa-regular fa-trash-can"	/>
+						<i on:click={() => {editProp($property.public_id)}} on:keydown={() => {}} class="fa-regular fa-pen-to-square" />
+						<i on:click={() => {deleProperty($property.public_id)}}	on:keydown={() => {}}	class="fa-regular fa-trash-can"	/>
 					</div>
 				</div>
 			</div>
