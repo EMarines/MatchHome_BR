@@ -69,7 +69,7 @@ let dateTo = new Date().getTime();
           conInt = conInt.filter((cont) => cont.numParks <= property.parking_spaces);
         };
 
-
+        console.log(conInt)
       // Presupuesto
       try {
         const filteredContacts = conInt.reduce((acc, cont) => {
@@ -94,24 +94,21 @@ let dateTo = new Date().getTime();
         console.log('Error al filtrar por presupuesto:', error);
         console.log('Valor del presupuesto:', property.operations[0].amount);
       }
-
-
+      console.log(conInt)
       // Filtra por Ubicación
       try {
         const filteredContacts = conInt.reduce((acc, cont) => {
             const propertyTags = Array.isArray(property.tags) 
                 ? property.tags.join(' ') 
-                : String(property.tags || '');
-            
+                : String(property.tags || '');            
     
-            if (cont.locaProperty && cont.locaProperty.length > 0) {
-                const locationTag = tagToUbicacion(propertyTags.toLowerCase());
+            const locationTag = tagToUbicacion(propertyTags.toLowerCase());
     
-                if (locationTag && cont.locaProperty.some(location => 
-                    location.toLowerCase() === locationTag.toLowerCase()
-                )) {
-                    acc.push(cont);
-                }
+            // Incluir contactos sin locationTag o que coincidan con la ubicación
+            if (!locationTag || (cont.locaProperty && cont.locaProperty.some(location => 
+                location.toLowerCase() === locationTag.toLowerCase()
+            ))) {
+                acc.push(cont);
             }
             return acc;
         }, []);
@@ -121,7 +118,7 @@ let dateTo = new Date().getTime();
         console.log('Error al filtrar por ubicación:', error);
     }
 
-
+    console.log(conInt)
       // Filtra por Etiquetas
       try {
         const filteredContacts = conInt.reduce((acc, cont) => {
@@ -133,7 +130,7 @@ let dateTo = new Date().getTime();
 
             // Si tiene tags, verificamos coincidencias
             const features = tagToFeatures(property.tags);
-            if (features && cont.tagsProperty.every(tag => features.includes(tag))) {
+            if (!features && cont.tagsProperty.every(tag => features.includes(tag))) {
                 acc.push(cont);
             }
 

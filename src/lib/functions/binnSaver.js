@@ -10,14 +10,22 @@ import { collection, addDoc } from 'firebase/firestore';
  * @param {{ date: string; comment: string; action: string; to: string; }} binn
 */
 export async function infoToBinnacle (binn) {  
-         try {
-            const binnacleToAdd = collection(db, "binnacles")
-            await addDoc(binnacleToAdd, binn);
-         } catch (error) {
-            console.log("error", error)
-         }  
-               
+   console.log("binn", binn)
+   try {
+      const validatedBinn = {
+         date: binn.date || '',
+         comment: binn.comment || '',
+         action: binn.action || '',
+         to: binn.to || ''
       };
+
+      const binnacleToAdd = collection(db, "binnacles")
+      await addDoc(binnacleToAdd, validatedBinn);
+   } catch (error) {
+      console.log("error", error)
+   }  
+         
+};
 
 
 

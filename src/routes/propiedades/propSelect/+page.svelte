@@ -100,18 +100,18 @@
 					toSend=[];
 					msgToShow = "Pendiente Para Enviar Esta Propieadad"
 					res =  $currBinnList.filter(item =>
-					item.comment === $property.nameProperty)
+					item.comment === $property.public_id)
 					const contsT = res.map(doc => doc.to)
-					toSend = contInterest.filter(doc => !contsT.includes(doc.telephon))               
+					toSend = contInterest.filter(doc => !contsT.includes(doc.id))               
 					contToRender = toSend
 			} else if(contInterested === "Ya_Se_Envió"){
 					sent=[];
 					msgToShow = "Ya se les envió esta propiedad"
 					res = $currBinnList.filter(item =>
-					item.comment === $property.nameProperty)
+					item.comment === $property.public_id)
 					$currContList.filter((cont) =>{
 						res.forEach(binn => {
-							if(cont.telephon === binn.to){
+							if(cont.id === binn.to){
 								sent.push(cont)
 								}
 							})

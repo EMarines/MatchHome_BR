@@ -18,7 +18,7 @@ import { tagToUbicacion, tagToFeatures } from './tagConverters'
             item.property_type.toLowerCase() === contact.selecTP.toLowerCase()
           // contact.selecTP.toLowerCase() === item.selectTP.toLowerCase()
           );
-          console.log(proInt)
+          // console.log(proInt)
 
           if (contact.numBeds > 0) {
             proInt = proInt.filter((item) => item.bedrooms >= contact.numBeds);
@@ -50,15 +50,17 @@ import { tagToUbicacion, tagToFeatures } from './tagConverters'
         } catch (error) {
           console.log(error);
         }};
+        // console.log(proInt)
         
   // Filtra por Ubicación 
-        if(contact.locaProperty.length > 0)
+        if (contact.locaProperty.length > 0) {
             proInt = proInt.filter(prop => {
                 const ubicacion = tagToUbicacion(prop.tags);
-                return ubicacion && contact.locaProperty.some((loca) => ubicacion.includes(loca));
+                return !ubicacion || contact.locaProperty.some(loca => ubicacion.includes(loca));
             });
+        }
 
-            console.log(proInt)
+            // console.log(proInt)
         
     // Filtra por Etiquetas
         try {

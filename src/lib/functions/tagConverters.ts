@@ -23,8 +23,8 @@ export function tagToUbicacion(input: string | string[]) {
 export function tagToFeatures(arr: string[]) {
     console.log(arr)
     const tags = [
-        'patio amplio', 'recamara en planta baja', 'lista para habitarse', 'un piso', 'frente a parque',
-        'nueva', 'moderna', 'fraccionamiento privado', 'alberca'
+        'Fracc. Privado', 'Frente a Parque', 'Una Planta', 'Recamara en P.B.',
+        'Patio Amplio', 'Lista para Habitarse', 'Nueva', 'Alberca'    
     ];
 
     const resultados: string[] = [];

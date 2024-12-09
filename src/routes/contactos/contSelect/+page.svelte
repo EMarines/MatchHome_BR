@@ -67,7 +67,7 @@
         layOut = "sendProp";
       }
       return propToRender = $currPropList.filter((propety) => {
-        let contInfo = (propety.nameProperty + " " + propety.colonia + " " + propety.claveEB).toLowerCase();
+        let contInfo = (propety.public_id + " " + propety.title + " " + propety.location.name).toLowerCase();
         return contInfo.includes(searchTerm.toLowerCase());
       });  
     };
@@ -101,18 +101,22 @@
   // Buttons actions
   // Selecciona Mensaje para WA
     async function selMsgWA() {
+      console.log("Property", $property, sig, $systStatus)
       // Envía la propiedad seleccionada del listado (propCheck) Alta de Contacto
       if($systStatus === "addContact"){
-          $binnacle = {"date": Date.now(), "comment": (`${$contact.name} ${$contact.lastname}`), "to": $contact.telephon, "action": "Se agregó a: "}
-          infoToBinnacle($binnacle)
+          $binnacle = {"date": Date.now(), "comment": (`${$contact.name} ${$contact.lastname}`), "to": $contact.id, "action": "Se agregó a: "}
+          infoToBinnacle($binnacle)          
           msg = $property.public_url;
+          console.log("msg", msg, $systStatus)
           sendWhatsApp(tel, msg)
+          $binnacle = {"date": Date.now(), "comment": ($property.public_id), "to": $contact.id, "action": "Propiedad enviada: "}
+          infoToBinnacle($binnacle)
           $systStatus = "msgGratitude";
       // Envia mensaje de agradecimiento después de enviar la propiedad en alta de contacto
       } else if($systStatus === "msgGratitude") {
         // Envía en mensaje de agradecimiento
-          $binnacle = {"date": Date.now(), "comment": $property.public_url, "to": $contact.telephon, "action": "Propiedad enviada: "}
-          infoToBinnacle($binnacle)
+          // $binnacle = {"date": Date.now(), "comment": $property.public_id, "to": $contact.telephon, "action": "Propiedad enviada: "}
+          // infoToBinnacle($binnacle)
           msg = "Gracias por contactarnos. Enrique Marines, asesor de ventas en Match Home, tel. 614 540 4003, email matchhome@hotmail.com ✔ Visita matchhome.net ✔ ¡Seguro encuentras algo de interés!"
           sendWhatsApp(tel, msg)
       // Envía por WA lo que está en TextArea y guarda la bitácora
@@ -120,14 +124,14 @@
           msg = commInpuyBinnacle;
           sendWhatsApp(tel, msg)
           $systStatus = "sendWA"
-          $binnacle = {"date": Date.now(), "comment": commInpuyBinnacle, "to": $contact.telephon, "action": "WhatsApp enviado: "}
+          $binnacle = {"date": Date.now(), "comment": commInpuyBinnacle, "to": $contact.id, "action": "WhatsApp enviado: "}
           infoToBinnacle($binnacle)
       // Envía por WA las propiedades seleccionadas
       } else if($systStatus === "sendProps"){
           faltanProp = propCheck.length - (sig + 1)
-          let msg = propCheck[sig].urlProp
+          let msg = propCheck[sig].public_url
           sendWhatsApp(tel, msg)
-          $binnacle = {"date": Date.now(), "comment": propCheck[sig].public_id, "to": $contact.telephon, "action": "Propiedad enviada: "}
+          $binnacle = {"date": Date.now(), "comment": propCheck[sig].public_id, "to": $contact.id, "action": "Propiedad enviada: "}
           infoToBinnacle($binnacle)
           if ( propCheck.length === sig + 1 ) {
             setTimeout ( function(){
@@ -139,8 +143,7 @@
               return
             }, 2500);
           };
-          sig ++ 
-   
+          sig ++    
         };
         // Borra la información del envío
         if($systStatus !== "msgGratitude") {
