@@ -46,7 +46,6 @@ let dateTo = new Date().getTime();
 
       // busqueda de Hoy hasta 1/ene/23
         conInt = conInt.filter((con) => con.createdAt <=  dateTo && con.createdAt >= 1672596060000);   
-      console.log(conInt)
 
       // Tipo de contacto    
         conInt = conInt.filter((cont) => cont.typeContact === "Comprador");        
@@ -69,7 +68,6 @@ let dateTo = new Date().getTime();
           conInt = conInt.filter((cont) => cont.numParks <= property.parking_spaces);
         };
 
-        console.log(conInt)
       // Presupuesto
       try {
         const filteredContacts = conInt.reduce((acc, cont) => {
@@ -83,6 +81,8 @@ let dateTo = new Date().getTime();
               acc.push(cont);
             }
           } else if (cont.rangeProp === mosRange(property.price)) {
+            let n=1
+            n++
             // Si coincide exactamente con el rango
             acc.push(cont);
           }
@@ -94,50 +94,51 @@ let dateTo = new Date().getTime();
         console.log('Error al filtrar por presupuesto:', error);
         console.log('Valor del presupuesto:', property.operations[0].amount);
       }
-      console.log(conInt)
+
       // Filtra por Ubicación
       try {
-        const filteredContacts = conInt.reduce((acc, cont) => {
-            const propertyTags = Array.isArray(property.tags) 
-                ? property.tags.join(' ') 
-                : String(property.tags || '');            
-    
-            const locationTag = tagToUbicacion(propertyTags.toLowerCase());
-    
-            // Incluir contactos sin locationTag o que coincidan con la ubicación
-            if (!locationTag || (cont.locaProperty && cont.locaProperty.some(location => 
-                location.toLowerCase() === locationTag.toLowerCase()
-            ))) {
-                acc.push(cont);
-            }
-            return acc;
-        }, []);
-    
-        conInt = filteredContacts;
+        const ubicPropTag = tagToUbicacion(property.tags);
+        // Solo filtramos si la propiedad tiene ubicación
+        if (ubicPropTag) {
+            const filteredContacts = conInt.filter(cont => {
+                // Si el contacto no tiene preferencias de ubicación, lo incluimos
+                if (!cont.locaProperty || cont.locaProperty.length === 0) {
+                    return true;
+                }
+                
+                // Verificar si alguna de las ubicaciones que busca el contacto
+                // coincide con la ubicación de la propiedad
+                return cont.locaProperty.some(location => 
+                    location.toLowerCase() === ubicPropTag.toLowerCase()
+                );
+            });
+            
+            conInt = filteredContacts;
+        }
     } catch (error) {
         console.log('Error al filtrar por ubicación:', error);
     }
 
-    console.log(conInt)
       // Filtra por Etiquetas
       try {
-        const filteredContacts = conInt.reduce((acc, cont) => {
-            // Si el contacto no tiene tags, lo incluimos directamente
-            if (!cont.tagsProperty || cont.tagsProperty.length === 0) {
-                acc.push(cont);
-                return acc;
-            }
+        if(tagToFeatures(property.tags)){
+          const filteredContacts = conInt.reduce((acc, cont) => {
+              // Si el contacto no tiene tags, lo incluimos directamente
+              if (!cont.tagsProperty || cont.tagsProperty.length === 0) {
+                  acc.push(cont);
+                  return acc;
+              }
 
-            // Si tiene tags, verificamos coincidencias
-            const features = tagToFeatures(property.tags);
-            if (!features && cont.tagsProperty.every(tag => features.includes(tag))) {
-                acc.push(cont);
-            }
+              // Si tiene tags, verificamos coincidencias
+              const features = tagToFeatures(property.tags);
+              if (!features && cont.tagsProperty.every(tag => features.includes(tag))) {
+                  acc.push(cont);
+              }
 
-            return acc;
-        }, []);
-
-        conInt = filteredContacts;
+              return acc;
+          }, []);
+          conInt = filteredContacts;
+        }
       } catch (error) {
         console.log('Error al filtrar por etiquetas:', error);
       }

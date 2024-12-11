@@ -19,6 +19,7 @@
     import InputOptions from '$lib/components/InputOptions.svelte';
     import InputEmail from '$lib/components/InputEmail.svelte';
     import InputDate from '$lib/components/InputDate.svelte';
+    import { convertOperationEbFb } from '$lib/functions/converterEb-Fb';
 
   // Declaraciones
       let searchTerm = "";
@@ -56,6 +57,8 @@
           // Da de alta al contacto con los datos de la propiedad por la que contactó
           $contact.createdAt= Date.now();            
           $contact.contactStage = "Etapa 1"
+          $contact.selecTP = $property.property_type
+          $contact.typeContact = convertOperationEbFb($property.operations[0].type)
           if($property){$contact.rangeProp = mosRange(Number($property.price))};
 
           try {
