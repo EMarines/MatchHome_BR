@@ -12,7 +12,6 @@ export function tagToUbicacion(input: string | string[]) {
     // Buscar la primera coincidencia en direcciones
     for (const palabra of palabras) {
         if (direcciones.includes(palabra)) {
-            console.log('Dirección encontrada:', palabra);
             return palabra;
         }
     }
@@ -21,7 +20,6 @@ export function tagToUbicacion(input: string | string[]) {
 }
 
 export function tagToFeatures(arr: string[]) {
-    console.log(arr)
     const tags = [
         'Fracc. Privado', 'Frente a Parque', 'Una Planta', 'Recamara en P.B.',
         'Patio Amplio', 'Lista para Habitarse', 'Nueva', 'Alberca'    

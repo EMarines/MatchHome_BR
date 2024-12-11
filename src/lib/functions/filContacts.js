@@ -81,8 +81,6 @@ let dateTo = new Date().getTime();
               acc.push(cont);
             }
           } else if (cont.rangeProp === mosRange(property.price)) {
-            let n=1
-            n++
             // Si coincide exactamente con el rango
             acc.push(cont);
           }
@@ -92,7 +90,6 @@ let dateTo = new Date().getTime();
         conInt = filteredContacts; // Solo guardamos los contactos que coinciden
       } catch (error) {
         console.log('Error al filtrar por presupuesto:', error);
-        console.log('Valor del presupuesto:', property.operations[0].amount);
       }
 
       // Filtra por Ubicación

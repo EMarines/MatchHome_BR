@@ -122,6 +122,7 @@
 
 	// Muestra listado de contactos interesados
 		function findCustomers() {
+
 			contInterested = "Por_Enviar"
 			listToRender($property, $currContList)
 			show__contacts = !show__contacts
@@ -133,10 +134,11 @@
 			saludoHora = diaTarde();
 			$contact = contToSend
 			let contacto = capitalize($contact.name)
-			let msg = `${$property.urlProp}    ${contacto}. ${saludoHora}  ${mensaje}`;
+			let msg = `${$property.public_url}    ${contacto}. ${saludoHora}  ${mensaje}`;
 			let tel = $contact.telephon
 			sendWhatsApp(tel, msg)
-			$binnacle = {"date": Date.now(), "comment": $property.nameProperty, "to": $contact.telephon, "action": "Propiedad enviada: "}
+			$binnacle = {"date": Date.now(), "comment": $property.public_id, "to": $contact.id, "action": "Propiedad enviada: "}
+			console.log($binnacle, "binnacle from sendWA propSelect")
 			try {
 				const binnacleToAdd = collection(db, "binnacles")
 				await addDoc(binnacleToAdd, $binnacle);					

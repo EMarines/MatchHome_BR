@@ -192,7 +192,7 @@
               return{...doc.data(), id: doc.id}
           })
           sortBinnacle(toRenBinn)
-          toRenBinn.filter(item => item.to === $contact.telephon)
+          toRenBinn.filter(item => item.to === $contact.id)
           contBinn(toRenBinn)
       },
       (err) =>{
@@ -204,7 +204,7 @@
     
   // Busca la bitácora del contacto
       function contBinn(){
-        let bitacora = toRenBinn.filter(item => item.to === $contact.telephon)
+        let bitacora = toRenBinn.filter(item => item.to === $contact.id)
         return sortedBinn = sortBinnacle(bitacora)
       };
    
