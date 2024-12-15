@@ -134,7 +134,7 @@
 			saludoHora = diaTarde();
 			$contact = contToSend
 			let contacto = capitalize($contact.name)
-			let msg = `${$property.public_url}    ${contacto}. ${saludoHora}  ${mensaje}`;
+			let msg = `${$property.public_url}    ${contacto}. ${saludoHora}.  ${mensaje}`;
 			let tel = $contact.telephon
 			sendWhatsApp(tel, msg)
 			$binnacle = {"date": Date.now(), "comment": $property.public_id, "to": $contact.id, "action": "Propiedad enviada: "}

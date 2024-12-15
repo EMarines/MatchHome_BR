@@ -48,7 +48,7 @@ let dateTo = new Date().getTime();
         conInt = conInt.filter((con) => con.createdAt <=  dateTo && con.createdAt >= 1672596060000);   
 
       // Tipo de contacto    
-        conInt = conInt.filter((cont) => cont.typeContact === "Comprador");        
+        conInt = conInt.filter((cont) => cont.typeContact === "Comprador"  || cont.contactType === "Comprador");        
         
       // Tipo de propiedad
         conInt = conInt.filter((cont) => cont.selecTP === property.property_type);
@@ -80,7 +80,7 @@ let dateTo = new Date().getTime();
             if (minBudget <= propertyAmount && maxBudget >= propertyAmount) {
               acc.push(cont);
             }
-          } else if (cont.rangeProp === mosRange(property.price)) {
+          } else if (cont.rangeProp === mosRange(property.operations[0].amount)) {
             // Si coincide exactamente con el rango
             acc.push(cont);
           }
