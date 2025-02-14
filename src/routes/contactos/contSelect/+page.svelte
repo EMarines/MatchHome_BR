@@ -2,25 +2,30 @@
 // @ts-nocheck
 
 // Importaciones
+  import { db, dbBinnacle } from '../../../firebase';
+  import { goto } from '$app/navigation';
+  import { deleteDoc, doc, collection, onSnapshot, updateDoc } from '@firebase/firestore';
+  import { contact, systStatus, currPropList, binnacle, property, currBinnList } from '$lib/stores/store';
+  import { onDestroy } from 'svelte';
+  import AddToSchedule from '$lib/components/AddToSchedule.svelte'
+  import Search from '$lib/components/Search.svelte';
+  import CardBinnacle from '$lib/components/CardBinnacle.svelte';
+  import CardProperty from '$lib/components/CardProperty.svelte';
   import { sendWhatsApp, closeWindow } from '$lib/functions/sendWhatsApp';
-  import { contact, systStatus, currPropList, binnacle, property } from '$lib/stores/store';
   import { formatDate } from '$lib/functions/dateFunctions';
   import { toComaSep, toTele } from '$lib/functions/format.js'
   import { infoToBinnacle } from '$lib/functions/binnSaver';
-  import { db, dbBinnacle } from '../../../firebase';
-  import Search from '$lib/components/Search.svelte';
-  import AddToSchedule from '$lib/components/AddToSchedule.svelte'
   import { filtContPropInte } from '$lib/functions/filProperties';
-  import { goto } from '$app/navigation';
-  import { deleteDoc, doc, collection, onSnapshot, updateDoc } from '@firebase/firestore';
-  import { onDestroy } from 'svelte';
-  import CardProperty from '$lib/components/CardProperty.svelte';
-  import CardBinnacle from '$lib/components/CardBinnacle.svelte';
   import { sortBinnacle } from '$lib/functions/sort.js';
+  // import { filtContPropInte } from '$lib/functions/filProperties';
 
 // Declaraciones
   let searchTerm = "";
-  let propCheck = []
+  let propCheck = [];
+  let propBinn = [];
+  let toSend = [];
+  let sent = [];
+  let propsStatus = ["Por Enviar", "Enviadas", "Todas"];
   let mostBusq = false;
   let showProp = false;
   let isActivated = false;
@@ -31,11 +36,12 @@
   let contacto = {};
   let propFalt = 0;
   let layOut = "";
+  let propInterested = "Por Enviar";
   let sig = 0;
   let msg = "";
 
   $: tel = $contact.telephon;
-  $: faltanProp = propCheck.length ;
+  $: faltanProp = propCheck.length;
 
 // Agendar
   // Cerrar Shedule                       
@@ -47,6 +53,53 @@
     function addSchedule(){
       isActivated = true;
     };
+
+    // function handlePropInterested(){ 
+    //   propInterested = "Por Enviar"
+    //   listToRender()
+    // }
+	// // Separar contactos agrupados
+	 	function listToRender(){ 
+			// Obtener todas las propiedades que podrían interesarle al contacto
+			let propInterest = filtContPropInte($contact, $currPropList);
+      // console.log("binnacle", $currBinnList)
+
+			switch(propInterested) {
+				case "Todas":
+					// Mostrar todas las propiedades que coinciden con sus intereses
+					propToRender = propInterest;
+					break;
+
+				case "Por Enviar":
+					// 1. Obtener todas las propiedades que ya se le enviaron al contacto
+          console.log("currBinnList", $contact)
+					const propiedadesEnviadas = $currBinnList
+						.filter(item => 
+							item.to === $contact.id && 
+							item.action === "Propiedad enviada:"
+						)
+						// .map(doc => doc.comment); // Obtener IDs de propiedades enviadas
+            console.log("propiedadesEnviadas", propiedadesEnviadas)
+
+					// 2. Filtrar propInterest para mostrar solo las que NO se han enviado
+					propToRender = propInterest.filter(prop => 
+						!propiedadesEnviadas.includes(prop.public_id)
+					);
+					break;
+
+				case "Enviadas":
+					// 1. Obtener IDs de propiedades enviadas a este contacto
+					const binnacleEnviadas = $currBinnList
+						.filter(item => item.to === $contact.id)
+						.map(item => item.comment);
+
+					// 2. Filtrar propInterest para mostrar solo las enviadas
+					propToRender = propInterest.filter(prop => 
+						binnacleEnviadas.includes(prop.public_id)
+					);
+					break;
+			}
+		};    
 
 // Search and filter
   // Muestra las propiedades que le podrían intesar
@@ -362,7 +415,18 @@
               </button>
             </div>          
           {/if}
+          
+          <div class="propRegister">
+            {#each propsStatus as list}
+									<label>
+										<input type="radio" bind:group={propInterested} value={list} on:change={listToRender}>
+										{list}
+									</label>
+							{/each}
 
+          </div>
+          
+        
         <div class="card__container">          
           {#each propToRender as prop}
             <div class="select__props">

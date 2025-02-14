@@ -45,7 +45,7 @@ let dateTo = new Date().getTime();
     export function filtPropContInte(property, conInt){  
 
       // busqueda de Hoy hasta 1/ene/23
-        conInt = conInt.filter((con) => con.createdAt <=  dateTo && con.createdAt >= 1672596060000);   
+        conInt = conInt.filter((con) => con.createdAt <=  dateTo && con.createdAt >= 1672596060000 || con.contactStage === "Etapa4");   
 
       // Tipo de contacto    
         conInt = conInt.filter((cont) => cont.typeContact === "Comprador"  || cont.contactType === "Comprador");        

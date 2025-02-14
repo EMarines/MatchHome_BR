@@ -8,26 +8,37 @@
   <div class="card__prop">
   
     <div class="img__cont">
-      <img src="{prop.images[0].url}" alt="casa">
+      <img src="{prop.title_image_thumb}" alt="casa">
     </div>
 
     <div class="info__cont">
 
       <div class="card__info">
-        <span class="capitalize">{prop.location.name.replace("Chihuahua, Chihuahua", "").replaceAll(",", "").replace("I, ", "").replace("II", "").replace("III", "").replace("IV", "").replace("V ", "").replaceAll("Y ", "")}</span>
-        <span>$ {toComaSep(Number(prop.operations[0].amount))}.</span>
+        <span class="capitalize">
+          {prop?.location?.replace("Chihuahua, Chihuahua", "").replaceAll(",", "").
+          replace("I, ", "").replace("II", "").replace("III", "").replace("IV", "").replace("V ", "")
+          .replaceAll("Y ", "") || 'Sin dirección'}
+        </span>
+          <span>$ {toComaSep(Number(prop?.operations[0].amount))}.</span>
       </div>
 
       <div class="card__features">
-        {#if  prop.selectTP === "casa" || prop.selectTP === "departamento"}
-            <span>Recámaras {Number(prop.beds)}</span>
-            <span>Baños {Number(prop.bathroom)}</span> 
-          {:else if prop.selectTP === "terreno"}  
-            <span>{toComaSep(Number(prop.areaTotal))} m²</span>
+        {#if prop?.property_type?.toLowerCase() === "casa" ||
+          prop?.property_type?.toLowerCase() === "departamento"}
+          <span>Recámaras {prop?.bedrooms}</span>
+          <span>Baños {Number(prop?.bathrooms)}</span> 
+        {:else if prop?.property_type?.toLowerCase() === "terreno" ||
+         prop?.property_type?.toLowerCase() === "local comercial"}  
+          <span>{toComaSep(Number(prop?.construction_size))} m²</span>
+        {:else if prop?.property_type?.toLowerCase() === "edificio" ||
+         prop?.property_type?.toLowerCase().startsWith("bodega")}
+          <span>{toComaSep(Number(prop?.construction_size))} m²</span>
+          <span>{toComaSep(Number(prop?.lot_size))} m²</span>
         {/if}
       </div>
 
     </div>
+
   </div> 
 
 <style>

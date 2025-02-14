@@ -48,10 +48,8 @@
     position: relative;
     width: 100%;
     height: 100%;
-    /* font-size: 0.9rem; */
     font-weight: 400;
-    /* align-items: center; */
-    /* padding: 5px; */
+
   }
 
   .card__Title {

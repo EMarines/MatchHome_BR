@@ -90,10 +90,8 @@
     .headContainer {
       display: flex;
       flex-direction: row;
-      /* width: 100%; */
       align-items: center;
       justify-content: space-around;
-      /* background: yellow; */
     }
 
     .mainContainer {
@@ -116,18 +114,17 @@
       gap: 4px;
     }
 
-    .card__container { 
-      display: flex; 
-      flex-direction: column; 
-      width: 350px;
-      height: 130px;   
+    .card__container{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 10px;
       justify-content: center;
-      align-items: center;  
-      /* color: grey; */
-      border: 1px solid grey;
+      background-color: rgb(31, 31, 31);
       border-radius: 5px;
-      padding: 8px;
-      cursor: pointer;
+    }
+
+    .card__container:hover{
+      background-color: rgb(63, 63, 63);
     }
 
     /* .card__info {
@@ -158,12 +155,12 @@
       align-items: center;
     } */
 
-
+/* 
     @media (max-width:400px){
       .headContainer {
         display: flex;
         flex-direction: column;
         width: 100%;
       }
-    }
+    } */
     </style>

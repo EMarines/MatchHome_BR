@@ -29,7 +29,7 @@ export function cleanNumber(numToClean){
 	try {
 		let newNumber = numToClean.replaceAll(",", "").replaceAll(" ", "").replaceAll("-", "").replaceAll("(", "").replaceAll(")", "");
 		return newNumber;
-
+		
 	} catch (error) {
 		console.log(error);
 	}

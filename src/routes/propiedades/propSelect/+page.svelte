@@ -1,20 +1,20 @@
 <script>
 	// @ts-nocheck
 	// Importaciones y declaraciónes
-  	import { sendWhatsApp, closeWindow } from '$lib/functions/sendWhatsApp';
-		import { db, dbBinnacle, dbContacts } from '../../../firebase';
-		import { property, contact, binnacle, systStatus, currPropList, currContList, currBinnList } from '$lib/stores/store';
-		import { toComaSep } from '$lib/functions/format.js';
+	import { onDestroy } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { db, dbBinnacle, dbContacts } from '../../../firebase';
+	import { property, contact, binnacle, systStatus, currPropList, currContList, currBinnList } from '$lib/stores/store';
+	import { deleteDoc, doc, collection, updateDoc, onSnapshot, addDoc, persistentMultipleTabManager } from '@firebase/firestore';
+	import BtnWA from '$lib/components/BtnWA.svelte';
+	import BtnFollLink from '$lib/components/BtnFollink.svelte';
+	import BtnFind from '$lib/components/BtnFind.svelte';
+	import BtnCancel from '$lib/components/BtnCancel.svelte';
+	import CardContact from '$lib/components/CardContact.svelte'
+	import { sendWhatsApp, closeWindow } from '$lib/functions/sendWhatsApp';
+	import { toComaSep } from '$lib/functions/format.js';
 		import { diaTarde } from '$lib/functions/dateFunctions';
-		import BtnWA from '$lib/components/BtnWA.svelte';
-		import BtnFollLink from '$lib/components/BtnFollink.svelte';
-		import BtnFind from '$lib/components/BtnFind.svelte';
-		import BtnCancel from '$lib/components/BtnCancel.svelte';
 		import { filtPropContInte } from '$lib/functions/filContacts.js'
-		import { goto } from '$app/navigation';
-		import { deleteDoc, doc, collection, updateDoc, onSnapshot, addDoc, persistentMultipleTabManager } from '@firebase/firestore';
-		import { onDestroy } from 'svelte';
-		import CardContact from '$lib/components/CardContact.svelte'
 		import { sortBinnacle } from '$lib/functions/sort.js'
 		import { formatDate } from '$lib/functions/dateFunctions.js'
 		import { capitalize } from '$lib/functions/capitalize.js'
@@ -42,7 +42,7 @@
 			$: contIntToSend = contCheck.length;
 			$: contInitial = contToRender;
 
-			
+			console.log("currBinnList", $currBinnList)
 
   
 	// Renderiza currBinnList

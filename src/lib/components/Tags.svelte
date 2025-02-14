@@ -33,11 +33,15 @@
 			<label>Lista para Habitarse
 				<input type="checkbox" value="Lista_Habitarse" bind:group={tags} />
 			</label>
+		
 		</div>
 			
 		<div class="rowContainer">
 			<label>Nueva
 				<input type="checkbox" value="Nueva" bind:group={tags} />
+			</label>
+			<label>En Avenida
+				<input type="checkbox" value="En_Avenida" bind:group={tags} />
 			</label>
 		</div>
 

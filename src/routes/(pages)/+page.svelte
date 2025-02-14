@@ -14,8 +14,6 @@
         $: totProp = $currPropList.length;
         $: totCont = dbContacts.length;
 
-        console.log(totProp, totCont);
-
     // Renderiza currPropList
           const unsubC = onSnapshot(
            collection(db, "contacts"),

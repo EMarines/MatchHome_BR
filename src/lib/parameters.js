@@ -114,6 +114,7 @@
     "Patio Amplio",
     "Lista para Habitarse",
     "Nueva",
+    "En Avenida",
     ""
   ]
 

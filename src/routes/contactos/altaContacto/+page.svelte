@@ -42,7 +42,9 @@
           $contact.telephon = cleanNumber($contact.telephon);
           $contact.name = cleanName($contact.name);
           $contact.lastname = cleanName($contact.lastname);
-          if($contact.budget){$contact.budget = cleanNumber($contact.budget)};
+          if($contact.budget)
+          {$contact.budget = cleanNumber($contact.budget)};
+          console.log("estas en el contact", $contact.budget);
         } catch (error) {
           console.log(error);
         }        
